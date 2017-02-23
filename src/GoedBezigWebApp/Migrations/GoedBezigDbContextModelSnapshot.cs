@@ -67,7 +67,7 @@ namespace GoedBezigWebApp.Migrations
 
                     b.HasKey("GroupId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("groups");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Interest", b =>

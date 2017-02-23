@@ -10,7 +10,7 @@ namespace GoedBezigWebApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Groups",
+                name: "groups",
                 columns: table => new
                 {
                     GroupId = table.Column<int>(nullable: false)
@@ -21,14 +21,14 @@ namespace GoedBezigWebApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Groups", x => x.GroupId);
+                    table.PrimaryKey("PK_groups", x => x.GroupId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "groups");
         }
     }
 }

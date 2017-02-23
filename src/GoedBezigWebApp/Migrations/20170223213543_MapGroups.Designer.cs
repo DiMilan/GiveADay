@@ -8,7 +8,7 @@ using GoedBezigWebApp.Data;
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(GoedBezigDbContext))]
-    [Migration("20170223212042_MapGroups")]
+    [Migration("20170223213543_MapGroups")]
     partial class MapGroups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace GoedBezigWebApp.Migrations
 
                     b.HasKey("GroupId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("groups");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Interest", b =>

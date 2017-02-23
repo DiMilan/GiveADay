@@ -900,7 +900,7 @@ namespace GoedBezigWebApp.Data
 
         private static void MapGroup(EntityTypeBuilder<Group> g)
         {
-            g.ToTable("Groups");
+            g.ToTable("groups");
 
             g.HasKey(gr => gr.GroupId);
 
