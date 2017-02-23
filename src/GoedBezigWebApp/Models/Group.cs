@@ -10,8 +10,8 @@ namespace GoedBezigWebApp.Models
         public int GroupId { get; set; }
         public string Name { get; set; }
         public DateTime Timestamp { get; set; }
-        public bool Closed { get; set; }
-
+        public bool ClosedGroup { get; set; }
+        
         public Group()
         {
             

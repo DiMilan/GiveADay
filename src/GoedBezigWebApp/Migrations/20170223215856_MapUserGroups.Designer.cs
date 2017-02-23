@@ -8,9 +8,10 @@ using GoedBezigWebApp.Data;
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(GoedBezigDbContext))]
-    partial class GoedBezigDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170223215856_MapUserGroups")]
+    partial class MapUserGroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")

@@ -896,6 +896,7 @@ namespace GoedBezigWebApp.Data
                     .HasConstraintName("vacancy_subscriptions$FK_Reference_30");
             });
             modelBuilder.Entity<Group>(MapGroup);
+            modelBuilder.Entity<UserGroup>(MapUserGroup);
         }
 
         private static void MapGroup(EntityTypeBuilder<Group> g)
@@ -913,6 +914,21 @@ namespace GoedBezigWebApp.Data
                 .HasColumnName("CreationTime")
                 .IsRequired();
 
+        }
+
+        private static void MapUserGroup(EntityTypeBuilder<UserGroup> ug)
+        {
+            ug.ToTable("user_groups");
+            ug.HasKey(t => t.UserGroupId);
+            ug.HasOne(t => t.User)
+                .WithMany()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            ug.HasOne(t => t.Group)
+                .WithMany()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
