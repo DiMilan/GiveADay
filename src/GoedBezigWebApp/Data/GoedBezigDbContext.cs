@@ -2,6 +2,7 @@
 using GoedBezigWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GoedBezigWebApp.Data
 {
@@ -26,6 +27,7 @@ namespace GoedBezigWebApp.Data
         public virtual DbSet<VacancyCalendar> VacancyCalendar { get; set; }
         public virtual DbSet<VacancyInvitation> VacancyInvitations { get; set; }
         public virtual DbSet<VacancySubscription> VacancySubscriptions { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
 
         // Unable to generate entity type for table 'dbo.engagement'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.org_contact_for_addresses'. Please see the warning messages.
@@ -383,6 +385,9 @@ namespace GoedBezigWebApp.Data
 
             modelBuilder.Entity<UserContact>(entity =>
             {
+                entity.HasKey(e => e.UserContactsId)
+                    .HasName("user_contacts_id");
+
                 entity.ToTable("user_contacts");
 
                 entity.HasIndex(e => e.FromUserId)
@@ -890,6 +895,24 @@ namespace GoedBezigWebApp.Data
                     .HasForeignKey(d => d.VacancyId)
                     .HasConstraintName("vacancy_subscriptions$FK_Reference_30");
             });
+            modelBuilder.Entity<Group>(MapGroup);
+        }
+
+        private static void MapGroup(EntityTypeBuilder<Group> g)
+        {
+            g.ToTable("Groups");
+
+            g.HasKey(gr => gr.GroupId);
+
+            g.Property(t => t.Name)
+                .HasColumnName("GroupName")
+                .IsRequired()
+                .HasMaxLength(100);
+
+            g.Property(t => t.Timestamp)
+                .HasColumnName("CreationTime")
+                .IsRequired();
+
         }
     }
 }

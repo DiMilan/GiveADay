@@ -17,5 +17,9 @@ namespace GoedBezigWebApp.Models
         public virtual OrgContact OrgContact { get; set; }
         public virtual Vacancy SuggestedVacancy { get; set; }
         public virtual User ToUser { get; set; }
+
+        UserContact()
+        {
+        }
     }
 }
