@@ -22,7 +22,7 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
+    "Microsoft.ApplicationInsights.AspNetCore": "2.0.0-beta1",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.1.0",
@@ -62,6 +62,7 @@
     "netcoreapp1.1": {
       "imports": [
         "dotnet5.6",
+        "dnxcore50",
         "portable-net45+win8"
       ]
     }
