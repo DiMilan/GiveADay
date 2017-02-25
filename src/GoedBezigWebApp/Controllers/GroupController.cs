@@ -54,7 +54,9 @@ namespace GoedBezigWebApp.Controllers
 
         private void MapGroupEditViewModelToGroup(GroupEditViewModel groupEditViewModel, Group group)
         {
-            throw new NotImplementedException();
+            group.Name = groupEditViewModel.Name;
+            group.Timestamp = groupEditViewModel.Timestamp;
+            group.ClosedGroup = groupEditViewModel.ClosedGroup;
         }
     }
 }
