@@ -41,13 +41,21 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2017 - GoedBezigWebApp</p>
-        </footer>
-    </div>
+<div class="container body-content">
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-success">@TempData["message"]</div>
+    }
+    @if (TempData["error"] != null)
+    {
+        <div class="alert alert-warning">@TempData["error"]</div>
+    }
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; 2017 - GoedBezigWebApp</p>
+    </footer>
+</div>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

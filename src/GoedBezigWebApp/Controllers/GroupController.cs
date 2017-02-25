@@ -41,6 +41,7 @@ namespace GoedBezigWebApp.Controllers
             try
             {
                 MapGroupEditViewModelToGroup(groupEditViewModel, group);
+                group.Timestamp = DateTime.Now;
                 _groupRepository.Add(group);
                 _groupRepository.SaveChanges();
                 TempData["message"] = $"You successfully added group {group.Name}.";

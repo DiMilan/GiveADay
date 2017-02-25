@@ -10,7 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GoedBezigWebApp.Data;
+using GoedBezigWebApp.Data.Repositories;
 using GoedBezigWebApp.Models;
+using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
 
 namespace GoedBezigWebApp
@@ -54,7 +56,8 @@ namespace GoedBezigWebApp
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddSession();
             services.AddMvc();
 
             // Add application services.
@@ -82,6 +85,8 @@ namespace GoedBezigWebApp
             app.UseStaticFiles();
 
             app.UseIdentity();
+
+            app.UseSession();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
