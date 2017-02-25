@@ -43,7 +43,6 @@ namespace GoedBezigWebApp.Data
 
         public GoedBezigDbContext(DbContextOptions<GoedBezigDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
