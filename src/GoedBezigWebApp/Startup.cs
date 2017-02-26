@@ -58,6 +58,7 @@ namespace GoedBezigWebApp
                 .AddDefaultTokenProviders();
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddSession();
             services.AddMvc();
 
