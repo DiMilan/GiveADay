@@ -28,9 +28,14 @@
     }
 </style>
 
-<form asp-action="Index">
-    <div class="form-horizontal">
-        
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search name: <input type="text" name="searchName" value="@ViewData["searchName"]" />
+            Search location: <select name="searchLocation" asp-for="@ViewData["searchLocation"]" asp-items="ViewBag.Cities"></select>
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Reset</a>
+        </p>
     </div>
 </form>
 

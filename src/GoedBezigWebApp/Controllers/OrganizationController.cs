@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GoedBezigWebApp.Models;
-using GoedBezigWebApp.Models.GroupViewModels;
-using GoedBezigWebApp.Models.OrganizationViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,15 +13,12 @@ namespace GoedBezigWebApp.Controllers
             _organizationRepository = organizationRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(String searchName, String searchLocation)
         {
-            return View(_organizationRepository.GetAll());
-        }
-
-        [HttpPost]
-        public IActionResult Index(OrganizationSearchViewModel organizationSearchModel)
-        {
-            return View(_organizationRepository.GetAll());
+            ViewData["searchName"] = searchName;
+            ViewData["searchLocation"] = searchLocation;
+            ViewBag.Cities = _organizationRepository.GetAllUniqueCities();
+            return View(_organizationRepository.GetAllFilteredByNameAndLocation(searchName,searchLocation));
         }
     }
 }

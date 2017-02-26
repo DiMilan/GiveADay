@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GoedBezigWebApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Data
 {
@@ -8,7 +9,10 @@ namespace GoedBezigWebApp.Data
     {
         public static void Initialize(GoedBezigDbContext context)
         {
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
+            // IPV Created eigenlijk context.Database.Migrate(); + functie voor Migrte van ApplicationDbContext
+
 
             // --> SEED Organizational Addresses
             if (!context.OrganizationalAddresses.Any())
@@ -28,6 +32,13 @@ namespace GoedBezigWebApp.Data
                         AddressCountry = "Belgium",
                         AddressLine1 = "St. Pietersnieuwstraat 33",
                         AddressPostalCode = "9000"
+                    },
+                    new OrganizationalAddress()
+                    {
+                        AddressCity = "Brussel",
+                        AddressCountry = "Belgium",
+                        AddressLine1 = "Franklin Rooseveltlaan 42",
+                        AddressPostalCode = "1050"
                     },
                 };
 
@@ -63,6 +74,15 @@ namespace GoedBezigWebApp.Data
                         Description = "University Ghent",
                         AddressId = 2
                     },
+                    new Organization
+                    {
+                        Name = "Solvay Economics & Management",
+                        Logo = "https://lh4.googleusercontent.com/-RuXL76SEWQQ/AAAAAAAAAAI/AAAAAAAAAG4/vplxDplhGmM/s0-c-k-no-ns/photo.jpg",
+                        Btw = "BE827638900032",
+                        IdentificationNr = "66483899483",
+                        Description = "Solvay offers programs for careers in management, finance, economics, marketing & more...",
+                        AddressId = 3
+                    }
                 };
 
                 foreach (Organization o in organizations)
