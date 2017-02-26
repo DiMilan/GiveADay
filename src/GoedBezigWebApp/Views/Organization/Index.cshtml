@@ -1,12 +1,162 @@
-@model IEnumerable<GoedBezigWebApp.Models.Group>
+@model IEnumerable<GoedBezigWebApp.Models.Organization>
 
 @{
-    ViewData["Title"] = "GB Organizations";
+    ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>GB Organizations</h2>
 
-<p>
-    //ADD TABLE ORGANIZATIONS
-</p>
+<style>
+    .organizationTable tr > *:nth-child(4),
+    .organizationTable tr > *:nth-child(5),
+    .organizationTable tr > *:nth-child(6),
+    .organizationTable tr > *:nth-child(11),
+    .organizationTable tr > *:nth-child(12),
+    .organizationTable tr > *:nth-child(13),
+    .organizationTable tr > *:nth-child(14),
+    .organizationTable tr > *:nth-child(15),
+    .organizationTable tr > *:nth-child(16),
+    .organizationTable tr > *:nth-child(17),
+    .organizationTable tr > *:nth-child(18) {
+        display: none;
+    }
+
+    .organizationTable img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+</style>
+
+<form asp-action="Index">
+    <div class="form-horizontal">
+        
+    </div>
+</form>
+
+<table class="table organizationTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrgId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Btw)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrgType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StructuurId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdentificationNr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Logo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WebsiteUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacebookUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GoogleUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TwitterUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YoutubeUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InstagramUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactCounter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Btw)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StructuurId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdentificationNr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address.AddressLine1)<br />
+                @Html.DisplayFor(modelItem => item.Address.AddressPostalCode) @Html.DisplayFor(modelItem => item.Address.AddressCountry)<br />
+                @Html.DisplayFor(modelItem => item.Address.AddressCountry)
+            </td>
+            <td>
+                <img src="@Html.DisplayFor(modelItem => item.Logo)" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WebsiteUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacebookUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoogleUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TwitterUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YoutubeUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InstagramUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactCounter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactDate)
+            </td>
+            <td>
+                @Html.ActionLink("Register", "Register", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

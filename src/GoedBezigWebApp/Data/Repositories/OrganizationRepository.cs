@@ -25,7 +25,8 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public IEnumerable<Organization> GetAll()
         {
-            return _organizations.ToList();
+            return _organizations.Include(g => g.Address).ToList();
         }
+
     }
 }
