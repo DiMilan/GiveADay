@@ -18,9 +18,9 @@ namespace GoedBezigWebApp.Data.Repositories
             _groups = _dbContext.Groups;
         }
 
-        public Group GetBy(int groupId)
+        public Group GetBy(string groupName)
         {
-            return _groups.SingleOrDefault((g => g.GroupId == groupId));
+            return _groups.Single((g => g.Name == groupName));
         }
 
         public IEnumerable<Group> GetAll()

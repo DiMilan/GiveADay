@@ -140,6 +140,47 @@ namespace GoedBezigWebApp.Data
 
                 context.SaveChanges();
             }
+
+            // --> SEED Groups
+            if (!context.Groups.Any())
+            {
+                var groups = new Group[]
+                {
+                    // DateTime today = DateTime.Today;  // de bedoeling was om de datum van vandaag op te halen maar voor de ene of andere reden werkt het niet
+                    // Hier per ongeluk ook een apckegae system.runtime toegevoegd maar vind niet direct terug waar ik het moet verwijderen. 
+                    new Group
+                    {
+                        Name = "2017Groep1",
+                        Timestamp = DateTime.Now,
+                        ClosedGroup = true
+                    },
+                    new Group
+                    {
+                        Name = "2017Groep2",
+                        Timestamp = DateTime.UtcNow,
+                        ClosedGroup = true
+                    },
+                    new Group
+                    {
+                        Name = "2017Groep3",
+                        Timestamp = DateTime.MinValue,
+                        ClosedGroup = true
+                    },
+                    new Group
+                    {
+                        Name = "Test",
+                        Timestamp = DateTime.MaxValue,
+                        ClosedGroup = true
+                    },
+                };
+
+                foreach (Group g in groups)
+                {
+                    context.Groups.Add(g);
+                }
+
+                context.SaveChanges();
+            }
         }
     }
 }

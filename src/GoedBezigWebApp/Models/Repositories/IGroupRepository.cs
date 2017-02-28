@@ -5,7 +5,7 @@ namespace GoedBezigWebApp.Models.Repositories
 {
     public interface IGroupRepository
     {
-        Group GetBy(int groupId);
+        Group GetBy(string groupName);
         IEnumerable<Group> GetAll();
         void Add(Group group);
         void Delete(Group group);

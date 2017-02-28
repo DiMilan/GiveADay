@@ -1,9 +1,9 @@
 @model GoedBezigWebApp.Models.GroupViewModels.GroupEditViewModel
 
 @{
-    ViewData["Title"] = Model.GroupId == 0 ? "Create Group" : "Edit Group";;
+    ViewData["Title"] = Model.Name == null ? "Create Group" : "Edit Group";;
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var action = Model.GroupId == 0 ? "Create" : "Edit";
+    var action = Model.Name == null ? "Create" : "Edit";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -13,7 +13,6 @@
     <div class="form-horizontal">
         
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="GroupId" />
 
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>

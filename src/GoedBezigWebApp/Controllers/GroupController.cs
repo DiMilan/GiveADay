@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -23,7 +25,7 @@ namespace GoedBezigWebApp.Controllers
             return View();
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string name)
         {
             Group group = new Group();
             return View(new GroupEditViewModel(group));
@@ -37,21 +39,34 @@ namespace GoedBezigWebApp.Controllers
         [HttpPost]
         public IActionResult Create(GroupEditViewModel groupEditViewModel)
         {
-            Group group = new Group();
-            try
+
+            if (ModelState.IsValid)
             {
-                MapGroupEditViewModelToGroup(groupEditViewModel, group);
-                group.Timestamp = DateTime.Now;
-                _groupRepository.Add(group);
-                _groupRepository.SaveChanges();
-                TempData["message"] = $"You successfully added group {group.Name}.";
+                try
+                {
+                    Group group = new Group();
+                    MapGroupEditViewModelToGroup(groupEditViewModel, group);
+                    group.Timestamp = DateTime.Now;
+                    _groupRepository.Add(group);
+                    _groupRepository.SaveChanges();
+                    TempData["message"] = $"De groep {group.Name} werd succesvol aangemaakt.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["error"] = "Er bestaat al een groep met deze naam";
+                    return RedirectToAction(nameof(Edit), groupEditViewModel);
+                }
+                catch (Exception)
+                {
+                    TempData["error"] = $"Er is iets fout gelopen. Groep {groupEditViewModel.Name} werd niet opgeslagen";
+                }
+
             }
-            catch
-            {
-                TempData["error"] = "Sorry, something went wrong, the group was not created...";
-            }
-            return RedirectToAction(nameof(Index));
+            TempData["error"] = "Er is een fout opgetreden";
+            return RedirectToAction(nameof(Edit), groupEditViewModel);
         }
+
 
         private void MapGroupEditViewModelToGroup(GroupEditViewModel groupEditViewModel, Group group)
         {

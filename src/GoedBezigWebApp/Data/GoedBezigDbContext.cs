@@ -902,7 +902,7 @@ namespace GoedBezigWebApp.Data
         {
             g.ToTable("groups");
 
-            g.HasKey(gr => gr.GroupId);
+            g.HasKey(gr => gr.Name);
 
             g.Property(t => t.Name)
                 .HasColumnName("GroupName")
