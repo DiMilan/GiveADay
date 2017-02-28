@@ -1,0 +1,23 @@
+﻿{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+
+  "dependencies": {
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "GoedBezigWebApp": "1.0.0-*",
+    "Moq": "4.7.0",
+    "xunit": "2.2.0",
+    "xunit.runner.console": "2.2.0"
+  },
+
+  "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        }
+      }
+    }
+  }
+}
