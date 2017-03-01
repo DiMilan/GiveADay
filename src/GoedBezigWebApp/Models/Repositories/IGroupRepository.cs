@@ -10,5 +10,6 @@ namespace GoedBezigWebApp.Models.Repositories
         void Add(Group group);
         void Delete(Group group);
         void SaveChanges();
+        bool Present(string groupName);
     }
 }

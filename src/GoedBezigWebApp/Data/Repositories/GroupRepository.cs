@@ -42,5 +42,15 @@ namespace GoedBezigWebApp.Data.Repositories
         {
             _dbContext.SaveChanges();
         }
+
+        public bool Present(string groupName)
+        {
+            Group g = _groups.Find(groupName);
+            if (g==null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

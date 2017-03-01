@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
@@ -39,20 +40,26 @@ namespace GoedBezigWebApp.Controllers
         [HttpPost]
         public IActionResult Create(GroupEditViewModel groupEditViewModel)
         {
+            string username="";
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    CheckPresence(groupEditViewModel);
+                    if (User.Identity.IsAuthenticated)
+                    {
+                         username = User.Identity.Name;
+                    }
                     Group group = new Group();
                     MapGroupEditViewModelToGroup(groupEditViewModel, group);
                     group.Timestamp = DateTime.Now;
                     _groupRepository.Add(group);
                     _groupRepository.SaveChanges();
-                    TempData["message"] = $"De groep {group.Name} werd succesvol aangemaakt.";
+                    TempData["message"] = $"{username} De groep {group.Name} werd succesvol aangemaakt.";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateException)
+                catch (ArgumentException)
                 {
                     TempData["error"] = "Er bestaat al een groep met deze naam";
                     return RedirectToAction(nameof(Edit), groupEditViewModel);
@@ -65,6 +72,11 @@ namespace GoedBezigWebApp.Controllers
             }
             TempData["error"] = "Er is een fout opgetreden";
             return RedirectToAction(nameof(Edit), groupEditViewModel);
+        }
+
+        public void CheckPresence(GroupEditViewModel groupEditViewModel)
+        {
+            if (_groupRepository.Present(groupEditViewModel.Name)) throw new ArgumentException();
         }
 
 

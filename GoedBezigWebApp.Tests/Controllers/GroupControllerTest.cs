@@ -64,7 +64,12 @@ namespace GoedBezigWebApp.Tests.Controllers
         }
 
         [Fact]
-        public void AddingAnExistingGroupThrowException() { }
+        public void AddingExistingGroupThrowException()
+        {
+            _groupRepository.Setup(m => m.Present("Test")).Returns(true);
+            GroupEditViewModel brewerEvm = new GroupEditViewModel() { Name = "Test" };
+            Assert.Throws<ArgumentException>(() => _controller.CheckPresence(brewerEvm));
+        }
 
         #endregion
 
