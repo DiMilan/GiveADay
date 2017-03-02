@@ -86,7 +86,8 @@ namespace GoedBezigWebApp
 
                 using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().EnsureSeedData();
+                    // Deletes the existing database (toggle comment to speed up startup)
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
                 }
             }
             else
@@ -108,6 +109,16 @@ namespace GoedBezigWebApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // Update database & seed data
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                context.Database.Migrate(); // Create new database and apply latest migrations
+                context.EnsureSeedData(); // Seeds dummy data into database (if not data is present)
+            }
         }
     }
 }

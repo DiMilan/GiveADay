@@ -14,14 +14,11 @@ namespace GoedBezigWebApp.Data
     {
         public static void EnsureSeedData(this ApplicationDbContext context)
         {
-            context.Database.EnsureDeleted(); // Deletes the existing database (if any)
-            context.Database.Migrate(); // Create new database and apply latest migrations
-
             // Seed entity data in correct order!
             EnsureSeedOrganizationalAddresses(context);
             EnsureSeedOrganizations(context);
             EnsureSeedGroups(context);
-            EnsureSeedRoles(context).Wait();
+//            EnsureSeedRoles(context).Wait();
             EnsureSeedUsers(context).Wait();
         }
 
@@ -242,8 +239,9 @@ namespace GoedBezigWebApp.Data
                 UserName = email,
                 NormalizedUserName = email.ToUpper(),
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString("D")
+                PhoneNumberConfirmed = false,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                LockoutEnabled = true
             };
         }
 
