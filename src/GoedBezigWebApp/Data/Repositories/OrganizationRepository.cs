@@ -15,17 +15,18 @@ namespace GoedBezigWebApp.Data.Repositories
 {
     public class OrganizationRepository : IOrganizationRepository
     {
-        private readonly GoedBezigDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
         private readonly DbSet<Organization> _organizations;
-        public OrganizationRepository(GoedBezigDbContext dbContext)
+        public OrganizationRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _organizations = _dbContext.Organization;
+            _organizations = _dbContext.Organizations;
         }
 
         public Organization GetBy(int organizationId)
         {
             return _organizations.SingleOrDefault((o => o.OrgId == organizationId));
+        
         }
 
         public IEnumerable<Organization> GetAll()
@@ -35,6 +36,7 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public IEnumerable<Organization> GetAllFilteredByNameAndLocation(string searchName, string searchLocation)
         {
+
             if (!string.IsNullOrEmpty(searchName) && !string.IsNullOrEmpty(searchLocation))
             {
                 return _organizations.Include(o => o.Address).Where(o => o.Name.Contains(searchName) && o.Address.AddressCity.Equals(searchLocation)).ToList();
@@ -49,15 +51,16 @@ namespace GoedBezigWebApp.Data.Repositories
             }
 
             return _organizations.Include(o => o.Address).ToList();
-            
         }
 
-        public IEnumerable<SelectListItem> GetAllUniqueCities()
+    public IEnumerable<SelectListItem> GetAllUniqueCities()
         {
             //As SelectListitem provides no comparator a new could be written but splitting the filtering in two parts seems shorter. Writing this one line gives a ValueBufferShaper error which is a bug in core 1.1 and below.
             List<string> tempList = _organizations.Include(o => o.Address).Select(o => o.Address.AddressCity).ToList().Distinct().ToList();
             tempList.Insert(0, "");
-            return tempList.Select(c => new SelectListItem {Text = c, Value = c}).ToList();
+            return tempList.Select(c => new SelectListItem { Text = c, Value = c }).ToList();
+
+
         }
     }
 }

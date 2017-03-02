@@ -1,13 +1,22 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GoedBezigWebApp.Models
 {
-    public partial class Role
+    public partial class Role: IdentityRole
     {
-        public int RoleId { get; set; }
-        public string Name { get; set; }
+        public Role()
+        {
+        }
+
+        public Role(string role) : base(role)
+        {
+        }
+
         public string Description { get; set; }
+
     }
 }

@@ -5,19 +5,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Users Index</h2>
+<h2>Index2</h2>
 
 <p>
-   <!-- <a asp-action="Create">Create New</a>-->
+    <a asp-action="Create">Create New</a>
 </p>
-
-
-
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Username)
+                @Html.DisplayNameFor(model => model.AccessFailedCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConcurrencyStamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FamilyName)
@@ -26,264 +32,96 @@
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressCapital)
+                @Html.DisplayNameFor(model => model.LockoutEnabled)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressCity)
+                @Html.DisplayNameFor(model => model.LockoutEnd)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressCountry)
+                @Html.DisplayNameFor(model => model.NormalizedEmail)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine1)
+                @Html.DisplayNameFor(model => model.NormalizedUserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine2)
+                @Html.DisplayNameFor(model => model.PasswordHash)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressPostalCode)
+                @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AuthLevel)
+                @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BankAccount)
+                @Html.DisplayNameFor(model => model.SecurityStamp)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Banned)
+                @Html.DisplayNameFor(model => model.TwoFactorEnabled)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BicCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Birthdate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Engagement)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FacebookLogin)
-            </th>
-           
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GoogleLogin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAccountActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAgendaPublic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsProfilePublic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JobSearchDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Language)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastLogin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NationalNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nationality)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OauthProvider)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OauthUid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Passwd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswdModifiedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswdRecoveryCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswdRecoveryDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProfilePicture)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShortIntroduction)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TwitterLogin)
-            </th>
-           
-            <th>
-                @Html.DisplayNameFor(model => model.VolunteerLocation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VolunteerLocationMaxDistance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.YoutubeLogin)
+                @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FamilyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressCapital)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressCountry)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressLine1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressLine2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressPostalCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AuthLevel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BankAccount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Banned)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BicCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Birthdate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Engagement)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FacebookLogin)
-            </td>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GoogleLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAccountActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAgendaPublic)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsProfilePublic)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobSearchDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Language)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NationalNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nationality)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OauthProvider)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OauthUid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Passwd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswdModifiedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswdRecoveryCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswdRecoveryDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfilePicture)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShortIntroduction)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TwitterLogin)
-            </td>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.VolunteerLocation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VolunteerLocationMaxDistance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YoutubeLogin)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccessFailedCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FamilyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LockoutEnabled)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LockoutEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NormalizedEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NormalizedUserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PasswordHash)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SecurityStamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
