@@ -70,7 +70,7 @@ namespace GoedBezigWebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -80,6 +80,16 @@ namespace GoedBezigWebApp
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                    context.Database.EnsureDeleted();
+                    context.Database.Migrate();
+                    context.Database.EnsureCreated();
+                    context.EnsureSeedData();
+                }
             }
             else
             {
@@ -100,8 +110,6 @@ namespace GoedBezigWebApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            //DbInitializer.Initialize(context);
         }
     }
 }

@@ -1,18 +1,32 @@
 ﻿using System;
 using System.Linq;
 using GoedBezigWebApp.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Data
 {
-    public static class DbInitializer
+    public static class ApplicationDbInitializer
     {
-        public static void Initialize(ApplicationDbContext context)
+        public static void EnsureSeedData(this ApplicationDbContext context)
         {
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-            // IPV Created eigenlijk context.Database.Migrate(); + functie voor Migrte van ApplicationDbContext
+            //// --> SEED Users & Roles
+            //if (!context.Roles.Any())
+            //{
+            //    string[] roles = new string[]
+            //    {
+            //        "Vrijwilliger",
+            //        "Cursist"
+            //    };
 
+            //    var roleStore = new RoleStore<Role>(context);
+
+            //    foreach (var role in roles)
+            //    {
+                    
+            //    }
+            //}
 
             // --> SEED Organizational Addresses
             if (!context.OrganizationalAddresses.Any())
@@ -42,7 +56,7 @@ namespace GoedBezigWebApp.Data
                     },
                 };
 
-                foreach (OrganizationalAddress oa in organizationalAddresses)
+                foreach (var oa in organizationalAddresses)
                 {
                     context.OrganizationalAddresses.Add(oa);
                 }
@@ -61,7 +75,6 @@ namespace GoedBezigWebApp.Data
                         Name = "HoGent",
                         Logo = "https://upload.wikimedia.org/wikipedia/commons/1/10/HoGent_Logo.png",
                         Btw = "BE012345678901",
-//                        IdentificationNr = "2876545678",
                         Description = "University College in Ghent",
                         AddressId = 1
                     },
@@ -70,7 +83,6 @@ namespace GoedBezigWebApp.Data
                         Name = "UGent",
                         Logo = "https://webster.ugent.be/alumnivacatures/invoeren/static/images/logo-ugent_org.svg",
                         Btw = "BE022344678901",
-//                        IdentificationNr = "9838920030",
                         Description = "University Ghent",
                         AddressId = 2
                     },
@@ -79,7 +91,6 @@ namespace GoedBezigWebApp.Data
                         Name = "Solvay Economics & Management",
                         Logo = "https://lh4.googleusercontent.com/-RuXL76SEWQQ/AAAAAAAAAAI/AAAAAAAAAG4/vplxDplhGmM/s0-c-k-no-ns/photo.jpg",
                         Btw = "BE827638900032",
-//                        IdentificationNr = "66483899483",
                         Description = "Solvay offers programs for careers in management, finance, economics, marketing & more...",
                         AddressId = 3
                     }
@@ -96,50 +107,57 @@ namespace GoedBezigWebApp.Data
             if (!context.Users.Any())
             {
                 // TODO Add users to identity https://blog.falafel.com/seed-database-initial-users-mvc-5/
-                //var users = new User[]
-                //{
-                //    // DateTime today = DateTime.Today;  // de bedoeling was om de datum van vandaag op te halen maar voor de ene of andere reden werkt het niet
-                //    // Hier per ongeluk ook een apckegae system.runtime toegevoegd maar vind niet direct terug waar ik het moet verwijderen. 
-                //    new User
-                //    {
-                //        Username = "milan",
-                //        Email = "milandimax@gmail.com",
-                //        CreatedAt = DateTime.Today,
-                //        FirstName = "Milan",
-                //        FamilyName = "Dima"
-                //    },
-                //    new User
-                //    {
-                //        Username = "tom",
-                //        Email = "tom@vdbussche.net",
-                //        CreatedAt = DateTime.Today,
-                //        FirstName = "Tom",
-                //        FamilyName = "Vandenbussche"
-                //    },
-                //    new User
-                //    {
-                //        Username = "max",
-                //        Email = "max.devloo@lightspeedhq.com",
-                //        CreatedAt = DateTime.Today,
-                //        FirstName = "Maximiliaan",
-                //        FamilyName = "Devloo"
-                //    },
-                //    new User
-                //    {
-                //        Username = "bart",
-                //        Email = "bartjevm@gmail.com",
-                //        CreatedAt = DateTime.Today,
-                //        FirstName = "Bart",
-                //        FamilyName = "Vanmarcke"
-                //    }
-                //};
 
-                //foreach (User u in users)
-                //{
-                //    context.Users.Add(u);
-                //}
+                var hasher = new PasswordHasher<User>();
 
-                //context.SaveChanges();
+                var users = new User[]
+                {
+                    // DateTime today = DateTime.Today;  // de bedoeling was om de datum van vandaag op te halen maar voor de ene of andere reden werkt het niet
+                    // Hier per ongeluk ook een apckegae system.runtime toegevoegd maar vind niet direct terug waar ik het moet verwijderen. 
+                    new User
+                    {
+                        UserName = "test@test.com",
+                        Email = "test@test.com",
+                        FirstName = "Test",
+                        FamilyName = "Test"
+                    },
+                    new User
+                    {
+                        UserName = "milandimax@gmail.com",
+                        Email = "milandimax@gmail.com",
+                        FirstName = "Milan",
+                        FamilyName = "Dima"
+                    },
+                    new User
+                    {
+                        UserName = "tom@vdbussche.net",
+                        Email = "tom@vdbussche.net",
+                        FirstName = "Tom",
+                        FamilyName = "Vandenbussche"
+                    },
+                    new User
+                    {
+                        UserName = "max.devloo@lightspeedhq.com",
+                        Email = "max.devloo@lightspeedhq.com",
+                        FirstName = "Maximiliaan",
+                        FamilyName = "Devloo"
+                    },
+                    new User
+                    {
+                        UserName = "bartjevm@gmail.com",
+                        Email = "bartjevm@gmail.com",
+                        FirstName = "Bart",
+                        FamilyName = "Vanmarcke"
+                    }
+                };
+
+                foreach (var u in users)
+                {
+                    u.PasswordHash = hasher.HashPassword(u, "Test!123");
+                    context.Users.Add(u);
+                }
+
+                context.SaveChanges();
             }
 
             // --> SEED Groups
@@ -175,7 +193,7 @@ namespace GoedBezigWebApp.Data
                     },
                 };
 
-                foreach (Group g in groups)
+                foreach (var g in groups)
                 {
                     context.Groups.Add(g);
                 }
