@@ -5,32 +5,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index2</h2>
+<h2>Add Users To Group</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+   <!-- <a asp-action="Create">Create New</a> -->
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FamilyName)
+            </th> 
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            
+            
             <th>
                 @Html.DisplayNameFor(model => model.AccessFailedCount)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ConcurrencyStamp)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.EmailConfirmed)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FamilyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
+            
+            
             <th>
                 @Html.DisplayNameFor(model => model.LockoutEnabled)
             </th>
@@ -58,9 +66,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.TwoFactorEnabled)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -69,23 +75,31 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AccessFailedCount)
+                    <a href="" > @Html.DisplayFor(modelItem => item.UserName) </a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                    @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FamilyName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @Html.DisplayFor(modelItem => item.Email)
                 </td>
+                
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccessFailedCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                
                 <td>
                     @Html.DisplayFor(modelItem => item.LockoutEnabled)
                 </td>
@@ -113,9 +127,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
+                
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
