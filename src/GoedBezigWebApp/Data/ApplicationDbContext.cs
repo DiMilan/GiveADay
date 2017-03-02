@@ -8,7 +8,7 @@ using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -19,7 +19,7 @@ namespace GoedBezigWebApp.Data
         {
             base.OnModelCreating(modelBuilder);
             //modelBuilder.Entity<IdentityUser>().ToTable("Users", "dbo");
-            modelBuilder.Entity<ApplicationUser>().ToTable("Users", "dbo");
+            modelBuilder.Entity<User>().ToTable("users", "dbo");
         }
     }
 }

@@ -47,13 +47,14 @@ namespace GoedBezigWebApp
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddDbContext<GoedBezigDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //Milan: is het niet beter als we hier de connectionstring al meegeven?
+            //services.AddDbContext(options => options.UseSqlServer(@"connectionstring")
+            //dan kan je ook de master db en zo instellen
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+
+            services.AddIdentity<User, UserRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             services.AddScoped<IGroupRepository, GroupRepository>();
@@ -68,7 +69,7 @@ namespace GoedBezigWebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, GoedBezigDbContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -99,7 +100,7 @@ namespace GoedBezigWebApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initialize(context);
+            //DbInitializer.Initialize(context);
         }
     }
 }

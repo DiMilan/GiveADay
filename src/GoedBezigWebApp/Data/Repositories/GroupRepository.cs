@@ -10,12 +10,12 @@ namespace GoedBezigWebApp.Data.Repositories
 {
     public class GroupRepository : IGroupRepository
     {
-        private readonly GoedBezigDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
         private readonly DbSet<Group> _groups;
-        public GroupRepository(GoedBezigDbContext dbContext)
+        public GroupRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _groups = _dbContext.Groups;
+            //_groups = _dbContext.Groups;
         }
 
         public Group GetBy(string groupName)

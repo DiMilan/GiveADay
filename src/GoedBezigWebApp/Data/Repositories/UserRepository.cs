@@ -10,17 +10,18 @@ namespace GoedBezigWebApp.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly GoedBezigDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
         private readonly DbSet<User> _user;
-        public UserRepository(GoedBezigDbContext dbContext)
+        public UserRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _user = _dbContext.Users;
+            //_user = _dbContext.Users;
         }
 
         public User GetBy(int userId)
         {
-            return _user.SingleOrDefault((u => u.UserId == userId));
+            return null;
+            //return _user.SingleOrDefault((u => u.UserId == userId));
         }
 
         public IEnumerable<User> GetAll()
