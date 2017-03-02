@@ -143,5 +143,7 @@ namespace GoedBezigWebApp.Data
                 .HasColumnName("address_postal_code")
                 .HasMaxLength(255);
         }
+
+        public DbSet<User> User { get; set; }
     }
 }

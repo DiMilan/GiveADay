@@ -15,13 +15,12 @@ namespace GoedBezigWebApp.Data.Repositories
         public UserRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            //_user = _dbContext.Users;
+            _user = _dbContext.Users;
         }
 
-        public User GetBy(int userId)
+        public User GetBy(string userId)
         {
-            return null;
-            //return _user.SingleOrDefault((u => u.UserId == userId));
+           return _user.SingleOrDefault((u => u.Id == userId));
         }
 
         public IEnumerable<User> GetAll()
