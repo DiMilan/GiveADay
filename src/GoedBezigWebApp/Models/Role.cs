@@ -8,6 +8,13 @@ namespace GoedBezigWebApp.Models
 {
     public partial class Role: IdentityRole
     {
+        public Role()
+        {
+        }
+
+        public Role(string role) : base(role)
+        {
+        }
 
         public string Description { get; set; }
 

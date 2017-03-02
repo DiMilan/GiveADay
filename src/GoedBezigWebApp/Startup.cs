@@ -14,6 +14,7 @@ using GoedBezigWebApp.Data.Repositories;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace GoedBezigWebApp
 {
@@ -55,6 +56,8 @@ namespace GoedBezigWebApp
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserStore<ApplicationUserStore>()
+                .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IGroupRepository, GroupRepository>();
@@ -83,12 +86,8 @@ namespace GoedBezigWebApp
 
                 using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
-                    context.Database.EnsureDeleted();
-                    context.Database.Migrate();
-                    context.Database.EnsureCreated();
-                    context.EnsureSeedData();
+                    // Deletes the existing database (toggle comment to speed up startup)
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
                 }
             }
             else
@@ -110,6 +109,16 @@ namespace GoedBezigWebApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // Update database & seed data
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                context.Database.Migrate(); // Create new database and apply latest migrations
+                context.EnsureSeedData(); // Seeds dummy data into database (if not data is present)
+            }
         }
     }
 }
