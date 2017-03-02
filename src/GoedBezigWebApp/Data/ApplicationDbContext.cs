@@ -11,8 +11,9 @@ namespace GoedBezigWebApp.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     {
-        public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<Organization> Organizations { get; set; }
+        public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
