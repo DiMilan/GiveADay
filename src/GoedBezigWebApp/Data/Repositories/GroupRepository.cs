@@ -15,7 +15,7 @@ namespace GoedBezigWebApp.Data.Repositories
         public GroupRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            //_groups = _dbContext.Groups;
+            _groups = _dbContext.Groups;
         }
 
         public Group GetBy(string groupName)
