@@ -15,7 +15,7 @@ namespace GoedBezigWebApp.Data.Migrations
                 name: "roles",
                 columns: table => new
                 {
-                    role_id = table.Column<string>(nullable: false),
+                    role_id = table.Column<string>(maxLength:128, nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     name = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
@@ -44,7 +44,7 @@ namespace GoedBezigWebApp.Data.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(nullable: false),
+                    user_id = table.Column<string>(maxLength: 128, nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     email = table.Column<string>(maxLength: 256, nullable: true),
@@ -75,16 +75,16 @@ namespace GoedBezigWebApp.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<string>(nullable: false)
+                    RoleId = table.Column<string>(maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_roles_RoleId",
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",                        
                         column: x => x.RoleId,
                         principalTable: "roles",
-                        principalColumn: "Id",
+                        principalColumn: "role_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -96,7 +96,7 @@ namespace GoedBezigWebApp.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,7 +105,7 @@ namespace GoedBezigWebApp.Data.Migrations
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "users",
-                        principalColumn: "Id",
+                        principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -116,7 +116,7 @@ namespace GoedBezigWebApp.Data.Migrations
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -125,7 +125,7 @@ namespace GoedBezigWebApp.Data.Migrations
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "users",
-                        principalColumn: "Id",
+                        principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -133,8 +133,8 @@ namespace GoedBezigWebApp.Data.Migrations
                 name: "user_roles",
                 columns: table => new
                 {
-                    user_id = table.Column<string>(nullable: false),
-                    role_id = table.Column<string>(nullable: false)
+                    user_id = table.Column<string>(maxLength: 128, nullable: false),
+                    role_id = table.Column<string>(maxLength: 128, nullable: false)
                    
                 },
                 constraints: table =>
