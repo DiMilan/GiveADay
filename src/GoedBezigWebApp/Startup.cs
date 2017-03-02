@@ -14,6 +14,7 @@ using GoedBezigWebApp.Data.Repositories;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace GoedBezigWebApp
 {
@@ -55,6 +56,8 @@ namespace GoedBezigWebApp
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserStore<ApplicationUserStore>()
+                .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IGroupRepository, GroupRepository>();
@@ -83,12 +86,7 @@ namespace GoedBezigWebApp
 
                 using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
-                    context.Database.EnsureDeleted();
-                    context.Database.Migrate();
-                    context.Database.EnsureCreated();
-                    context.EnsureSeedData();
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().EnsureSeedData();
                 }
             }
             else
