@@ -5,21 +5,23 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
 
-namespace GoedBezigWebApp.Data.Migrations
+namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170302114604_CreateIdentitySchema")]
+    partial class CreateIdentitySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.ApplicationUser", b =>
+            modelBuilder.Entity("GoedBezigWebApp.Models.User", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("user_id");
 
                     b.Property<int>("AccessFailedCount");
 
@@ -27,9 +29,16 @@ namespace GoedBezigWebApp.Data.Migrations
                         .IsConcurrencyToken();
 
                     b.Property<string>("Email")
+                        .HasColumnName("email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FamilyName")
+                        .HasColumnName("family_name");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnName("first_name");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -43,7 +52,8 @@ namespace GoedBezigWebApp.Data.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnName("phone");
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
@@ -52,6 +62,7 @@ namespace GoedBezigWebApp.Data.Migrations
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
+                        .HasColumnName("username")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -63,18 +74,25 @@ namespace GoedBezigWebApp.Data.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex");
 
-                    b.ToTable("Users","dbo");
+                    b.ToTable("AspNetUsers");
+
+                    b.HasAnnotation("SqlServer:TableName", "users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("role_id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("Name")
+                        .HasColumnName("name")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
@@ -87,6 +105,10 @@ namespace GoedBezigWebApp.Data.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
+
+                    b.HasAnnotation("SqlServer:TableName", "roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -106,6 +128,8 @@ namespace GoedBezigWebApp.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
+
+                    b.HasAnnotation("SqlServer:TableName", "role_claims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
@@ -125,6 +149,8 @@ namespace GoedBezigWebApp.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims");
+
+                    b.HasAnnotation("SqlServer:TableName", "user_claims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
@@ -143,6 +169,8 @@ namespace GoedBezigWebApp.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins");
+
+                    b.HasAnnotation("SqlServer:TableName", "user_logins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
@@ -156,6 +184,8 @@ namespace GoedBezigWebApp.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasAnnotation("SqlServer:TableName", "user_roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserToken<string>", b =>
@@ -171,6 +201,22 @@ namespace GoedBezigWebApp.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+
+                    b.HasAnnotation("SqlServer:TableName", "user_tokens");
+                });
+
+            modelBuilder.Entity("GoedBezigWebApp.Models.Role", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole");
+
+                    b.Property<string>("Description")
+                        .HasColumnName("description");
+
+                    b.ToTable("Role");
+
+                    b.HasDiscriminator().HasValue("Role");
+
+                    b.HasAnnotation("SqlServer:TableName", "roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -183,7 +229,7 @@ namespace GoedBezigWebApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.ApplicationUser")
+                    b.HasOne("GoedBezigWebApp.Models.User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -191,7 +237,7 @@ namespace GoedBezigWebApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.ApplicationUser")
+                    b.HasOne("GoedBezigWebApp.Models.User")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -204,7 +250,7 @@ namespace GoedBezigWebApp.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("GoedBezigWebApp.Models.ApplicationUser")
+                    b.HasOne("GoedBezigWebApp.Models.User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

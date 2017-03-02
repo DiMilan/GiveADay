@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoedBezigWebApp.Models
 {
-    public class UserRole: IdentityRole
+    public partial class Role: IdentityRole
     {
 
         public string Description { get; set; }

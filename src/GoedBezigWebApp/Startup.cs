@@ -53,13 +53,14 @@ namespace GoedBezigWebApp
             //services.AddDbContext(options => options.UseSqlServer(@"connectionstring")
             //dan kan je ook de master db en zo instellen
 
-
-            services.AddIdentity<User, UserRole>()
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddSession();
             services.AddMvc();
 
