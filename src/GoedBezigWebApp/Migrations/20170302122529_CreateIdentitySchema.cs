@@ -10,6 +10,21 @@ namespace GoedBezigWebApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "roles",
+                columns: table => new
+                {
+                    role_id = table.Column<string>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    description = table.Column<string>(nullable: true),
+                    name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roles", x => x.role_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
@@ -37,22 +52,6 @@ namespace GoedBezigWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "roles",
-                columns: table => new
-                {
-                    role_id = table.Column<string>(nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
-                    description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_roles", x => x.role_id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "user_tokens",
                 columns: table => new
                 {
@@ -64,6 +63,27 @@ namespace GoedBezigWebApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_user_tokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "role_claims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true),
+                    RoleId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_role_claims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_role_claims_roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "roles",
+                        principalColumn: "role_id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,27 +128,6 @@ namespace GoedBezigWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "role_claims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_role_claims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_role_claims_roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "roles",
-                        principalColumn: "role_id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "user_roles",
                 columns: table => new
                 {
@@ -153,6 +152,12 @@ namespace GoedBezigWebApp.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "roles",
+                column: "NormalizedName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "users",
                 column: "NormalizedEmail");
@@ -161,12 +166,6 @@ namespace GoedBezigWebApp.Migrations
                 name: "UserNameIndex",
                 table: "users",
                 column: "NormalizedUserName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "roles",
-                column: "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
