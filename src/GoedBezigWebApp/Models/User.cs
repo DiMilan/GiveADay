@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Models
 {
-    public partial class User
+    public partial class User : IdentityUser
     {
         public User()
         {
