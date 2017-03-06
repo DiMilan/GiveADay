@@ -8,7 +8,7 @@ using GoedBezigWebApp.Data;
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170302195203_UserGroups")]
+    [Migration("20170306174330_UserGroups")]
     partial class UserGroups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -198,6 +198,28 @@ namespace GoedBezigWebApp.Migrations
                     b.HasAnnotation("SqlServer:TableName", "users");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.UserGroup", b =>
+                {
+                    b.Property<int>("UserGroupId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Accepted");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired();
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("UserGroupId");
+
+                    b.HasIndex("GroupName");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("user_groups");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -297,6 +319,17 @@ namespace GoedBezigWebApp.Migrations
                     b.HasOne("GoedBezigWebApp.Models.OrganizationalAddress", "Address")
                         .WithMany("Organization")
                         .HasForeignKey("AddressId");
+                });
+
+            modelBuilder.Entity("GoedBezigWebApp.Models.UserGroup", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupName");
+
+                    b.HasOne("GoedBezigWebApp.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

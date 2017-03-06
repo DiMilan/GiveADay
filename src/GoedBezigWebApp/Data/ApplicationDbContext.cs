@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GoedBezigWebApp.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GoedBezigWebApp.Data
 {
@@ -36,6 +37,7 @@ namespace GoedBezigWebApp.Data
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
+            MapUserGroup(modelBuilder.Entity<UserGroup>());
         }
 
         private static void MapUser(EntityTypeBuilder<User> entity)
@@ -144,6 +146,19 @@ namespace GoedBezigWebApp.Data
                 .HasMaxLength(255);
         }
 
-        public DbSet<User> User { get; set; }
+        private static void MapUserGroup(EntityTypeBuilder<UserGroup> ug)
+        {
+            ug.ToTable("user_groups");
+            ug.HasKey(t => t.UserGroupId);
+            ug.HasOne(t => t.User)
+                .WithMany()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            ug.HasOne(t => t.Group)
+                .WithMany()
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }
