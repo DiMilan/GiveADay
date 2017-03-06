@@ -37,27 +37,22 @@ namespace GoedBezigWebApp.Data
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
-            // methode oproepen usergroups
             MapUserGroup(modelBuilder.Entity<UserGroup>());
         }
 
         private static void MapUser(EntityTypeBuilder<User> entity)
         {
-            //Milan 4/3: e.Id aangepast naar e.UserId
-            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Id).HasColumnName("user_id");
             entity.Property(e => e.Email).HasColumnName("email");
-            //Milan 4/3: e.PhoneNumber aangepast naar e.Phone
-            entity.Property(e => e.Phone).HasColumnName("phone");
-            //Milan 4/3: e.UserName aangepast naar e.Username
-            entity.Property(e => e.Username).HasColumnName("username");
+            entity.Property(e => e.PhoneNumber).HasColumnName("phone");
+            entity.Property(e => e.UserName).HasColumnName("username");
             entity.Property(e => e.FirstName).HasColumnName("first_name");
             entity.Property(e => e.FamilyName).HasColumnName("family_name");
         }
 
         private static void MapRole(EntityTypeBuilder<Role> entity)
         {
-            //Milan 4/3: e.Id aangepast naar e.RoleId
-            entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.Id).HasColumnName("role_id");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Description).HasColumnName("description");
         }
@@ -150,7 +145,7 @@ namespace GoedBezigWebApp.Data
                 .HasColumnName("address_postal_code")
                 .HasMaxLength(255);
         }
-        //methode van Bart
+
         private static void MapUserGroup(EntityTypeBuilder<UserGroup> ug)
         {
             ug.ToTable("user_groups");
@@ -165,11 +160,5 @@ namespace GoedBezigWebApp.Data
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }
-        //remove migration: nog niet gelukt door build errors
-
-        //add migration: nog niet gelukt door builderrors
-        //update database: nog niet gelukt door builderrors
-        
-
     }
 }

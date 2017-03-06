@@ -14,6 +14,7 @@ using GoedBezigWebApp.Data.Repositories;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace GoedBezigWebApp
 {
@@ -47,18 +48,22 @@ namespace GoedBezigWebApp
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddDbContext<GoedBezigDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //Milan: is het niet beter als we hier de connectionstring al meegeven?
+            //services.AddDbContext(options => options.UseSqlServer(@"connectionstring")
+            //dan kan je ook de master db en zo instellen
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserStore<ApplicationUserStore>()
+                .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
+
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddSession();
             services.AddMvc();
 
@@ -68,7 +73,7 @@ namespace GoedBezigWebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, GoedBezigDbContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -78,6 +83,12 @@ namespace GoedBezigWebApp
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    // Deletes the existing database (toggle comment to speed up startup)
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
+                }
             }
             else
             {
@@ -99,7 +110,15 @@ namespace GoedBezigWebApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initialize(context);
+            // Update database & seed data
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                context.Database.Migrate(); // Create new database and apply latest migrations
+                context.EnsureSeedData(); // Seeds dummy data into database (if not data is present)
+            }
         }
     }
 }
