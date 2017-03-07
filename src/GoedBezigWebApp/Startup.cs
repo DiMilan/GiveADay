@@ -15,6 +15,7 @@ using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GoedBezigWebApp
 {
@@ -105,6 +106,7 @@ namespace GoedBezigWebApp
 
             app.UseMvc(routes =>
             {
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

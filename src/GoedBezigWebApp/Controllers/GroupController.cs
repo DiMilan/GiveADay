@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using GoedBezigWebApp.Models;
+using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,9 @@ namespace GoedBezigWebApp.Controllers
             return View();
         }
 
-        public IActionResult Edit(string name)
+        public IActionResult Edit(string id)
         {
-            Group group = new Group();
+            Group group = _groupRepository.GetBy(id);
             return View(new GroupEditViewModel(group));
         }
 
@@ -46,23 +47,21 @@ namespace GoedBezigWebApp.Controllers
             {
                 try
                 {
-                    CheckPresence(groupEditViewModel);
                     if (User.Identity.IsAuthenticated)
                     {
                          username = User.Identity.Name;
                     }
-                    Group group = new Group();
-                    MapGroupEditViewModelToGroup(groupEditViewModel, group);
-                    group.Timestamp = DateTime.Now;
+                    Group group = new Group(groupEditViewModel);
                     _groupRepository.Add(group);
                     _groupRepository.SaveChanges();
                     TempData["message"] = $"{username} De groep {group.Name} werd succesvol aangemaakt.";
-                    return RedirectToAction(nameof(Index));
+                    return View(nameof(Edit), groupEditViewModel);
                 }
-                catch (ArgumentException)
+                catch (GroupExistsException)
                 {
-                    TempData["error"] = "Er bestaat al een groep met deze naam";
-                    return RedirectToAction(nameof(Edit), groupEditViewModel);
+                    TempData["error"] = $"Er bestaat al een groep met de naam {groupEditViewModel.Name}";
+                    groupEditViewModel.Name = null;
+                    return View(nameof(Edit), groupEditViewModel);
                 }
                 catch (Exception)
                 {
@@ -71,20 +70,8 @@ namespace GoedBezigWebApp.Controllers
 
             }
             TempData["error"] = "Er is een fout opgetreden";
-            return RedirectToAction(nameof(Edit), groupEditViewModel);
+            return View(nameof(Edit), groupEditViewModel);
         }
 
-        public void CheckPresence(GroupEditViewModel groupEditViewModel)
-        {
-            if (_groupRepository.Present(groupEditViewModel.Name)) throw new ArgumentException();
-        }
-
-
-        private void MapGroupEditViewModelToGroup(GroupEditViewModel groupEditViewModel, Group group)
-        {
-            group.Name = groupEditViewModel.Name;
-            group.Timestamp = groupEditViewModel.Timestamp;
-            group.ClosedGroup = groupEditViewModel.ClosedGroup;
-        }
     }
 }
