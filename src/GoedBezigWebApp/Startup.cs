@@ -15,6 +15,10 @@ using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 namespace GoedBezigWebApp
 {
@@ -70,8 +74,34 @@ namespace GoedBezigWebApp
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-        }
 
+            //localization services
+            services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
+
+            services.AddMvc()
+                .AddViewLocalization(
+                    LanguageViewLocationExpanderFormat.Suffix,
+                    opts => { opts.ResourcesPath = "Resources"; })
+                .AddDataAnnotationsLocalization();
+            services.Configure<RequestLocalizationOptions>(
+        opts =>
+        {
+            var supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("en"),
+                new CultureInfo("fr"),
+                new CultureInfo("nl"),
+            };
+
+            opts.DefaultRequestCulture = new RequestCulture("en");
+            // Formatting numbers, dates, etc.
+            opts.SupportedCultures = supportedCultures;
+            // UI strings that we have localized.
+            opts.SupportedUICultures = supportedCultures;
+        });
+
+
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -100,6 +130,10 @@ namespace GoedBezigWebApp
             app.UseIdentity();
 
             app.UseSession();
+
+            //Localization add
+            var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
