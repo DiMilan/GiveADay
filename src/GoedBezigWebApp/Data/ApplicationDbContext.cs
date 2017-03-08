@@ -72,6 +72,10 @@ namespace GoedBezigWebApp.Data
                 .HasColumnName("CreationTime")
                 .IsRequired();
 
+            g.Property(t => t.Motivation)
+                .HasColumnName("Motivatie")
+                .HasMaxLength(1000);
+
         }
 
         private static void MapOrganization(EntityTypeBuilder<Organization> entity)
