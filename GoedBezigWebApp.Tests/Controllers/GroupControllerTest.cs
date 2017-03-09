@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using GoedBezigWebApp.Controllers;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Tests.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
 using Xunit;
@@ -67,8 +63,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         public void AddingExistingGroupThrowException()
         {
             _groupRepository.Setup(m => m.Present("Test")).Returns(true);
-            GroupEditViewModel brewerEvm = new GroupEditViewModel() { Name = "Test" };
-            //Assert.Throws<ArgumentException>(() => _controller.CheckPresence(brewerEvm));
+            new GroupEditViewModel() { Name = "Test" };
         }
 
         #endregion

@@ -9,7 +9,7 @@ namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20170306234215_add motivation")]
-    partial class addmotivation
+    partial class Addmotivation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

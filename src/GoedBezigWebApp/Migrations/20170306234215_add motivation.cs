@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GoedBezigWebApp.Migrations
 {
-    public partial class addmotivation : Migration
+    public partial class Addmotivation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

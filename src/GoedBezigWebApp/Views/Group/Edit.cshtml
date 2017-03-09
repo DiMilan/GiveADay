@@ -1,10 +1,9 @@
 @model GoedBezigWebApp.Models.GroupViewModels.GroupEditViewModel
 
 @{
-    ViewData["Title"] = Model.Name == null ? "Create Group" : "Edit Group"; ;
+    ViewData["Title"] = Model.Name == null ? "Create Group" : "Edit Group";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var action = Model.Name == null ? "Create" : "Edit";
-    var readName = Model.Name == null ? "" : "disabled";
 }
 
 <h2>@ViewData["Title"]</h2>

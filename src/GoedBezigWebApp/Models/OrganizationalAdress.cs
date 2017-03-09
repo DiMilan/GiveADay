@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GoedBezigWebApp.Models
 {
-    public partial class OrganizationalAddress
+    public sealed class OrganizationalAddress
     {
         public OrganizationalAddress()
         {
@@ -18,6 +17,6 @@ namespace GoedBezigWebApp.Models
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
 
-        public virtual ICollection<Organization> Organization { get; set; }
+        public ICollection<Organization> Organization { get; set; }
     }
 }

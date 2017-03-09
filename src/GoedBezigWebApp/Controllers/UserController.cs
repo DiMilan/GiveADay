@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GoedBezigWebApp.Models;
-using GoedBezigWebApp.Models.GroupViewModels;
+﻿using System.Linq;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GoedBezigWebApp.Models
+﻿namespace GoedBezigWebApp.Models
 {
-    public partial class Organization
+    public class Organization
     {
         public Organization()
         {

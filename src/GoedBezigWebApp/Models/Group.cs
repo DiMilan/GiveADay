@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using GoedBezigWebApp.Models.GroupViewModels;
 
@@ -23,10 +19,10 @@ namespace GoedBezigWebApp.Models
 
         public Group(GroupEditViewModel groupEditViewModel)
         {
-            this.Name = groupEditViewModel.Name;
-            this.Timestamp = DateTime.Now;
-            this.ClosedGroup = groupEditViewModel.ClosedGroup;
-            this.Motivation = groupEditViewModel.Motivation;
+            Name = groupEditViewModel.Name;
+            Timestamp = DateTime.Now;
+            ClosedGroup = groupEditViewModel.ClosedGroup;
+            Motivation = groupEditViewModel.Motivation;
         }
     }
 }
