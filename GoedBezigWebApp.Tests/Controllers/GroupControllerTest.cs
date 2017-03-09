@@ -15,12 +15,13 @@ namespace GoedBezigWebApp.Tests.Controllers
     {
         private readonly GroupController _controller;
         private readonly Mock<IGroupRepository> _groupRepository;
+        private readonly Mock<IUserRepository> _userRepository;
         private readonly DummyGoedBezigDbContext _dummyContext;
         public GroupControllerTest()
         {
             _dummyContext = new DummyGoedBezigDbContext();
             _groupRepository = new Mock<IGroupRepository>();
-            _controller = new GroupController(_groupRepository.Object)
+            _controller = new GroupController(_groupRepository.Object, _userRepository.Object)
             {
                 TempData = new Mock<ITempDataDictionary>().Object
             };

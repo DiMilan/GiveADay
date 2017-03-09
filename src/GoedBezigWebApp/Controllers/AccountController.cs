@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.AccountViewModels;
 using GoedBezigWebApp.Services;
+using Microsoft.AspNetCore.Http.Authentication;
 
 namespace GoedBezigWebApp.Controllers
 {

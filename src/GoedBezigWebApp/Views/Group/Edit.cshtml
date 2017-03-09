@@ -27,15 +27,6 @@
             </div>
         </div>
         <br/>
-        <div class="form-group">
-            <div class="col-md-12">
-                <div class="checkbox">
-                    <input asp-for="ClosedGroup" />
-                    <label asp-for="ClosedGroup"></label>
-                </div>
-            </div>
-        </div>
-        <br/>
         @if (Model.Name != null)
         {
             <div class="form-group">
@@ -48,12 +39,12 @@
             <br/>
         }
     </div>
-</form>
-<div class="row">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="submit" value="Save" class="btn btn-default" />
-    </div>
-</div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div></form>
+
 
 <p><a asp-action="Index">Back to List</a></p>
 
