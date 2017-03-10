@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using GoedBezigWebApp.Models.GroupViewModels;
 
 namespace GoedBezigWebApp.Models
@@ -15,18 +13,27 @@ namespace GoedBezigWebApp.Models
         public DateTime Timestamp { get; set; }
         public bool ClosedGroup { get; set; }
         public string Motivation { get; set; }
-        
-        public Group()
+        public ICollection<Invitation> Invitations { get; set; }
+        public IEnumerable<User> Users
         {
-            
+            get { return Invitations.Where(i => i.Status.Equals(InvitationStatus.Accepted)).Select(i => i.User); }
         }
 
-        public Group(GroupEditViewModel groupEditViewModel)
+        public Group()
         {
-            this.Name = groupEditViewModel.Name;
-            this.Timestamp = DateTime.Now;
-            this.ClosedGroup = groupEditViewModel.ClosedGroup;
-            this.Motivation = groupEditViewModel.Motivation;
+            Invitations= new List<Invitation>();
+        }
+        public Group(string Name, bool ClosedGroup): this()
+        {
+            this.Name = Name;
+            this.ClosedGroup = ClosedGroup;
+            Timestamp = DateTime.Now;
+        }
+
+        public void InviteUser(User user)
+        {
+            //ToDo add validations (eg if user is not yet present)
+            Invitations.Add(new Invitation(user, this));
         }
     }
 }

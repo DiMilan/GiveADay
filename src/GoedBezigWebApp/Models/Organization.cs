@@ -1,12 +1,14 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Razor.Chunks;
 
 namespace GoedBezigWebApp.Models
 {
-    public partial class Organization
+    public class Organization
     {
         public Organization()
         {
+            Groups = new List<Group>();
         }
 
         public int OrgId { get; set; }
@@ -16,7 +18,16 @@ namespace GoedBezigWebApp.Models
         public string Description { get; set; }
 
         public int? AddressId { get; set; }
+        public bool ClosedGroups { get; set; }
         public virtual OrganizationalAddress Address { get; set; }
+        public List<Group> Groups { get; set; }
+
+        public Group AddGroup(string groupName)
+        {
+            Group NewGroup = new Group(groupName, this.ClosedGroups);
+            Groups.Add(NewGroup);
+            return NewGroup;
+        }
 
     }
 }

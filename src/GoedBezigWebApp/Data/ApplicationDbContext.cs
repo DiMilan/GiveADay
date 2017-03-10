@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GoedBezigWebApp.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,6 +11,7 @@ namespace GoedBezigWebApp.Data
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
+        public virtual DbSet<Invitation> Invitations { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -37,7 +34,7 @@ namespace GoedBezigWebApp.Data
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
-            MapUserGroup(modelBuilder.Entity<UserGroup>());
+            MapUserGroup(modelBuilder.Entity<Invitation>());
         }
 
         private static void MapUser(EntityTypeBuilder<User> entity)
@@ -48,6 +45,8 @@ namespace GoedBezigWebApp.Data
             entity.Property(e => e.UserName).HasColumnName("username");
             entity.Property(e => e.FirstName).HasColumnName("first_name");
             entity.Property(e => e.FamilyName).HasColumnName("family_name");
+
+            entity.HasMany(u => u.Invitations).WithOne(i => i.User);
         }
 
         private static void MapRole(EntityTypeBuilder<Role> entity)
@@ -150,17 +149,17 @@ namespace GoedBezigWebApp.Data
                 .HasMaxLength(255);
         }
 
-        private static void MapUserGroup(EntityTypeBuilder<UserGroup> ug)
+        private static void MapUserGroup(EntityTypeBuilder<Invitation> ug)
         {
             ug.ToTable("user_groups");
-            ug.HasKey(t => t.UserGroupId);
+            ug.HasKey(t => new { t.UserId, t.GroupId });
             ug.HasOne(t => t.User)
-                .WithMany()
+                .WithMany(u => u.Invitations)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             ug.HasOne(t => t.Group)
-                .WithMany()
+                .WithMany(g => g.Invitations)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }

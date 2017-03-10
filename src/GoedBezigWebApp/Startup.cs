@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +10,6 @@ using GoedBezigWebApp.Data.Repositories;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
@@ -67,6 +62,7 @@ namespace GoedBezigWebApp
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IInvitationRepository, InvitationRepository>();
 
             services.AddSession();
             services.AddMvc();
@@ -150,8 +146,10 @@ namespace GoedBezigWebApp
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                context.Database.Migrate(); // Create new database and apply latest migrations
-                context.EnsureSeedData(); // Seeds dummy data into database (if not data is present)
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                //context.Database.Migrate(); // Create new database and apply latest migrations
+                new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)
             }
         }
     }

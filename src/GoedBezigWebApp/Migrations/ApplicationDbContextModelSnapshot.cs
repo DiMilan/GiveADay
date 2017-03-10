@@ -29,12 +29,31 @@ namespace GoedBezigWebApp.Migrations
                         .HasColumnName("Motivatie")
                         .HasMaxLength(1000);
 
+                    b.Property<int?>("OrganizationOrgId");
+
                     b.Property<DateTime>("Timestamp")
                         .HasColumnName("CreationTime");
 
                     b.HasKey("Name");
 
+                    b.HasIndex("OrganizationOrgId");
+
                     b.ToTable("groups");
+                });
+
+            modelBuilder.Entity("GoedBezigWebApp.Models.Invitation", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("GroupId");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("UserId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("user_groups");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Organization", b =>
@@ -49,6 +68,8 @@ namespace GoedBezigWebApp.Migrations
                     b.Property<string>("Btw")
                         .HasColumnName("btw")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("ClosedGroups");
 
                     b.Property<string>("Description")
                         .HasColumnName("description")
@@ -162,6 +183,8 @@ namespace GoedBezigWebApp.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnName("first_name");
 
+                    b.Property<string>("GroupName");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -171,6 +194,8 @@ namespace GoedBezigWebApp.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
+
+                    b.Property<int?>("OrganizationOrgId");
 
                     b.Property<string>("PasswordHash");
 
@@ -189,6 +214,8 @@ namespace GoedBezigWebApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GroupName");
+
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -196,31 +223,11 @@ namespace GoedBezigWebApp.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex");
 
+                    b.HasIndex("OrganizationOrgId");
+
                     b.ToTable("AspNetUsers");
 
                     b.HasAnnotation("SqlServer:TableName", "users");
-                });
-
-            modelBuilder.Entity("GoedBezigWebApp.Models.UserGroup", b =>
-                {
-                    b.Property<int>("UserGroupId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Accepted");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired();
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("UserGroupId");
-
-                    b.HasIndex("GroupName");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("user_groups");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -317,6 +324,24 @@ namespace GoedBezigWebApp.Migrations
                     b.HasAnnotation("SqlServer:TableName", "user_tokens");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.Organization")
+                        .WithMany("Groups")
+                        .HasForeignKey("OrganizationOrgId");
+                });
+
+            modelBuilder.Entity("GoedBezigWebApp.Models.Invitation", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.Group", "Group")
+                        .WithMany("Invitations")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("GoedBezigWebApp.Models.User", "User")
+                        .WithMany("Invitations")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.Organization", b =>
                 {
                     b.HasOne("GoedBezigWebApp.Models.OrganizationalAddress", "Address")
@@ -324,15 +349,15 @@ namespace GoedBezigWebApp.Migrations
                         .HasForeignKey("AddressId");
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.UserGroup", b =>
+            modelBuilder.Entity("GoedBezigWebApp.Models.User", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.Group", "Group")
-                        .WithMany()
+                    b.HasOne("GoedBezigWebApp.Models.Group")
+                        .WithMany("Users")
                         .HasForeignKey("GroupName");
 
-                    b.HasOne("GoedBezigWebApp.Models.User", "User")
+                    b.HasOne("GoedBezigWebApp.Models.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("OrganizationOrgId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

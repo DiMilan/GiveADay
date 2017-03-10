@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.AccountViewModels;
 using GoedBezigWebApp.Services;
+using Microsoft.AspNetCore.Http.Authentication;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -386,7 +387,7 @@ namespace GoedBezigWebApp.Controllers
                 await _smsSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
             }
 
-            return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
         //
