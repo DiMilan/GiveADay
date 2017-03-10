@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +16,9 @@ namespace GoedBezigWebApp.Data.Repositories
             _user = _dbContext.Users;
         }
 
-        public User GetBy(string userId)
+        public User GetBy(string username)
         {
-           return _user.SingleOrDefault((u => u.Id == userId));
+           return _user.Include(u => u.Organization).SingleOrDefault((u => u.UserName == username));
         }
 
         public IEnumerable<User> GetAll()

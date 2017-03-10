@@ -4,38 +4,57 @@ using System.Linq;
 using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GoedBezigWebApp.Data
 {
-    public static class ApplicationDbInitializer
+    public class ApplicationDbInitializer
     {
-        public static void EnsureSeedData(this ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        public ApplicationDbInitializer(ApplicationDbContext context)
         {
-            // Seed entity data in correct order!
-            EnsureSeedOrganizationalAddresses(context);
-            EnsureSeedOrganizations(context);
-            EnsureSeedGroups(context);
-//            EnsureSeedRoles(context).Wait();
-            EnsureSeedUsers(context).Wait();
+            _context = context;
         }
-
-        private static void EnsureSeedOrganizationalAddresses(ApplicationDbContext context)
+        public void SeedData()
         {
-            // --> SEED Organizational Addresses
-            if (context.OrganizationalAddresses.Any()) return;
 
-            var organizationalAddresses = new OrganizationalAddress[]
+            // Seed entity data in correct order!
+            //EnsureSeedOrganizationalAddresses();
+            //EnsureSeedOrganizations();
+            //EnsureSeedGroups();
+            //            EnsureSeedRoles(context).Wait();
+            EnsureSeedUsers().Wait();
+
+            // Organisatie met associaties
+            Organization hoGent = new Organization
             {
-                new OrganizationalAddress()
+                Name = "HoGent",
+                Logo = "https://upload.wikimedia.org/wikipedia/commons/1/10/HoGent_Logo.png",
+                Btw = "BE012345678901",
+                Description = "University College in Ghent",
+                ClosedGroups = true,
+                Address = new OrganizationalAddress()
                 {
                     AddressCity = "Gent",
                     AddressCountry = "Belgium",
                     AddressLine1 = "Voskenslaan 270",
                     AddressPostalCode = "9000"
-                },
+                }
+            };
+            _context.Organizations.Add(hoGent);
+            UserTest.Organization = hoGent;
+            _context.Users.Update(UserTest);
+            Group test = hoGent.AddGroup("Test");
+            _context.SaveChanges();
+        }
+
+        private void EnsureSeedOrganizationalAddresses()
+        {
+            // --> SEED Organizational Addresses
+            if (_context.OrganizationalAddresses.Any()) return;
+
+            var organizationalAddresses = new OrganizationalAddress[]
+            {
+
                 new OrganizationalAddress()
                 {
                     AddressCity = "Gent",
@@ -54,28 +73,20 @@ namespace GoedBezigWebApp.Data
 
             foreach (var oa in organizationalAddresses)
             {
-                context.OrganizationalAddresses.Add(oa);
+                _context.OrganizationalAddresses.Add(oa);
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
-        private static void EnsureSeedOrganizations(ApplicationDbContext context)
+        private void EnsureSeedOrganizations()
         {
             // --> SEED Organizations
 
-            if (context.Organizations.Any()) return;
+            if (_context.Organizations.Any()) return;
 
             var organizations = new Organization[]
             {
-                new Organization
-                {
-                    Name = "HoGent",
-                    Logo = "https://upload.wikimedia.org/wikipedia/commons/1/10/HoGent_Logo.png",
-                    Btw = "BE012345678901",
-                    Description = "University College in Ghent",
-                    AddressId = 1
-                },
                 new Organization
                 {
                     Name = "UGent",
@@ -96,16 +107,16 @@ namespace GoedBezigWebApp.Data
 
             foreach (var o in organizations)
             {
-                context.Organizations.Add(o);
+                _context.Organizations.Add(o);
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
-        private static void EnsureSeedGroups(ApplicationDbContext context)
+        private void EnsureSeedGroups()
         {
             // --> SEED Groups
-            if (context.Groups.Any()) return;
+            if (_context.Groups.Any()) return;
 
             var groups = new Group[]
             {
@@ -136,31 +147,30 @@ namespace GoedBezigWebApp.Data
                     ClosedGroup = true
                 },
             };
-
             foreach (var g in groups)
             {
-                context.Groups.Add(g);
+                _context.Groups.Add(g);
             }
-
-            context.SaveChanges();
+            
+            _context.SaveChanges();
         }
 
-        private static async Task EnsureSeedRoles(ApplicationDbContext context)
+        private async Task EnsureSeedRoles()
         {
             // --> SEED Roles
-            if (context.Roles.Any()) return;
+            if (_context.Roles.Any()) return;
 
             foreach (var role in Roles)
             {
-                var roleStore = new ApplicationRoleStore(context);
+                var roleStore = new ApplicationRoleStore(_context);
 
                 await roleStore.CreateAsync(role);
             }
 
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
-        private static async Task EnsureSeedUsers(ApplicationDbContext context)
+        private async Task EnsureSeedUsers()
         {
             // --> SEED Users
             foreach (var user in Users)
@@ -169,7 +179,7 @@ namespace GoedBezigWebApp.Data
 
                 user.PasswordHash = passwordHasher.HashPassword(user, DefaultPassword);
 
-                var userStore = new ApplicationUserStore(context);
+                var userStore = new ApplicationUserStore(_context);
 
                 await userStore.CreateAsync(user);
 
@@ -182,7 +192,7 @@ namespace GoedBezigWebApp.Data
                 //await userManager.AddToRolesAsync(user, UserRoles[user]);
             }
 
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         #region UserData
@@ -209,13 +219,13 @@ namespace GoedBezigWebApp.Data
 
         private static readonly Dictionary<User, string[]> UserRoles = new Dictionary<User, string[]>()
         {
-            { UserTest, new string[] {} },
             { UserVrijwilliger, new string[] { RoleNameVrijwilliger } },
             { UserCursist, new string[] { RoleNameCursist } },
             { UserMilan, new string[] {} },
             { UserTom, new string[] {} },
             { UserMax, new string[] {} },
             { UserBart, new string[] {} },
+            { UserTest, new string[] {} }
         };
 
         #endregion
@@ -241,7 +251,7 @@ namespace GoedBezigWebApp.Data
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = false,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
-                LockoutEnabled = true
+                LockoutEnabled = true,
             };
         }
 

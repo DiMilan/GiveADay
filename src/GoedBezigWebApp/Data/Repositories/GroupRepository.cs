@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
+using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Data.Repositories
 {
+
     public class GroupRepository : IGroupRepository
     {
         private readonly ApplicationDbContext _dbContext;
@@ -20,7 +20,7 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public Group GetBy(string groupName)
         {
-            return _groups.Single((g => g.Name == groupName));
+            return _groups.Find(groupName);
         }
 
         public IEnumerable<Group> GetAll()
@@ -30,6 +30,7 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public void Add(Group group)
         {
+            if (Present(group.Name)) throw new GroupExistsException();
             _groups.Add(group);
         }
 

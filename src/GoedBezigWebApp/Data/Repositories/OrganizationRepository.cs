@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using NUglify.Helpers;
 
 namespace GoedBezigWebApp.Data.Repositories
 {
     public class OrganizationRepository : IOrganizationRepository
     {
-        private readonly ApplicationDbContext _dbContext;
         private readonly DbSet<Organization> _organizations;
         public OrganizationRepository(ApplicationDbContext dbContext)
         {
-            _dbContext = dbContext;
-            _organizations = _dbContext.Organizations;
+            _organizations = dbContext.Organizations;
         }
 
         public Organization GetBy(int organizationId)
