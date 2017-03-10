@@ -6,16 +6,19 @@ using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace GoedBezigWebApp.Controllers
 {
     public class UserController : Controller
     {
+        private readonly IStringLocalizer<HomeController> _localizer;
         private readonly IUserRepository _userRepository;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IStringLocalizer<HomeController> localizer)
         {
             _userRepository = userRepository;
+            _localizer = localizer;
         }
 
         public IActionResult Index()
