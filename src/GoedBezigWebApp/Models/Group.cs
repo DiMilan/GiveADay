@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using GoedBezigWebApp.Models.GroupViewModels;
 
 namespace GoedBezigWebApp.Models
@@ -12,13 +13,15 @@ namespace GoedBezigWebApp.Models
         public DateTime Timestamp { get; set; }
         public bool ClosedGroup { get; set; }
         public string Motivation { get; set; }
-        public List<User> Users { get; set; }
-        public List<UserGroup> UserGroups { get; set; }
+        public ICollection<Invitation> Invitations { get; set; }
+        public IEnumerable<User> Users
+        {
+            get { return Invitations.Where(i => i.Status.Equals(InvitationStatus.Accepted)).Select(i => i.User); }
+        }
 
         public Group()
         {
-            Users = new List<User>();
-            UserGroups= new List<UserGroup>();
+            Invitations= new List<Invitation>();
         }
         public Group(string Name, bool ClosedGroup): this()
         {
@@ -27,10 +30,10 @@ namespace GoedBezigWebApp.Models
             Timestamp = DateTime.Now;
         }
 
-        public void AddUser(User user)
+        public void InviteUser(User user)
         {
             //ToDo add validations (eg if user is not yet present)
-            Users.Add(user);
+            Invitations.Add(new Invitation(user, this));
         }
     }
 }

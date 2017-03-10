@@ -1,0 +1,38 @@
+@model IEnumerable<GoedBezigWebApp.Models.Invitation>
+
+@{
+    ViewData["Title"] = "Invitations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Invitations</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Group.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Group.ClosedGroup)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Group.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Group.ClosedGroup)
+        </td>
+        <td>
+            @Html.ActionLink("Accept", "Decline", new { id = item.GroupId }) |
+            @Html.ActionLink("Decline", "Accept", new { id = item.GroupId })
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

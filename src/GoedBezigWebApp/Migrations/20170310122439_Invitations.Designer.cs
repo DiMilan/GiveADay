@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
+using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170310122439_Invitations")]
+    partial class Invitations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -43,15 +45,22 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Invitation", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<int>("UserGroupId")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupName")
+                        .IsRequired();
 
                     b.Property<int>("Status");
 
-                    b.HasKey("UserId", "GroupId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
-                    b.HasIndex("GroupId");
+                    b.HasKey("UserGroupId");
+
+                    b.HasIndex("GroupName");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("user_groups");
                 });
@@ -335,7 +344,7 @@ namespace GoedBezigWebApp.Migrations
                 {
                     b.HasOne("GoedBezigWebApp.Models.Group", "Group")
                         .WithMany("Invitations")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupName");
 
                     b.HasOne("GoedBezigWebApp.Models.User", "User")
                         .WithMany("Invitations")
@@ -351,7 +360,7 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.User", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.Group")
+                    b.HasOne("GoedBezigWebApp.Models.Group", "Group")
                         .WithMany("Users")
                         .HasForeignKey("GroupName");
 

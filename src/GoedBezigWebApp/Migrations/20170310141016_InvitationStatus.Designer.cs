@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
+using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170309214912_ModelChanges2")]
-    partial class ModelChanges2
+    [Migration("20170310141016_InvitationStatus")]
+    partial class InvitationStatus
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,21 @@ namespace GoedBezigWebApp.Migrations
                     b.HasIndex("OrganizationOrgId");
 
                     b.ToTable("groups");
+                });
+
+            modelBuilder.Entity("GoedBezigWebApp.Models.Invitation", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("GroupId");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("UserId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("user_groups");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Organization", b =>
@@ -216,32 +232,6 @@ namespace GoedBezigWebApp.Migrations
                     b.HasAnnotation("SqlServer:TableName", "users");
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.UserGroup", b =>
-                {
-                    b.Property<int>("UserGroupId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Accepted");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired();
-
-                    b.Property<string>("GroupName1");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("UserGroupId");
-
-                    b.HasIndex("GroupName");
-
-                    b.HasIndex("GroupName1");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("user_groups");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -343,6 +333,17 @@ namespace GoedBezigWebApp.Migrations
                         .HasForeignKey("OrganizationOrgId");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.Invitation", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.Group", "Group")
+                        .WithMany("Invitations")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("GoedBezigWebApp.Models.User", "User")
+                        .WithMany("Invitations")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.Organization", b =>
                 {
                     b.HasOne("GoedBezigWebApp.Models.OrganizationalAddress", "Address")
@@ -352,28 +353,13 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.User", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.Group", "Group")
+                    b.HasOne("GoedBezigWebApp.Models.Group")
                         .WithMany("Users")
                         .HasForeignKey("GroupName");
 
                     b.HasOne("GoedBezigWebApp.Models.Organization", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationOrgId");
-                });
-
-            modelBuilder.Entity("GoedBezigWebApp.Models.UserGroup", b =>
-                {
-                    b.HasOne("GoedBezigWebApp.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupName");
-
-                    b.HasOne("GoedBezigWebApp.Models.Group")
-                        .WithMany("UserGroups")
-                        .HasForeignKey("GroupName1");
-
-                    b.HasOne("GoedBezigWebApp.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
