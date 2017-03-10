@@ -8,7 +8,6 @@ namespace GoedBezigWebApp.Models.Repositories
         IEnumerable<User> GetAll();
         void Add(User user);
         void Delete(User user);
-        void Update(User user);
         void SaveChanges();
     }
 }
