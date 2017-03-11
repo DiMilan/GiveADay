@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -39,11 +42,11 @@
                         
                         <ul class="nav navbar-nav">
                             <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link"><span>Home</span></a></li>
-                            <li class="nav-item"><a asp-area="" asp-controller="Invitation" asp-action="Index" class="nav-link"><span>Invitation</span></a></li>
-                            <li class="nav-item"><a asp-area="" asp-controller="Organization" asp-action="Index" class="nav-link"><span>Organizations</span></a></li>
-                            <li class="nav-item"><a asp-area="" asp-controller="Group" asp-action="Index" class="nav-link"><span>GroupIndex</span></a></li>
-                            <li class="nav-item"><a asp-area="" asp-controller="Group" asp-action="Create" class="nav-link"><span>NewGroup</span></a></li>
-                            <li class="nav-item"><a asp-area="" asp-controller="User" asp-action="Index" class="nav-link"><span>Users</span></a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Invitation" asp-action="Index" class="nav-link"><span>@Localizer["Invitation"]</span></a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Organization" asp-action="Index" class="nav-link"><span>@Localizer["Organizations"]</span></a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Group" asp-action="Index" class="nav-link"><span>@Localizer["GroupIndex"]</span></a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Group" asp-action="Create" class="nav-link"><span>@Localizer["NewGroup"]</span></a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="User" asp-action="Index" class="nav-link"><span>@Localizer["Users"]</span></a></li>
                             <li class="nav-divider"></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -79,7 +82,7 @@
             <footer>
                 <div class="row">
                     <div class="col-sm-6">
-                        <p>&copy; 2016 - Adding Localization</p>
+                        <p>&copy; 2017 - GoedBezigWebapp</p>
                     </div>
                     <div class="col-sm-6 text-right">
                         @await Html.PartialAsync("_SelectLanguagePartial")
