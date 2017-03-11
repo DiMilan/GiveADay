@@ -71,7 +71,7 @@ namespace GoedBezigWebApp
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            //localization services
+            //localization services (middleware)
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
 
             services.AddMvc()
@@ -79,17 +79,18 @@ namespace GoedBezigWebApp
                     LanguageViewLocationExpanderFormat.Suffix,
                     opts => { opts.ResourcesPath = "Resources"; })
                 .AddDataAnnotationsLocalization();
+            //add localization midleware 
             services.Configure<RequestLocalizationOptions>(
         opts =>
         {
             var supportedCultures = new List<CultureInfo>
             {
-                new CultureInfo("en"),
-                new CultureInfo("fr"),
-                new CultureInfo("nl"),
+                new CultureInfo("en-US"),
+                new CultureInfo("fr-FR"),
+                new CultureInfo("nl-NL"),
             };
 
-            opts.DefaultRequestCulture = new RequestCulture("en");
+            opts.DefaultRequestCulture = new RequestCulture("en-US");
             // Formatting numbers, dates, etc.
             opts.SupportedCultures = supportedCultures;
             // UI strings that we have localized.
