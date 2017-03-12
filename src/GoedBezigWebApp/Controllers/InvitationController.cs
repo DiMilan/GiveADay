@@ -14,14 +14,12 @@ namespace GoedBezigWebApp.Controllers
     public class InvitationController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository;
         private readonly IInvitationRepository _invitationRepository;
 
 
-        public InvitationController(UserManager<User> userManager, IUserRepository userRepository, IInvitationRepository invitationRepository)
+        public InvitationController(UserManager<User> userManager, IInvitationRepository invitationRepository)
         {
             _userManager = userManager;
-            _userRepository = userRepository;
             _invitationRepository = invitationRepository;
         }
 
@@ -31,11 +29,68 @@ namespace GoedBezigWebApp.Controllers
 
             if (user == null)
             {
-                return View("Error");
+                TempData["error"] = "User not logged in";
+                return View();
             }
-            
-            return View(_invitationRepository.GetForUser(user));
+            else
+            {
+                return View(_invitationRepository.GetForUser(user));
+            }
         }
+
+        public async Task<IActionResult> Accept(string id)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                TempData["error"] = "User not logged in";
+            }
+            else
+            {
+                var invitation = _invitationRepository.GetById(user.Id, id);
+
+                if (invitation == null)
+                {
+                    TempData["error"] = string.Format("Invitation  does not exist (userId = {0}, groupId = {1})", user.Id, id);
+                }
+                else
+                {
+                    invitation.Accept();
+                    _invitationRepository.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        
+        public async Task<IActionResult> Decline(string id)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                TempData["error"] = "User not logged in";
+            }
+            else
+            {
+                var invitation = _invitationRepository.GetById(user.Id, id);
+
+                if (invitation == null)
+                {
+                    TempData["error"] = string.Format("Invitation  does not exist (userId = {0}, groupId = {1})", user.Id, id);
+                }
+                else
+                {
+                    invitation.Decline();
+                    _invitationRepository.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
         private Task<User> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);

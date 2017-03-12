@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -81,23 +82,26 @@ namespace GoedBezigWebApp
                 .AddDataAnnotationsLocalization();
             //add localization midleware 
             services.Configure<RequestLocalizationOptions>(
-        opts =>
-        {
-            var supportedCultures = new List<CultureInfo>
+                opts =>
+                {
+                    var supportedCultures = new List<CultureInfo>
+                    {
+                        new CultureInfo("en-US"),
+                        new CultureInfo("fr-FR"),
+                        new CultureInfo("nl-NL")
+                    };
+
+                    opts.DefaultRequestCulture = new RequestCulture("en-US");
+                    // Formatting numbers, dates, etc.
+                    opts.SupportedCultures = supportedCultures;
+                    // UI strings that we have localized.
+                    opts.SupportedUICultures = supportedCultures;
+                });
+
+            services.Configure<IdentityOptions>(options =>
             {
-                new CultureInfo("en-US"),
-                new CultureInfo("fr-FR"),
-                new CultureInfo("nl-NL"),
-            };
-
-            opts.DefaultRequestCulture = new RequestCulture("en-US");
-            // Formatting numbers, dates, etc.
-            opts.SupportedCultures = supportedCultures;
-            // UI strings that we have localized.
-            opts.SupportedUICultures = supportedCultures;
-        });
-
-
+                options.SecurityStampValidationInterval = TimeSpan.Zero;
+            });
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -116,6 +120,7 @@ namespace GoedBezigWebApp
                     // Deletes the existing database (toggle comment to speed up startup)
                     serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
                 }
+
             }
             else
             {
@@ -147,7 +152,6 @@ namespace GoedBezigWebApp
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 //context.Database.Migrate(); // Create new database and apply latest migrations
                 new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)
