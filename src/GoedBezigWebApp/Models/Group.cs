@@ -16,9 +16,9 @@ namespace GoedBezigWebApp.Models
         public string Motivation { get; set; }
         public MotivationStatus.MotivationState MotivationStatus { get; set; }
         public ICollection<Invitation> Invitations { get; set; }
-        public IEnumerable<User> Users
+        public ICollection<User> Users
         {
-            get { return Invitations.Where(i => i.Status.Equals(InvitationStatus.Accepted)).Select(i => i.User); }
+            get { return Invitations.Where(i => i.Status.Equals(InvitationStatus.Accepted)).Select(i => i.User).ToList(); }
         }
 
         public Group()

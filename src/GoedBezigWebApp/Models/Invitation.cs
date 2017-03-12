@@ -5,9 +5,9 @@ namespace GoedBezigWebApp.Models
     public class Invitation
     {
         public string UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public string GroupId { get; set; }
-        public Group Group { get; set; }
+        public virtual Group Group { get; set; }
         public InvitationStatus Status { get; set; }
 
         public Invitation()
@@ -39,7 +39,6 @@ namespace GoedBezigWebApp.Models
             {
                 Status = InvitationStatus.Accepted;
             }
-
         }
 
         public void Decline()

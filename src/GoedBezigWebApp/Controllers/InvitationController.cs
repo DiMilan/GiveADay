@@ -14,13 +14,13 @@ namespace GoedBezigWebApp.Controllers
     public class InvitationController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IInvitationRepository _invitationRepository;
+        private readonly IUserRepository _userRepository;
 
 
-        public InvitationController(UserManager<User> userManager, IInvitationRepository invitationRepository)
+        public InvitationController(UserManager<User> userManager, IUserRepository userRepository)
         {
             _userManager = userManager;
-            _invitationRepository = invitationRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -34,7 +34,7 @@ namespace GoedBezigWebApp.Controllers
             }
             else
             {
-                return View(_invitationRepository.GetForUser(user));
+                return View(user.GetPendingInvitations());
             }
         }
 
@@ -48,7 +48,7 @@ namespace GoedBezigWebApp.Controllers
             }
             else
             {
-                var invitation = _invitationRepository.GetById(user.Id, id);
+                var invitation = user.Invitations.FirstOrDefault(i => i.GroupId == id);
 
                 if (invitation == null)
                 {
@@ -56,8 +56,8 @@ namespace GoedBezigWebApp.Controllers
                 }
                 else
                 {
-                    invitation.Accept();
-                    _invitationRepository.SaveChanges();
+                    user.AcceptInvitation(invitation);
+                    _userRepository.SaveChanges();
                 }
             }
 
@@ -75,7 +75,7 @@ namespace GoedBezigWebApp.Controllers
             }
             else
             {
-                var invitation = _invitationRepository.GetById(user.Id, id);
+                var invitation = user.Invitations.FirstOrDefault(i => i.GroupId == id);
 
                 if (invitation == null)
                 {
@@ -83,17 +83,18 @@ namespace GoedBezigWebApp.Controllers
                 }
                 else
                 {
-                    invitation.Decline();
-                    _invitationRepository.SaveChanges();
+                    user.DeclineInvitation(invitation);
+                    _userRepository.SaveChanges();
                 }
             }
 
             return RedirectToAction("Index");
         }
 
-        private Task<User> GetCurrentUserAsync()
+        private async Task<User> GetCurrentUserAsync()
         {
-            return _userManager.GetUserAsync(HttpContext.User);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return user != null ? _userRepository.GetBy(user.UserName) : null;
         }
     }
 }
