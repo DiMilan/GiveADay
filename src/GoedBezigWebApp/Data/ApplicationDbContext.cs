@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GoedBezigWebApp.Models;
+using GoedBezigWebApp.Models.MotivationStatus;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -12,6 +13,7 @@ namespace GoedBezigWebApp.Data
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
         public virtual DbSet<Invitation> Invitations { get; set; }
+        public virtual DbSet<Invitation> MotivationState { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -28,13 +30,30 @@ namespace GoedBezigWebApp.Data
             modelBuilder.Entity<IdentityUserClaim<string>>().ForSqlServerToTable("user_claims");
             modelBuilder.Entity<IdentityUserToken<string>>().ForSqlServerToTable("user_tokens");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ForSqlServerToTable("role_claims");
+            modelBuilder.Entity<MotivationState>().HasKey(k => k.MotivationStatusId);
+            modelBuilder.Entity<OpenState>();
+            modelBuilder.Entity<SubmittedState>();
+            modelBuilder.Entity<ApprovedState>();
+            modelBuilder.Entity<DeclinedState>();
 
             MapUser(modelBuilder.Entity<User>().ForSqlServerToTable("users"));
             MapRole(modelBuilder.Entity<Role>().ForSqlServerToTable("roles"));
+            MapMotivationState(modelBuilder.Entity<MotivationState>());
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
+        }
+
+        private void MapMotivationState(EntityTypeBuilder<MotivationState> ms)
+        {
+            ms.HasKey(k => k.MotivationStatusId);
+
+            ms.Property(p => p.MotivationStatusId).ValueGeneratedOnAdd();
+            ms.Property(p => p.Name)
+                .HasColumnName("MotivationName")
+                .IsRequired()
+                .HasMaxLength(100);
         }
 
         private static void MapUser(EntityTypeBuilder<User> entity)
@@ -60,9 +79,9 @@ namespace GoedBezigWebApp.Data
         {
             g.ToTable("groups");
 
-            g.HasKey(gr => gr.Name);
+            g.HasKey(gr => gr.GroupName);
 
-            g.Property(t => t.Name)
+            g.Property(t => t.GroupName)
                 .HasColumnName("GroupName")
                 .IsRequired()
                 .HasMaxLength(100);
@@ -74,6 +93,9 @@ namespace GoedBezigWebApp.Data
             g.Property(t => t.Motivation)
                 .HasColumnName("Motivatie")
                 .HasMaxLength(1000);
+
+            g.HasOne(t => t.MotivationStatus)
+                .WithMany();
 
         }
 

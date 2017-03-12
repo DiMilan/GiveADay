@@ -1,3 +1,4 @@
+@using Castle.Core.Internal
 @model GoedBezigWebApp.Models.GroupViewModels.GroupEditViewModel
 
 @{
@@ -27,7 +28,7 @@
             </div>
         </div>
         <br/>
-        @if (Model.Name != null)
+        @if (!Model.Name.IsNullOrEmpty())
         {
             <div class="form-group">
                 <label asp-for="Motivation" class="col-md-2 control-label"></label>

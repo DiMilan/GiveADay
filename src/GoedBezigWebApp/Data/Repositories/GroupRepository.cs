@@ -30,7 +30,7 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public void Add(Group group)
         {
-            if (Present(group.Name)) throw new GroupExistsException();
+            if (Present(group.GroupName)) throw new GroupExistsException();
             _groups.Add(group);
         }
 

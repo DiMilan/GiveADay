@@ -5,6 +5,7 @@ using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoedBezigWebApp.Controllers
@@ -31,6 +32,7 @@ namespace GoedBezigWebApp.Controllers
             return View(new GroupEditViewModel(group));
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return View(nameof(Edit), new GroupEditViewModel(new Group()));
@@ -50,15 +52,15 @@ namespace GoedBezigWebApp.Controllers
                         Group group = user.Organization.AddGroup(groupEditViewModel.Name);
                         _groupRepository.Add(group);
                         _groupRepository.SaveChanges();
-                        TempData["message"] = $"{username} De groep {group.Name} werd succesvol aangemaakt.";
+                        TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangemaakt.";
 
                         //Mail notification to lector
                         //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
                         var mailer = new AuthMessageSender();
                         var sendMail =  mailer.SendEmailAsync("devloomax@mdware.org",
                             "Group has been added",
-                            String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.Name),
-                            String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.Name));
+                            String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.GroupName),
+                            String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.GroupName));
                         return View(nameof(Edit), groupEditViewModel);
                     }
                 }
@@ -67,11 +69,11 @@ namespace GoedBezigWebApp.Controllers
                     TempData["error"] = $"Er bestaat al een groep met de naam {groupEditViewModel.Name}. Kies een andere naam";
                     groupEditViewModel.Name = null;
                 }
-                catch (Exception)
-                {
-                    TempData["error"] = $"Er is iets fout gelopen. Groep {groupEditViewModel.Name} werd niet opgeslagen";
-                    groupEditViewModel.Name = null;
-                }
+                //catch (Exception)
+                //{
+                //    TempData["error"] = $"Er is iets fout gelopen. Groep {groupEditViewModel.Name} werd niet opgeslagen";
+                //    groupEditViewModel.Name = null;
+                //}
 
             }
             return View(nameof(Edit), groupEditViewModel);
