@@ -7,7 +7,7 @@ namespace GoedBezigWebApp.Models.Repositories
     {
         Organization GetBy(int organizationId);
         IEnumerable<Organization> GetAll();
-        IEnumerable<SelectListItem> GetAllUniqueCities();
+        SelectList GetAllUniqueCities();
         IEnumerable<Organization> GetAllFilteredByNameAndLocation(string searchName, string searchLocation);
     }
 }

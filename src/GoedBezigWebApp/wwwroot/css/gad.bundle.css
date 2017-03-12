@@ -15868,3 +15868,14 @@ be a descendant of the grid when it is being dragged.
 .fc-unthemed .fc-list-empty { /* theme will provide own background */
 	background-color: #eee;
 }
+
+/* Max CSS Edits*/
+.importantMsg {
+    font-weight: bold;
+    font-style: italic;
+}
+
+input, select {
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+}
