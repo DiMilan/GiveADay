@@ -28,7 +28,7 @@
             </div>
         </div>
         <br/>
-        @if (!Model.Name.IsNullOrEmpty())
+        @if (Model.MotivationEditable)
         {
             <div class="form-group">
                 <label asp-for="Motivation" class="col-md-2 control-label"></label>
@@ -38,6 +38,17 @@
                 </div>
             </div>
             <br/>
+        }
+        else
+        {
+            <div class="form-group">
+                <label asp-for="Motivation" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <textarea asp-for="Motivation" class="form-control" rows="3" disabeled></textarea>
+                    <span asp-validation-for="Motivation" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
         }
     </div>
     <div class="row">
