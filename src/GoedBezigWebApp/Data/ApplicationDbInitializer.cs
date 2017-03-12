@@ -32,6 +32,7 @@ namespace GoedBezigWebApp.Data
                 _context.Organizations.Add(HoGent);
                 _context.Organizations.Add(UGent);
                 _context.Organizations.Add(Solvay);
+                _context.Organizations.Add(TestOrg);
 
             _context.SaveChanges();
         }
@@ -43,6 +44,7 @@ namespace GoedBezigWebApp.Data
             Name = "HoGent",
             Logo = "https://upload.wikimedia.org/wikipedia/commons/1/10/HoGent_Logo.png",
             Btw = "BE012345678901",
+            Domain = "hogent.be",
             Description = "University College in Ghent",
             ClosedGroups = true,
             Address = new OrganizationalAddress()
@@ -59,6 +61,7 @@ namespace GoedBezigWebApp.Data
             Name = "UGent",
             Logo = "https://webster.ugent.be/alumnivacatures/invoeren/static/images/logo-ugent_org.svg",
             Btw = "BE022344678901",
+            Domain = "ugent.be",
             Description = "University Ghent",
             Address = new OrganizationalAddress()
             {
@@ -75,6 +78,7 @@ namespace GoedBezigWebApp.Data
             Logo =
                 "https://lh4.googleusercontent.com/-RuXL76SEWQQ/AAAAAAAAAAI/AAAAAAAAAG4/vplxDplhGmM/s0-c-k-no-ns/photo.jpg",
             Btw = "BE827638900032",
+            Domain = "solvay.edu",
             Description = "Solvay offers programs for careers in management, finance, economics, marketing & more...",
             Address = new OrganizationalAddress()
             {
@@ -84,7 +88,22 @@ namespace GoedBezigWebApp.Data
                 AddressPostalCode = "1050"
             }
         };
-        
+
+        private static readonly Organization TestOrg = new Organization
+        {
+            Name = "Test University",
+            Btw = "BE9876545678",
+            Description = "Test University is the greatest University in the world. Come make Test great again.",
+            Domain = "test.be",
+            Address = new OrganizationalAddress()
+            {
+                AddressCity = "Washington",
+                AddressCountry = "US",
+                AddressLine1 = "White House Street 4",
+                AddressPostalCode = "1000"
+            }
+        };
+
         #endregion
 
         private void EnsureSeedGroups()

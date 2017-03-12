@@ -104,6 +104,8 @@ namespace GoedBezigWebApp.Migrations
                         .HasColumnName("description")
                         .HasMaxLength(800);
 
+                    b.Property<string>("Domain");
+
                     b.Property<string>("Logo")
                         .HasColumnName("logo")
                         .HasMaxLength(255);

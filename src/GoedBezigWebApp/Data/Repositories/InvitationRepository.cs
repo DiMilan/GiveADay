@@ -17,19 +17,19 @@ namespace GoedBezigWebApp.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<Invitation> GetForUser(User user)
-        {
-            return _context.Invitations.Include(i => i.Group).Where(i => i.User == user);
-        }
+        public IEnumerable<Invitation> GetForUser(User user) => _context.Invitations.Where(i => i.User == user).Include(i => i.Group);
 
         public void Add(Invitation invitation)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Invitation invitation)
-        {
-            _context.Invitations.Update(invitation);
-        }
+        public void Update(Invitation invitation) => _context.Invitations.Update(invitation);
+        
+
+        public void SaveChanges() => _context.SaveChanges();
+        
+
+        public Invitation GetById(string userId, string groupId) => _context.Invitations.FirstOrDefault(i => i.UserId == userId && i.GroupId == groupId);
     }
 }
