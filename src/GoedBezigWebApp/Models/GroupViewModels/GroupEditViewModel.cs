@@ -21,7 +21,8 @@ namespace GoedBezigWebApp.Models.GroupViewModels
 
         public GroupEditViewModel()
         {
-
+            MotivationEditable = true;
+            MotivationSubmittable = true;
         }
 
         public GroupEditViewModel(Group group)

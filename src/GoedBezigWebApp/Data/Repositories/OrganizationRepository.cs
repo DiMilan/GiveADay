@@ -46,12 +46,13 @@ namespace GoedBezigWebApp.Data.Repositories
         }
 
         //Refactor to use SelectList instead of SelectListItem
-        public IEnumerable<SelectListItem> GetAllUniqueCities()
+        public SelectList GetAllUniqueCities()
         {
             //As SelectListitem provides no comparator a new could be written but splitting the filtering in two parts seems shorter. Writing this one line gives a ValueBufferShaper error which is a bug in core 1.1 and below.
-            List<string> tempList = _organizations.Include(o => o.Address).Select(o => o.Address.AddressCity).ToList().Distinct().ToList();
-            tempList.Insert(0, "");
-            return tempList.Select(c => new SelectListItem { Text = c, Value = c }).ToList();
+            IEnumerable<string> tempList = _organizations.Include(o => o.Address).Select(o => o.Address.AddressCity).ToList().Distinct().ToList();
+            //tempList.Insert(0, "");
+            return new SelectList(tempList);
+            //return tempList.Select(c => new SelectListItem { Text = c, Value = c }).ToList();
         }
     }
 }

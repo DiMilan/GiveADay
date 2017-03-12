@@ -15,6 +15,8 @@ namespace GoedBezigWebApp.Models
 
         public Organization Organization { get; set; }
 
+        public User LectorUser { get; set; }
+
         public User()
         {
             Invitations = new List<Invitation>();

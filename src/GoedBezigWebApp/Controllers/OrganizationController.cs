@@ -7,6 +7,7 @@ using GoedBezigWebApp.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using NUglify.Helpers;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -36,6 +37,7 @@ namespace GoedBezigWebApp.Controllers
             ViewData["searchName"] = searchName;
             ViewData["searchLocation"] = searchLocation;
             ViewBag.Cities = _organizationRepository.GetAllUniqueCities();
+            ViewBag.User = user;
             return View(_organizationRepository.GetAllFilteredByNameAndLocation(searchName,searchLocation));
         }
 
@@ -53,6 +55,7 @@ namespace GoedBezigWebApp.Controllers
                 Organization organization = _organizationRepository.GetBy(id);
                 User userToEdit = _userRepository.GetBy(user.UserName);
                 if(!user.Email.Split('@')[1].Contains(organization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
+                if(user.Organization != null) throw new OrganizationException($"You are already registered in organization {userToEdit.Organization.Name}.");
                 userToEdit.Organization = organization;
                 _userRepository.SaveChanges();
                 TempData["message"] =
