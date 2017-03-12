@@ -8,7 +8,9 @@ namespace GoedBezigWebApp.Models.Repositories
     public interface IInvitationRepository
     {
         IEnumerable<Invitation> GetForUser(User user);
+        Invitation GetById(string userId, string groupId);
         void Add(Invitation invitation);
         void Update(Invitation invitation);
+        void SaveChanges();
     }
 }
