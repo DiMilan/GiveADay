@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
+using GoedBezigWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoedBezigWebApp.Controllers
@@ -49,6 +51,14 @@ namespace GoedBezigWebApp.Controllers
                         _groupRepository.Add(group);
                         _groupRepository.SaveChanges();
                         TempData["message"] = $"{username} De groep {group.Name} werd succesvol aangemaakt.";
+
+                        //Mail notification to lector
+                        //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
+                        var mailer = new AuthMessageSender();
+                        var sendMail =  mailer.SendEmailAsync("devloomax@mdware.org",
+                            "Group has been added",
+                            String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.Name),
+                            String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.Name));
                         return View(nameof(Edit), groupEditViewModel);
                     }
                 }
