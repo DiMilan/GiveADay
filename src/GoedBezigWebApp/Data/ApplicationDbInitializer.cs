@@ -93,14 +93,14 @@ namespace GoedBezigWebApp.Data
             if (_context.Groups.Any()) return;
 
             var groupHogent = HoGent.AddGroup("Test1");
-            var groupUGent = UGent.AddGroup("Test2");
-            var groupSolvay = Solvay.AddGroup("Test3");
+            //var groupUGent = UGent.AddGroup("Test2");
+            //var groupSolvay = Solvay.AddGroup("Test3");
 
             _context.SaveChanges();
 
             _context.Invitations.Add(new Invitation(UserTest, groupHogent));
-            _context.Invitations.Add(new Invitation(UserTest, groupUGent));
-            _context.Invitations.Add(new Invitation(UserCursist, groupSolvay));
+            //_context.Invitations.Add(new Invitation(UserTest, groupUGent));
+            //_context.Invitations.Add(new Invitation(UserCursist, groupSolvay));
 
             _context.SaveChanges();
 
@@ -148,7 +148,7 @@ namespace GoedBezigWebApp.Data
                 //await userStore.AddToRoleAsync(user, UserRoles[user]);
                 //await userManager.AddToRolesAsync(user, UserRoles[user]);
             }
-
+            UserTest.Organization = HoGent;
             await _context.SaveChangesAsync();
         }
 

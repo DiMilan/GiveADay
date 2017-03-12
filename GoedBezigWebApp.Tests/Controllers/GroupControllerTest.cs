@@ -41,7 +41,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         {
             GroupEditViewModel brewerEvm = new GroupEditViewModel(new Group()
             {
-                Name = "Project123",
+                GroupName = "Project123",
                 ClosedGroup = true,
                 Timestamp = new DateTime(2017,02,15,18,52,45)
                         
