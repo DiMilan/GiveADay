@@ -10,9 +10,6 @@ namespace GoedBezigWebApp.Models.MotivationStatus
 
         public OpenState(Group group) : base(group)
         {
-            this.Name = "Open";
-            MotivationEditable = true;
-            MotivationSubmittable = true;
         }
         public override void SaveMotivation(string motivation)
         {
@@ -23,6 +20,16 @@ namespace GoedBezigWebApp.Models.MotivationStatus
         public override void SubmitMotivation()
         {
             ToState(new SubmittedState(Group));
+        }
+
+        public override bool MotivationEditable()
+        {
+            return true;
+        }
+
+        public override bool MotivationSubmittable()
+        {
+            return true;
         }
     }
 }

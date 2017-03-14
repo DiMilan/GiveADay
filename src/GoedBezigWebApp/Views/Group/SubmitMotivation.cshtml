@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Submit Motivation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewData["Title"]</h2>
+<h4>
+    Please confirm you want to submit the motivation of Group @ViewData["GroupName"]...
+</h4>
+<form asp-action="SubmitMotivation" method="post">
+    <div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>

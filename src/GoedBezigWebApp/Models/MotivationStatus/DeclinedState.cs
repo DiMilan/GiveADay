@@ -8,13 +8,9 @@ namespace GoedBezigWebApp.Models.MotivationStatus
 {
     public class DeclinedState:MotivationState
     {
-        public DeclinedState(Group group) : base(group)
+        public DeclinedState(Group @group) : base(@group)
         {
-            this.Name = "Declined";
-            MotivationEditable = true;
-            MotivationSubmittable = false;
         }
-
         public override void SaveMotivation(string motivation)
         {
             Group.Motivation = motivation;
@@ -24,6 +20,16 @@ namespace GoedBezigWebApp.Models.MotivationStatus
         public override void SubmitMotivation()
         {
             throw new MotivationException("Een afgekeurde motivatie kan niet worden ingediend zonder wijzigingen");
+        }
+
+        public override bool MotivationEditable()
+        {
+            return true;
+        }
+
+        public override bool MotivationSubmittable()
+        {
+            return false;
         }
     }
 }

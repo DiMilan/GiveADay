@@ -31,8 +31,8 @@ namespace GoedBezigWebApp.Models.GroupViewModels
             Timestamp = group.Timestamp;
             ClosedGroup = group.ClosedGroup;
             Motivation = group.Motivation;
-            MotivationSubmittable = group.MotivationStatus.MotivationSubmittable;
-            MotivationEditable = group.MotivationStatus.MotivationEditable;
+            MotivationSubmittable = group.MotivationStatus.MotivationSubmittable();
+            MotivationEditable = group.MotivationStatus.MotivationEditable();
         }
     }
 }

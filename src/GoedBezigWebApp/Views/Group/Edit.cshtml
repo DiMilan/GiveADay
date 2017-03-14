@@ -18,12 +18,7 @@
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @if (Model.Name == null)
-                {
-                    <input asp-for="Name" class="form-control" />
-                }
-                else
-                { <input asp-for="Name" class="form-control" disabled />}
+                    <input asp-for="Name" class="form-control" />     
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
@@ -56,7 +51,7 @@
             <input type="submit" value="Save" class="btn btn-default" />
         </div>
     </div></form>
-
+<p><a asp-controller="Group" asp-action="SubmitMotivation" asp-route-id="@Model.Name">Submit</a></p>
 
 <p><a asp-action="Index">Back to List</a></p>
 

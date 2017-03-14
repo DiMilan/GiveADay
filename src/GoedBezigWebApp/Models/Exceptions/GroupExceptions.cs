@@ -27,4 +27,16 @@ namespace GoedBezigWebApp.Models.Exceptions
 
         }
     }
+    public class NoStateException : ArgumentException
+    {
+
+        public NoStateException()
+        {
+
+        }
+        public NoStateException(string message) : base(message)
+        {
+
+        }
+    }
 }
