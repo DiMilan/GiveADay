@@ -7,6 +7,8 @@ using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -14,16 +16,27 @@ namespace GoedBezigWebApp.Controllers
     {
         private readonly IGroupRepository _groupRepository;
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<User> _userManager;
 
-        public GroupController(IGroupRepository groupRepository, IUserRepository userRepository)
+        public GroupController(IGroupRepository groupRepository, IUserRepository userRepository, UserManager<User> userManager)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_groupRepository.GetAll());
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                TempData["error"] = "User not logged in";
+                return View();
+            }
+            else
+            {
+                return View(_groupRepository.GetAll());
+            }
         }
 
         public IActionResult Edit(string id)
@@ -79,6 +92,10 @@ namespace GoedBezigWebApp.Controllers
             }
             return View(nameof(Edit), groupEditViewModel);
         }
-
+        private async Task<User> GetCurrentUserAsync()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return user != null ? _userRepository.GetBy(user.UserName) : null;
+        }
     }
 }
