@@ -23,19 +23,7 @@ namespace GoedBezigWebApp.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>().ForSqlServerToTable("users");
-            modelBuilder.Entity<Role>().ForSqlServerToTable("roles");
-            modelBuilder.Entity<IdentityUserRole<string>>().ForSqlServerToTable("user_roles");
-            modelBuilder.Entity<IdentityUserLogin<string>>().ForSqlServerToTable("user_logins");
-            modelBuilder.Entity<IdentityUserClaim<string>>().ForSqlServerToTable("user_claims");
-            modelBuilder.Entity<IdentityUserToken<string>>().ForSqlServerToTable("user_tokens");
-            modelBuilder.Entity<IdentityRoleClaim<string>>().ForSqlServerToTable("role_claims");
-            modelBuilder.Entity<MotivationState>().HasKey(k => k.MotivationStatusId);
-            modelBuilder.Entity<OpenState>();
-            modelBuilder.Entity<SubmittedState>();
-            modelBuilder.Entity<ApprovedState>();
-            modelBuilder.Entity<DeclinedState>();
-
+            MapIdentity(modelBuilder);
             MapUser(modelBuilder.Entity<User>().ForSqlServerToTable("users"));
             MapRole(modelBuilder.Entity<Role>().ForSqlServerToTable("roles"));
             MapMotivationState(modelBuilder.Entity<MotivationState>());
@@ -43,6 +31,24 @@ namespace GoedBezigWebApp.Data
             MapOrganization(modelBuilder.Entity<Organization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
+
+            modelBuilder.Entity<MotivationState>().HasKey(k => k.MotivationStatusId);
+            modelBuilder.Entity<OpenState>();
+            modelBuilder.Entity<SubmittedState>();
+            modelBuilder.Entity<ApprovedState>();
+            modelBuilder.Entity<DeclinedState>();
+        }
+
+        private static void MapIdentity(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().ForSqlServerToTable("users");
+            modelBuilder.Entity<Role>().ForSqlServerToTable("roles");
+            modelBuilder.Entity<IdentityUserRole<string>>().ForSqlServerToTable("user_roles");
+            modelBuilder.Entity<IdentityUserLogin<string>>().ForSqlServerToTable("user_logins");
+            modelBuilder.Entity<IdentityUserClaim<string>>().ForSqlServerToTable("user_claims");
+            modelBuilder.Entity<IdentityUserToken<string>>().ForSqlServerToTable("user_tokens");
+            modelBuilder.Entity<IdentityRoleClaim<string>>().ForSqlServerToTable("role_claims");
+
         }
 
         private void MapMotivationState(EntityTypeBuilder<MotivationState> ms)

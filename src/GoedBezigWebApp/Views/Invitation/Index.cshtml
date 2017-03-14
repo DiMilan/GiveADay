@@ -29,8 +29,8 @@
             @Html.DisplayFor(modelItem => item.Group.ClosedGroup)
         </td>
         <td>
-            @Html.ActionLink("Accept", "Decline", new { id = item.GroupId }) |
-            @Html.ActionLink("Decline", "Accept", new { id = item.GroupId })
+            @Html.ActionLink("", "Accept", new { id = item.GroupId }, new { @class = "fa fa-check" })
+            @Html.ActionLink("", "Decline", new { id = item.GroupId }, new { @class = "fa fa-times" })
         </td>
     </tr>
 }

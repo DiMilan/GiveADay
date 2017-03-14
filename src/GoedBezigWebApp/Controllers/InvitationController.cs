@@ -15,14 +15,12 @@ namespace GoedBezigWebApp.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
-        private readonly IInvitationRepository _invitationRepository;
 
 
-        public InvitationController(UserManager<User> userManager, IUserRepository userRepository, IInvitationRepository invitationRepository)
+        public InvitationController(UserManager<User> userManager, IUserRepository userRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
-            _invitationRepository = invitationRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -31,14 +29,72 @@ namespace GoedBezigWebApp.Controllers
 
             if (user == null)
             {
-                return View("Error");
+                TempData["error"] = "User not logged in";
+                return View();
             }
-            
-            return View(_invitationRepository.GetForUser(user));
+            else
+            {
+                return View(user.GetPendingInvitations());
+            }
         }
-        private Task<User> GetCurrentUserAsync()
+
+        public async Task<IActionResult> Accept(string id)
         {
-            return _userManager.GetUserAsync(HttpContext.User);
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                TempData["error"] = "User not logged in";
+            }
+            else
+            {
+                var invitation = user.Invitations.FirstOrDefault(i => i.GroupId == id);
+
+                if (invitation == null)
+                {
+                    TempData["error"] = string.Format("Invitation  does not exist (userId = {0}, groupId = {1})", user.Id, id);
+                }
+                else
+                {
+                    user.AcceptInvitation(invitation);
+                    _userRepository.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        
+        public async Task<IActionResult> Decline(string id)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                TempData["error"] = "User not logged in";
+            }
+            else
+            {
+                var invitation = user.Invitations.FirstOrDefault(i => i.GroupId == id);
+
+                if (invitation == null)
+                {
+                    TempData["error"] = string.Format("Invitation  does not exist (userId = {0}, groupId = {1})", user.Id, id);
+                }
+                else
+                {
+                    user.DeclineInvitation(invitation);
+                    _userRepository.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        private async Task<User> GetCurrentUserAsync()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return user != null ? _userRepository.GetBy(user.UserName) : null;
         }
     }
 }

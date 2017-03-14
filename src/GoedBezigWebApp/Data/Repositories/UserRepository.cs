@@ -18,7 +18,11 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public User GetBy(string username)
         {
-           return _user.Include(u => u.Organization).SingleOrDefault((u => u.UserName == username));
+           return _user
+                .Include(u => u.Organization)
+                .Include(u => u.Invitations)
+                    .ThenInclude(i => i.Group)
+                .SingleOrDefault((u => u.UserName == username));
         }
 
         public IEnumerable<User> GetAll()
