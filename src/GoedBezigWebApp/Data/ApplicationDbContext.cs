@@ -72,6 +72,8 @@ namespace GoedBezigWebApp.Data
             entity.Property(e => e.FamilyName).HasColumnName("family_name");
 
             entity.HasMany(u => u.Invitations).WithOne(i => i.User);
+
+            entity.HasOne(o => o.LectorUser).WithMany();
         }
 
         private static void MapRole(EntityTypeBuilder<Role> entity)
