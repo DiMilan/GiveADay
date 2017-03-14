@@ -92,6 +92,7 @@ namespace GoedBezigWebApp.Data
         private static readonly Organization TestOrg = new Organization
         {
             Name = "Test University",
+            Logo = "http://users.hogent.be/~533031md/eportfolio/spost/images/cap.png",
             Btw = "BE9876545678",
             Description = "Test University is the greatest University in the world. Come make Test great again.",
             Domain = "test.be",
