@@ -92,7 +92,6 @@ namespace GoedBezigWebApp.Controllers
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
                         Group group = user.Organization.AddGroup(groupEditViewModel.Name);
-                        _groupRepository.Add(group);
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
                         _groupRepository.SaveChanges();
 
