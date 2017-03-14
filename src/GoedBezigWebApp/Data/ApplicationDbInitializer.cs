@@ -112,8 +112,8 @@ namespace GoedBezigWebApp.Data
             if (_context.Groups.Any()) return;
 
             var groupHogent = HoGent.AddGroup("Test1");
-            //var groupUGent = UGent.AddGroup("Test2");
-            //var groupSolvay = Solvay.AddGroup("Test3");
+            var groupUGent = UGent.AddGroup("Test2");
+            var groupSolvay = Solvay.AddGroup("Test3");
 
             _context.SaveChanges();
 
@@ -183,6 +183,7 @@ namespace GoedBezigWebApp.Data
 
         private static readonly Role[] Roles = new Role[] { RoleVrijwilliger, RoleCursist };
 
+        private static readonly User UserLector = GenerateTestUser("giveaday", "mdware.org");
         private static readonly User UserTest = GenerateTestUser("test", "test.be");
         private static readonly User UserVrijwilliger = GenerateTestUser("vrijwilliger", "test.be");
         private static readonly User UserCursist = GenerateTestUser("cursist", "test.be");
@@ -228,6 +229,7 @@ namespace GoedBezigWebApp.Data
                 PhoneNumberConfirmed = false,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
                 LockoutEnabled = true,
+                LectorUser = UserLector
             };
         }
 
