@@ -10,9 +10,6 @@ namespace GoedBezigWebApp.Models.MotivationStatus
     {
         public ApprovedState(Group group) : base(group)
         {
-            this.Name = "Approved";
-            MotivationEditable = false;
-            MotivationSubmittable = false;
         }
 
         public override void SaveMotivation(string motivation)
@@ -24,6 +21,16 @@ namespace GoedBezigWebApp.Models.MotivationStatus
         public override void SubmitMotivation()
         {
             throw new MotivationException("Een goedgekeurde motivatie kan niet opnieuw worden ingediend");
+        }
+
+        public override bool MotivationEditable()
+        {
+            return false;
+        }
+
+        public override bool MotivationSubmittable()
+        {
+            return false;
         }
     }
 }

@@ -10,9 +10,6 @@ namespace GoedBezigWebApp.Models.MotivationStatus
     {
         public SubmittedState(Group group):base(group)
         {
-            this.Name = "Submitted";
-            MotivationEditable = false;
-            MotivationSubmittable = false;
         }
 
         public override void SaveMotivation(string motivation)
@@ -22,7 +19,17 @@ namespace GoedBezigWebApp.Models.MotivationStatus
 
         public override void SubmitMotivation()
         {
-            throw new MotivationException("Een reeds ingediende motivatie kan niet worden aangepast");
+            throw new MotivationException("Een reeds ingediende motivatie kan niet opnieuw worden ingediend");
+        }
+
+        public override bool MotivationEditable()
+        {
+            return false;
+        }
+
+        public override bool MotivationSubmittable()
+        {
+            return false;
         }
     }
 }
