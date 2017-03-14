@@ -112,8 +112,9 @@ namespace GoedBezigWebApp.Data
             if (_context.Groups.Any()) return;
 
             var groupHogent = HoGent.AddGroup("Test1");
-            //var groupUGent = UGent.AddGroup("Test2");
-            //var groupSolvay = Solvay.AddGroup("Test3");
+            // ungecomment door Milan
+            var groupUGent = UGent.AddGroup("Test2");
+            var groupSolvay = Solvay.AddGroup("Test3");
 
             _context.SaveChanges();
 

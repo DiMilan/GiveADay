@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreationDate" xml:space="preserve">
-    <value>Creation Date</value>
+    <value>Creatiedatum</value>
   </data>
   <data name="Group Index" xml:space="preserve">
-    <value>Groups</value>
+    <value>Groepen</value>
   </data>
   <data name="GroupName" xml:space="preserve">
-    <value>Group Name</value>
+    <value>Groepsnaam</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Gebruikers</value>
   </data>
 </root>

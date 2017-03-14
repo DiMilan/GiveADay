@@ -63,7 +63,7 @@ namespace GoedBezigWebApp
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IInvitationRepository, InvitationRepository>();
+  //          services.AddScoped<IInvitationRepository, InvitationRepository>();
 
             services.AddSession();
             services.AddMvc();

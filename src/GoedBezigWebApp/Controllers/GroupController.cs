@@ -23,7 +23,7 @@ namespace GoedBezigWebApp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_groupRepository.GetAll());
         }
 
         public IActionResult Edit(string id)
