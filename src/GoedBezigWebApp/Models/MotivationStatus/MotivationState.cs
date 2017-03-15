@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using GoedBezigWebApp.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace GoedBezigWebApp.Models.MotivationStatus
+namespace GoedBezigWebApp.Models.MotivationState
 {
     public abstract class MotivationState
     {

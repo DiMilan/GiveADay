@@ -95,7 +95,7 @@ namespace GoedBezigWebApp.Controllers
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
                         _groupRepository.SaveChanges();
 
-                        TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangemaakt.";
+                        TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangemaakt. U kan de groep nog bewerken om zaken aan te passen.";
 
                         //Mail notification to lector
                         //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
@@ -165,7 +165,7 @@ namespace GoedBezigWebApp.Controllers
                 catch (MotivationException e)
                 {
 
-                    TempData["error"] = e.Message.ToString();
+                    TempData["error"] = $"De motivatie werd niet ingediend. {e.Message.ToString()}";
                 }
                 //catch (Exception)
                 //{

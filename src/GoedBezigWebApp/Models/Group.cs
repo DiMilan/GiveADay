@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Castle.Core.Internal;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.GroupViewModels;
-using GoedBezigWebApp.Models.MotivationStatus;
+using GoedBezigWebApp.Models.MotivationState;
 
 namespace GoedBezigWebApp.Models
 {
@@ -17,7 +18,7 @@ namespace GoedBezigWebApp.Models
         public bool ClosedGroup { get; set; }
         public string Motivation { get; set; }
         [NotMapped]
-        public MotivationStatus.MotivationState MotivationStatus { get; set; }
+        public MotivationState.MotivationState MotivationStatus { get; set; }
         public int StateType
         {
             get
@@ -89,10 +90,21 @@ namespace GoedBezigWebApp.Models
             Invitations.Add(new Invitation(user, this));
         }
 
-        public void AddMotivation(string Motivation)
+        private int GetNrOfWords(string s)
         {
+            return s.Split(new char[] { ' ', '.', ',', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        }
 
-            this.Motivation = Motivation;
+        public void CheckMotivation(string motivation)
+        {
+            if (!motivation.IsNullOrEmpty())
+            {
+                int nrOfWords = GetNrOfWords(motivation);
+                if (nrOfWords < 100 || nrOfWords > 250)
+                {
+                    throw new MotivationException("De motivatie moet minstens 100 en maximum 250 woorden bevatten");
+                }
+            }
         }
     }
 

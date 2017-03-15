@@ -14,14 +14,27 @@
     <div class="form-horizontal">
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-        <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                    <input asp-for="Name" class="form-control" />     
-                <span asp-validation-for="Name" class="text-danger"></span>
+        @if (Model.Name == null)
+        {
+            <div class="form-group">
+                <label asp-for="Name" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Name" class="form-control"/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="form-group">
+                <label asp-for="Name" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    @Html.HiddenFor(a => a.Name)
+                    <input asp-for="Name" class="form-control" disabled/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+        }
         <br/>
         @if (Model.MotivationEditable)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GoedBezigWebApp.Models.MotivationStatus
+namespace GoedBezigWebApp.Models.MotivationState
 {
     public class OpenState : MotivationState
     {
@@ -19,6 +19,7 @@ namespace GoedBezigWebApp.Models.MotivationStatus
 
         public override void SubmitMotivation()
         {
+            Group.CheckMotivation(Group.Motivation);
             ToState(new SubmittedState(Group));
         }
 

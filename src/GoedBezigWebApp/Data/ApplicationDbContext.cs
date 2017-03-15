@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GoedBezigWebApp.Models;
-using GoedBezigWebApp.Models.MotivationStatus;
+using GoedBezigWebApp.Models.MotivationState;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata;
 

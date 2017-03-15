@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GoedBezigWebApp.Models.Exceptions;
 
-namespace GoedBezigWebApp.Models.MotivationStatus
+namespace GoedBezigWebApp.Models.MotivationState
 {
     public class DeclinedState:MotivationState
     {
@@ -13,6 +13,7 @@ namespace GoedBezigWebApp.Models.MotivationStatus
         }
         public override void SaveMotivation(string motivation)
         {
+
             Group.Motivation = motivation;
             ToState(new OpenState(Group));
         }

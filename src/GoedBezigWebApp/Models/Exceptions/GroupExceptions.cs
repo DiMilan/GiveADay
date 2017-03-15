@@ -27,6 +27,18 @@ namespace GoedBezigWebApp.Models.Exceptions
 
         }
     }
+    public class MotivationAlert : ArgumentException
+    {
+
+        public MotivationAlert()
+        {
+
+        }
+        public MotivationAlert(string message) : base(message)
+        {
+
+        }
+    }
     public class NoStateException : ArgumentException
     {
 
