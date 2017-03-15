@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GoedBezigWebApp.Models.Exceptions;
 
-namespace GoedBezigWebApp.Models.MotivationStatus
+namespace GoedBezigWebApp.Models.MotivationState
 {
     public class ApprovedState:MotivationState
     {

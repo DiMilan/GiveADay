@@ -18,6 +18,14 @@ namespace GoedBezigWebApp.Models.GroupViewModels
 
         public bool MotivationEditable { get; set; }
         public bool MotivationSubmittable { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        public string CompanyWebsite { get; set; }
+        public string CompanyEmail { get; set; }
+        public string CompanyContactName { get; set; }
+        public string CompanyContactSurname { get; set; }
+        public string CompanyContactEmail { get; set; }
+        public string CompanyContactTitle { get; set; }
 
         public GroupEditViewModel()
         {

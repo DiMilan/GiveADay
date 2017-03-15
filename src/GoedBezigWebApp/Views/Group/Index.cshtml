@@ -1,3 +1,4 @@
+@using Castle.Core.Internal
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
@@ -31,27 +32,31 @@
         </tr>
     </thead>
     <tbody>
+    @if (!Model.IsNullOrEmpty())
+    {
         @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <a href=""> @Html.DisplayFor(modelItem => item.GroupName) </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Timestamp)
-                </td>
+         {
+             <tr>
+                 <td>
+                     <a href=""> @Html.DisplayFor(modelItem => item.GroupName) </a>
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Timestamp)
+                 </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Users)
-                </td>
-                
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Users)
+                 </td>
 
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.GroupName">@Localizer["Edit"]</a> |
-                    <a asp-action="Details" asp-route-id="@item.GroupName">@Localizer["Details"]</a> |
-                    <a asp-action="Delete" asp-route-id="@item.GroupName">@Localizer["Delete"]</a>
-                </td>
-            </tr>
-        }
+
+                 <td>
+                     <a asp-action="Edit" asp-route-id="@item.GroupName">@Localizer["Edit"]</a> |
+                     <a asp-action="Details" asp-route-id="@item.GroupName">@Localizer["Details"]</a> |
+                     <a asp-action="Delete" asp-route-id="@item.GroupName">@Localizer["Delete"]</a>
+                 </td>
+             </tr>
+         }
+    }
+    else { <tr><td colspan="3">No Groups to display</td></tr>}
     </tbody>
 </table>
