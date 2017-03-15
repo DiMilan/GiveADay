@@ -1,4 +1,5 @@
 ﻿using System;
+using GoedBezigWebApp.Models.Exceptions;
 
 namespace GoedBezigWebApp.Models
 {
@@ -33,7 +34,7 @@ namespace GoedBezigWebApp.Models
         {
             if (User.Group != null)
             {
-                throw new Exception("User is already in group");
+                throw new UserAlreadyInGroupException();
             }
             else
             {
