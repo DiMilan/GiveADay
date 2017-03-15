@@ -94,7 +94,8 @@ namespace GoedBezigWebApp.Controllers
         private async Task<User> GetCurrentUserAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            return user != null ? _userRepository.GetBy(user.UserName) : null;
+            _userRepository.LoadInvitations(user);
+            return user;
         }
     }
 }

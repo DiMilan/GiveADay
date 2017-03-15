@@ -20,8 +20,6 @@ namespace GoedBezigWebApp.Data.Repositories
         {
            return _user
                 .Include(u => u.Organization)
-                .Include(u => u.Invitations)
-                    .ThenInclude(i => i.Group)
                 .SingleOrDefault((u => u.UserName == username));
         }
 
@@ -43,6 +41,15 @@ namespace GoedBezigWebApp.Data.Repositories
         public void SaveChanges()
         {
             _dbContext.SaveChanges();
+        }
+
+        public void LoadInvitations(User user)
+        {
+            _dbContext.Entry(user)
+                .Collection(u => u.Invitations)
+                .Query()
+                .Include(i => i.Group)
+                .Load();
         }
     }
 }

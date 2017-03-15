@@ -9,5 +9,6 @@ namespace GoedBezigWebApp.Models.Repositories
         void Add(User user);
         void Delete(User user);
         void SaveChanges();
+        void LoadInvitations(User user);
     }
 }
