@@ -52,15 +52,11 @@ namespace GoedBezigWebApp.Controllers
 
             try
             {
-                Organization organization = _organizationRepository.GetBy(id);
-                User userToEdit = _userRepository.GetBy(user.UserName);
-                if(!user.Email.Split('@')[1].Contains(organization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
-                if(user.Organization != null) throw new OrganizationException($"You are already registered in organization {userToEdit.Organization.Name}.");
-                userToEdit.Organization = organization;
+                _userRepository.GetBy(user.UserName).RegisterInOrganization(_organizationRepository.GetBy(id));
                 _userRepository.SaveChanges();
-                TempData["message"] =
-                    $"{user.FirstName}, you have been added to the organization {organization.Name} succesfully.";
+                TempData["message"] = $"You have been added to the organization succesfully!";
                 return RedirectToAction("Index");
+
             }
             catch (OrganizationException error)
             {

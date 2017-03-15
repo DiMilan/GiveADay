@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using GoedBezigWebApp.Migrations;
+using GoedBezigWebApp.Models.Exceptions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Models
@@ -47,6 +48,13 @@ namespace GoedBezigWebApp.Models
         public void DeclineInvitation(Invitation invitation)
         {
             invitation.Decline();
+        }
+
+        public void RegisterInOrganization(Organization organization)
+        {
+            if (!this.Email.Split('@')[1].Contains(organization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
+            if (this.Organization != null) throw new OrganizationException($"You are already registered in organization {this.Organization.Name}.");
+            this.Organization = organization;
         }
     }
 }
