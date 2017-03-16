@@ -72,7 +72,11 @@
                 {
                     @Html.ActionLink("Register", "Register", new { id = item.OrgId })
                 }
-                
+                @if (ViewBag.Group != null)
+                {
+                   @Html.ActionLink("Assign GB Label", "AssignLabel", new { id = item.OrgId })
+                }
+
             </td>
         </tr>
 }

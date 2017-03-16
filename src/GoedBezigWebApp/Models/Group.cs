@@ -19,6 +19,7 @@ namespace GoedBezigWebApp.Models
         public string Motivation { get; set; }
         [NotMapped]
         public MotivationState.MotivationState MotivationStatus { get; set; }
+        public Organization GBOrganization { get; set; }
         public int StateType
         {
             get
@@ -105,6 +106,12 @@ namespace GoedBezigWebApp.Models
                     throw new MotivationException("De motivatie moet minstens 100 en maximum 250 woorden bevatten");
                 }
             }
+        }
+
+        public bool entitledToGiveGBLabel()
+        {
+            //NOT IMPLEMENTED YET
+            return (MotivationStatus is ApprovedState && GBOrganization == null);
         }
     }
 
