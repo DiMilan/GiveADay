@@ -36,7 +36,15 @@ namespace GoedBezigWebApp.Controllers
             }
             else
             {
-                return View(_groupRepository.GetAll());
+                //filter enkel de groepen:
+                // van de organisatie waar de ingelogde user deel van uitmaakt => CHECK
+                // die niet gesloten zijn => CHECK
+                // met een motivatie die nog niet goegekeurd is 
+                    return View(_groupRepository.GetAll().Where(
+                        g => g.GBOrganization == user.Organization 
+                    && g.ClosedGroup == false 
+          //          && g.MotivationStatus == 1 //wat is de status voor GOEDGEKEURD ?  
+                    ));
             }
         }
 
