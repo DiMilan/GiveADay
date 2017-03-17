@@ -73,6 +73,8 @@ namespace GoedBezigWebApp.Models
             get { return Invitations.Where(i => i.Status.Equals(InvitationStatus.Accepted)).Select(i => i.User).ToList(); }
         }
 
+        public ICollection<Event> Events { get; set; }
+
         public Group()
         {
             Invitations = new List<Invitation>();

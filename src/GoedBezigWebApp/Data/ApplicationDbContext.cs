@@ -184,5 +184,15 @@ namespace GoedBezigWebApp.Data
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }
+
+        private static void MapEvent(EntityTypeBuilder<Event> type)
+        {
+            type.ToTable("events");
+            type.HasKey(e => e.Id);
+            type.HasOne(e => e.Group)
+                .WithMany(g => g.Events)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
