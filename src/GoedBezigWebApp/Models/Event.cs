@@ -11,6 +11,7 @@ namespace GoedBezigWebApp.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
+        public bool Accepted { get; set; }
         public virtual Group Group { get; set; }
     }
 }
