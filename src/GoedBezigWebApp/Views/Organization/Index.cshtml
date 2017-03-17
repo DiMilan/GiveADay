@@ -72,6 +72,9 @@
                 {
                     @Html.ActionLink("Register", "Register", new { id = item.OrgId })
                 }
+                
+               @* Milan 17/03 : GBOrganization kan je geen GB label assignen*@
+                
                 @if (ViewBag.Group != null)
                 {
                    @Html.ActionLink("Assign GB Label", "AssignLabel", new { id = item.OrgId })

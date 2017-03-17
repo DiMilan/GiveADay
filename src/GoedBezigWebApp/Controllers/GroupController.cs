@@ -203,6 +203,30 @@ namespace GoedBezigWebApp.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             return user != null ? _userRepository.GetBy(user.UserName) : null;
         }
+        private async Task<IActionResult> AddUser(Group group)
+        {
+            var user = await GetCurrentUserAsync();
 
+            if (user == null)
+            {
+                TempData["error"] = "User not logged in";
+                return View("Error");
+            }
+            else
+
+                try
+                {
+                    group.AddUser(user);
+                    _groupRepository.SaveChanges();
+                    TempData["message"] = $"User successfully added to group!";
+                    return RedirectToAction("Index");
+
+                }
+                catch (OrganizationException error)
+                {
+                    TempData["error"] = error.Message;
+                    return RedirectToAction("Index");
+                }
+        }
     }
 }

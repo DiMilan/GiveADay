@@ -93,6 +93,12 @@ namespace GoedBezigWebApp.Models
             Invitations.Add(new Invitation(user, this));
         }
 
+        public void AddUser(User user)
+        {
+
+            Invitations.Add(new Invitation(user, this, InvitationStatus.Accepted));
+        }
+
         private int GetNrOfWords(string s)
         {
             return s.Split(new char[] { ' ', '.', ',', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;

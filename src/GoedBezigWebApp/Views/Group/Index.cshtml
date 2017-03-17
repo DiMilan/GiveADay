@@ -50,6 +50,9 @@
 
 
                  <td>
+                     
+                         @Html.ActionLink("AddUser", "AddUser", new { id = item.GroupName })  |
+                     
                      <a asp-action="Subscribe" asp-route-id="@item.GroupName">@Localizer["Subscribe"]</a> |
                      <a asp-action="Edit" asp-route-id="@item.GroupName">@Localizer["Edit"]</a> |
                      <a asp-action="Details" asp-route-id="@item.GroupName">@Localizer["Details"]</a> |
