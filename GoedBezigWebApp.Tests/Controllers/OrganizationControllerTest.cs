@@ -18,6 +18,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         private readonly OrganizationController _controller;
         private readonly Mock<IOrganizationRepository> _organizationRepository;
         private readonly Mock<IUserRepository> _userRepository;
+        private readonly Mock<IGroupRepository> _groupRepository;
         private readonly Mock<UserManager<User>> _userManager;
         private readonly DummyGoedBezigDbContext _dummyContext;
 
@@ -25,7 +26,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         {
             _dummyContext = new DummyGoedBezigDbContext();
             _organizationRepository = new Mock<IOrganizationRepository>();
-            _controller = new OrganizationController(_userManager.Object,_organizationRepository.Object, _userRepository.Object)
+            _controller = new OrganizationController(_userManager.Object,_organizationRepository.Object, _userRepository.Object, _groupRepository.Object)
             {
                 TempData = new Mock<ITempDataDictionary>().Object
             };

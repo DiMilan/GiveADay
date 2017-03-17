@@ -4,6 +4,7 @@ using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Tests.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
@@ -16,12 +17,13 @@ namespace GoedBezigWebApp.Tests.Controllers
         private readonly GroupController _controller;
         private readonly Mock<IGroupRepository> _groupRepository;
         private readonly Mock<IUserRepository> _userRepository;
+        private readonly Mock<UserManager<User>> _userManager;
         private readonly DummyGoedBezigDbContext _dummyContext;
         public GroupControllerTest()
         {
             _dummyContext = new DummyGoedBezigDbContext();
             _groupRepository = new Mock<IGroupRepository>();
-            _controller = new GroupController(_groupRepository.Object, _userRepository.Object)
+            _controller = new GroupController(_userManager.Object, _groupRepository.Object, _userRepository.Object)
             {
                 TempData = new Mock<ITempDataDictionary>().Object
             };
