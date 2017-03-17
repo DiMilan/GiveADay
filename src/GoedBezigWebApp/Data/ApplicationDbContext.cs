@@ -30,6 +30,8 @@ namespace GoedBezigWebApp.Data
             MapOrganization(modelBuilder.Entity<Organization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
+            MapEvent(modelBuilder.Entity<Event>());
+            MapMessage(modelBuilder.Entity<Message>());
 
             modelBuilder.Entity<MotivationState>().HasKey(k => k.MotivationStatusId);
             modelBuilder.Entity<OpenState>();
@@ -189,8 +191,23 @@ namespace GoedBezigWebApp.Data
         {
             type.ToTable("events");
             type.HasKey(e => e.Id);
+            type.Property(e => e.Title).IsRequired();
+            type.Property(e => e.Description).IsRequired();
+            type.Property(e => e.Date).IsRequired();
             type.HasOne(e => e.Group)
                 .WithMany(g => g.Events)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        private static void MapMessage(EntityTypeBuilder<Message> type)
+        {
+            type.ToTable("messages");
+            type.HasKey(m => m.Id);
+            type.Property(m => m.Content).IsRequired();
+            type.Property(m => m.Time).IsRequired();
+            type.HasOne(m => m.Event)
+                .WithMany(e => e.Messages)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         }

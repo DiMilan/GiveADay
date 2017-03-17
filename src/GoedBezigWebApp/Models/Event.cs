@@ -12,6 +12,7 @@ namespace GoedBezigWebApp.Models
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public bool Accepted { get; set; }
+        public ICollection<Message> Messages { get; set; }
         public virtual Group Group { get; set; }
     }
 }
