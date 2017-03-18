@@ -17,9 +17,26 @@ namespace GoedBezigWebApp.Models.MotivationState
 
         }
 
+        public override void AddCompanyDetails(string name, string address, string email, string website)
+        {
+            Group.CompanyName = name;
+            Group.CompanyAddress = address;
+            Group.CompanyEmail = email;
+            Group.CompanyWebsite = website;
+        }
+
+        public override void AddCompanyContact(string name, string surname, string email, string title)
+        {
+            Group.CompanyContactName = name;
+            Group.CompanyContactSurname = surname;
+            Group.CompanyContactEmail = email;
+            Group.CompanyContactTitle = title;
+        }
+
         public override void SubmitMotivation()
         {
             Group.CheckMotivation(Group.Motivation);
+            Group.checkMotivationCompany();
             ToState(new SubmittedState(Group));
         }
 

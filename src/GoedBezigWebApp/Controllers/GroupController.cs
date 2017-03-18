@@ -68,11 +68,10 @@ namespace GoedBezigWebApp.Controllers
                     {
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
-                        group = _groupRepository.GetBy(groupEditViewModel.Name);
-                        
+                        group = _groupRepository.GetBy(groupEditViewModel.Name);              
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
-
-                        
+                        group.MotivationStatus.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
+                        group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
                         _groupRepository.SaveChanges();
                         TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangepast.";
                         return View(nameof(Index));
@@ -117,6 +116,8 @@ namespace GoedBezigWebApp.Controllers
                         User user = _userRepository.GetBy(username);
                         Group group = user.Organization.AddGroup(groupEditViewModel.Name);
                         group.Users.Add(user);
+                        group.MotivationStatus.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
+                        group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
                         _groupRepository.SaveChanges();
 

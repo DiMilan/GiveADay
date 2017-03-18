@@ -18,6 +18,16 @@ namespace GoedBezigWebApp.Models.MotivationState
             
         }
 
+        public override void AddCompanyDetails(string name, string address, string email, string website)
+        {
+            throw new MotivationException("reeds goedgekeurde bedrijfsgegevens kunnen niet worden aangepast");
+        }
+
+        public override void AddCompanyContact(string name, string surname, string email, string title)
+        {
+            throw new MotivationException("reeds goedgekeurde bedrijfsgegevens kunnen niet worden aangepast");
+        }
+
         public override void SubmitMotivation()
         {
             throw new MotivationException("Een goedgekeurde motivatie kan niet opnieuw worden ingediend");

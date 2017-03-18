@@ -124,6 +124,14 @@ namespace GoedBezigWebApp.Models
             }
         }
 
+        public void checkMotivationCompany()
+        {
+            if(CompanyName == null) throw new MotivationException("Het opgegeven berijf bevat geen naam");
+            if (CompanyAddress == null) throw new MotivationException("Het opgegeven berijf bevat geen adres");
+            if (CompanyEmail == null) throw new MotivationException("Het opgegeven berijf bevat geen e-mailadres");
+            if (CompanyWebsite == null) throw new MotivationException("Het opgegeven berijf bevat geen naam");
+        }
+
         public bool entitledToGiveGBLabel()
         {
             //NOT IMPLEMENTED YET

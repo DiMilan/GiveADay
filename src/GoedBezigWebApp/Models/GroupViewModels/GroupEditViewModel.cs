@@ -22,6 +22,7 @@ namespace GoedBezigWebApp.Models.GroupViewModels
         [Display(Name = "Adres")]
         public string CompanyAddress { get; set; }
         [Display(Name = "Website")]
+        [Url]
         public string CompanyWebsite { get; set; }
         [Display(Name = "E-mail")]
         [EmailAddress]
@@ -50,6 +51,14 @@ namespace GoedBezigWebApp.Models.GroupViewModels
             Motivation = group.Motivation;
             MotivationSubmittable = group.MotivationStatus.MotivationSubmittable();
             MotivationEditable = group.MotivationStatus.MotivationEditable();
+            CompanyName = group.CompanyName;
+            CompanyAddress = group.CompanyAddress;
+            CompanyEmail = group.CompanyEmail;
+            CompanyWebsite = group.CompanyWebsite;
+            CompanyContactEmail = group.CompanyContactEmail;
+            CompanyContactName = group.CompanyContactName;
+            CompanyContactSurname = group.CompanyContactSurname;
+            CompanyContactTitle = group.CompanyContactTitle;
         }
     }
 }
