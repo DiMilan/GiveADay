@@ -14,7 +14,7 @@ namespace GoedBezigWebApp.Tests.Model
         public GroupTest()
         {
             _testGroup = new Group("testGroup", false);
-            GeldigeMotivation = @"Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! ";
+            
         }
 
         [Fact]
