@@ -80,13 +80,13 @@ namespace GoedBezigWebApp.Models
             get { return Invitations.Where(i => i.Status.Equals(InvitationStatus.Accepted)).Select(i => i.User).ToList(); }
         }
 
-        public ICollection<Event> Events { get; set; }
+        public ICollection<Activity> Activities { get; set; }
 
         public Group()
         {
             Invitations = new List<Invitation>();
             MotivationStatus = new OpenState(this);
-            Events = new List<Event>();
+            Activities = new List<Activity>();
         }
         public Group(string groupName, bool ClosedGroup) : this()
         {

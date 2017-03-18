@@ -14,7 +14,7 @@ namespace GoedBezigWebApp.Data
         public virtual DbSet<ExternalOrganization> ExternalOrganizations { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
         public virtual DbSet<Invitation> Invitations { get; set; }
-
+        public virtual DbSet<Activity> Activities { get; set; }
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -32,6 +32,7 @@ namespace GoedBezigWebApp.Data
             MapExternalOrganization(modelBuilder.Entity<ExternalOrganization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
+            MapActivity(modelBuilder.Entity<Activity>());
             MapEvent(modelBuilder.Entity<Event>());
             MapMessage(modelBuilder.Entity<Message>());
         }
@@ -192,17 +193,25 @@ namespace GoedBezigWebApp.Data
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
-        private static void MapEvent(EntityTypeBuilder<Event> type)
+        private static void MapActivity(EntityTypeBuilder<Activity> type)
         {
             type.ToTable("events");
             type.HasKey(e => e.Id);
             type.Property(e => e.Title).IsRequired();
             type.Property(e => e.Description).IsRequired();
-            type.Property(e => e.Date).IsRequired();
+            type.HasDiscriminator<string>("Type")
+                .HasValue<Event>("Event")
+                .HasValue<Activity>("Activity");
             type.HasOne(e => e.Group)
-                .WithMany(g => g.Events)
+                .WithMany(g => g.Activities)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+            type.HasMany(t => t.Messages).WithOne(t => t.Activity);
+        }
+
+        private static void MapEvent(EntityTypeBuilder<Event> type)
+        {
+            type.Property(t => t.Date).HasAnnotation("BackingField", "Date");
         }
 
         private static void MapMessage(EntityTypeBuilder<Message> type)
@@ -211,7 +220,7 @@ namespace GoedBezigWebApp.Data
             type.HasKey(m => m.Id);
             type.Property(m => m.Content).IsRequired();
             type.Property(m => m.Time).IsRequired();
-            type.HasOne(m => m.Event)
+            type.HasOne(m => m.Activity)
                 .WithMany(e => e.Messages)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);

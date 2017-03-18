@@ -26,7 +26,7 @@ namespace GoedBezigWebApp.Tests.Model
             Assert.InRange(group.Timestamp, DateTime.Now.Subtract(TimeSpan.FromSeconds(1)), DateTime.Now);
             Assert.True(group.MotivationStatus is OpenState);
             Assert.True(group.Invitations is List<Invitation>);
-            Assert.True(group.Events is List<Event>);
+            Assert.True(group.Activities is List<Activity>);
             Assert.Null(group.Motivation);
             Assert.Null(group.CompanyName);
             Assert.Null(group.CompanyAddress);
