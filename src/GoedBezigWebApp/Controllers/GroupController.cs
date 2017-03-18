@@ -26,13 +26,6 @@ namespace GoedBezigWebApp.Controllers
             _userManager = userManager;
         }
 
-        //constructor for tests
-        public GroupController(IGroupRepository groupRepository, IUserRepository userRepository)
-        {
-            _groupRepository = groupRepository;
-            _userRepository = userRepository;
-        }
-
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();

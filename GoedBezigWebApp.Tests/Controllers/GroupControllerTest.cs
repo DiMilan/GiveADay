@@ -29,12 +29,11 @@ namespace GoedBezigWebApp.Tests.Controllers
             _dummyContext = new DummyGoedBezigDbContext();
             _groupRepository = new Mock<IGroupRepository>();
             _userRepository = new Mock<IUserRepository>();
-            _controller = new GroupController(_groupRepository.Object, _userRepository.Object)
+            _controller = new GroupController(null, _groupRepository.Object, _userRepository.Object)
             {
-                TempData = new Mock<ITempDataDictionary>().Object
+                TempData = new Mock<ITempDataDictionary>().Object,
+                ControllerContext = new ControllerContext {HttpContext = new DefaultHttpContext()}
             };
-            _controller.ControllerContext = new ControllerContext();
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext();
             var testUsername = new GenericIdentity("testUser");
             _controller.ControllerContext.HttpContext.User = new GenericPrincipal(testUsername, null);
             testUser= new User()
