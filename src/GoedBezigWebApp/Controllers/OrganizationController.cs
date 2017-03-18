@@ -45,16 +45,15 @@ namespace GoedBezigWebApp.Controllers
             if (groupId.IsNullOrEmpty())
             {
                 //Load only gb-label orgs
-                //BUGFIX NEEDED: When filtering on city and user.organization is not in results anymore user.org == null wich causes register links to come up again.
-                ViewBag.Cities = _organizationRepository.GetAllUniqueCities();
-                return View(_organizationRepository.GetAllFilteredByNameAndLocation(searchName, searchLocation));
+                ViewBag.Cities = _organizationRepository.GetAllGbUniqueCities();
+                return View(_organizationRepository.GetAllGbFilteredByNameAndLocation(searchName, searchLocation));
             }
             else if (_groupRepository.GetBy(groupId).entitledToGiveGBLabel())
             {
                 //Load only not-GB-Label orgs - not implemented yet
                 ViewBag.Group = _groupRepository.GetBy(groupId);
-                ViewBag.Cities = _organizationRepository.GetAllUniqueCities();
-                return View(_organizationRepository.GetAllFilteredByNameAndLocation(searchName, searchLocation));
+                ViewBag.Cities = _organizationRepository.GetAllExternalOrganizationsWithoutLabel();
+                return View(_organizationRepository.GetAllExternalWithoutLabelFilteredByNameAndLocation(searchName, searchLocation));
             }
             else
             {
@@ -76,7 +75,7 @@ namespace GoedBezigWebApp.Controllers
 
             try
             {
-                _userRepository.GetBy(user.UserName).RegisterInOrganization(_organizationRepository.GetBy(id));
+                _userRepository.GetBy(user.UserName).RegisterInOrganization(_organizationRepository.GetGbOrganizationBy(id));
                 _userRepository.SaveChanges();
                 TempData["message"] = $"You have been added to the organization succesfully!";
                 return RedirectToAction("Index");
@@ -94,7 +93,7 @@ namespace GoedBezigWebApp.Controllers
         private async Task<User> GetCurrentUserAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            _userRepository.LoadOrganization(user);
+            _userRepository.LoadGbOrganization(user);
             return user;
         }
 

@@ -27,19 +27,19 @@ namespace GoedBezigWebApp.Data
         private void EnsureSeedOrganizations()
         {
             // --> SEED Organizations
-            if (_context.Organizations.Any()) return;
+            if (_context.GbOrganizations.Any()) return;
             
-                _context.Organizations.Add(HoGent);
-                _context.Organizations.Add(UGent);
-                _context.Organizations.Add(Solvay);
-                _context.Organizations.Add(TestOrg);
+                _context.GbOrganizations.Add(HoGent);
+                _context.GbOrganizations.Add(UGent);
+                _context.GbOrganizations.Add(Solvay);
+                _context.GbOrganizations.Add(TestOrg);
 
             _context.SaveChanges();
         }
 
         #region Organization Data
 
-        private static readonly Organization HoGent = new Organization
+        private static readonly GBOrganization HoGent = new GBOrganization
         {
             Name = "HoGent",
             Logo = "https://upload.wikimedia.org/wikipedia/commons/1/10/HoGent_Logo.png",
@@ -56,7 +56,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly Organization UGent = new Organization
+        private static readonly GBOrganization UGent = new GBOrganization
         {
             Name = "UGent",
             Logo = "https://webster.ugent.be/alumnivacatures/invoeren/static/images/logo-ugent_org.svg",
@@ -72,7 +72,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly Organization Solvay = new Organization
+        private static readonly GBOrganization Solvay = new GBOrganization
         {
             Name = "Solvay Economics & Management",
             Logo =
@@ -89,7 +89,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly Organization TestOrg = new Organization
+        private static readonly GBOrganization TestOrg = new GBOrganization
         {
             Name = "Test University",
             Logo = "http://users.hogent.be/~533031md/eportfolio/spost/images/cap.png",
