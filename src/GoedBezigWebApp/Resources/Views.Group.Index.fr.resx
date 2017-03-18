@@ -126,6 +126,9 @@
   <data name="GroupName" xml:space="preserve">
     <value>Nom du groupe</value>
   </data>
+  <data name="Subscribe" xml:space="preserve">
+    <value>S'abonner</value>
+  </data>
   <data name="Users" xml:space="preserve">
     <value>Utilisateurs</value>
   </data>
