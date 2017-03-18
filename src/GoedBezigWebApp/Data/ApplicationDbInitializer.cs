@@ -27,12 +27,14 @@ namespace GoedBezigWebApp.Data
         private void EnsureSeedOrganizations()
         {
             // --> SEED Organizations
-            if (_context.GbOrganizations.Any()) return;
+            if (_context.Organizations.Any()) return;
             
                 _context.GbOrganizations.Add(HoGent);
                 _context.GbOrganizations.Add(UGent);
                 _context.GbOrganizations.Add(Solvay);
                 _context.GbOrganizations.Add(TestOrg);
+                _context.ExternalOrganizations.Add(KebabHouse);
+                _context.ExternalOrganizations.Add(PizzaRoma);
 
             _context.SaveChanges();
         }
@@ -102,6 +104,38 @@ namespace GoedBezigWebApp.Data
                 AddressCountry = "US",
                 AddressLine1 = "White House Street 4",
                 AddressPostalCode = "1000"
+            }
+        };
+
+        private static readonly ExternalOrganization KebabHouse = new ExternalOrganization
+        {
+            Name = "Kebab House",
+            Logo = "https://eggthedail.files.wordpress.com/2010/08/100_2041.jpg",
+            Btw = "BE045785456",
+            Description = "Kebab schnijden is onze specialiteit. Mohammed zegt dat ook altijd.",
+            hasGBLabel = false,
+            Address = new OrganizationalAddress()
+            {
+                AddressCity = "Wevelgem",
+                AddressCountry = "België",
+                AddressLine1 = "Kortrijksestraat 32",
+                AddressPostalCode = "8560"
+            }
+        };
+
+        private static readonly ExternalOrganization PizzaRoma = new ExternalOrganization
+        {
+            Name = "Pizza Roma",
+            Logo = "http://www.pizzaroma.be/assets/images/pizza-roma-gent.png",
+            Btw = "BE066585456",
+            Description = "Pizza Roma, de nr. 1 pizzamaker uit Gent!",
+            hasGBLabel = true,
+            Address = new OrganizationalAddress()
+            {
+                AddressCity = "Gent",
+                AddressCountry = "België",
+                AddressLine1 = "Hoogstraat 12",
+                AddressPostalCode = "9000"
             }
         };
 

@@ -7,6 +7,6 @@ namespace GoedBezigWebApp.Models
 {
     public class ExternalOrganization : Organization
     {
-        public bool hasGBLabel;
+        public bool hasGBLabel { get; set; }
     }
 }

@@ -134,7 +134,6 @@ namespace GoedBezigWebApp.Models
 
         public bool entitledToGiveGBLabel()
         {
-            //NOT IMPLEMENTED YET
             return (MotivationStatus is ApprovedState && GBOrganization == null);
         }
     }

@@ -28,7 +28,7 @@ namespace GoedBezigWebApp.Controllers
             _groupRepository = groupRepository;
         }
 
-        public async Task<IActionResult> Index(String searchName, String searchLocation, string groupId)
+        public async Task<IActionResult> Index(String searchName, String searchLocation, bool isExternalWithLabel, bool isExternalWithoutLabel, string groupId)
         {
             var user = await GetCurrentUserAsync();
 
@@ -41,23 +41,42 @@ namespace GoedBezigWebApp.Controllers
             ViewData["searchLocation"] = searchLocation;
             
             ViewBag.User = user;
-            if (groupId.IsNullOrEmpty())
+            if (groupId.IsNullOrEmpty() && !isExternalWithLabel && !isExternalWithoutLabel)
             {
-                //Load only gb-label orgs
+                //Load only gb-orgs
+                ViewData["title"] = "GB Organizations";
                 ViewBag.Cities = _organizationRepository.GetAllGbUniqueCities();
                 return View(_organizationRepository.GetAllGbFilteredByNameAndLocation(searchName, searchLocation));
             }
+
+            if (groupId.IsNullOrEmpty() && isExternalWithLabel && !isExternalWithoutLabel)
+            {
+                //Load only external orgs with Label
+                ViewData["title"] = "External Organizations with GBLabel";
+                ViewBag.Cities = _organizationRepository.GetAllExternalWithLabelUniqueCities();
+                return View(_organizationRepository.GetAllExternalWithLabelFilteredByNameAndLocation(searchName, searchLocation));
+            }
+
+            if (groupId.IsNullOrEmpty() && !isExternalWithLabel && isExternalWithoutLabel)
+            {
+                //Load only external orgs without label
+                ViewData["title"] = "External Organizations without GBLabel";
+                ViewBag.Cities = _organizationRepository.GetAllExternalWithoutLabelUniqueCities();
+                return View(_organizationRepository.GetAllExternalWithoutLabelFilteredByNameAndLocation(searchName, searchLocation));
+            }
+
             else if (_groupRepository.GetBy(groupId).entitledToGiveGBLabel())
             {
-                //Load only not-GB-Label orgs - not implemented yet
+                //Load only external orgs without label - ready to give label
+                ViewData["title"] = "Give GBLabel to External Organization";
                 ViewBag.Group = _groupRepository.GetBy(groupId);
-                ViewBag.Cities = _organizationRepository.GetAllExternalOrganizationsWithoutLabel();
+                ViewBag.Cities = _organizationRepository.GetAllExternalWithoutLabelUniqueCities();
                 return View(_organizationRepository.GetAllExternalWithoutLabelFilteredByNameAndLocation(searchName, searchLocation));
             }
             else
             {
                 TempData["error"] =
-                    "The GroupId is either not valid or not entitled to give a GBLabel to an organization.";
+                    "The request is not valid or the GroupId is either not valid or not entitled to give a GBLabel to an organization.";
                 return View("Error");
             }
 

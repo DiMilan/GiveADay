@@ -9,8 +9,8 @@ using GoedBezigWebApp.Models;
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170318162618_OrganizationSplit")]
-    partial class OrganizationSplit
+    [Migration("20170318190419_Organization_Split")]
+    partial class Organization_Split
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,8 +141,6 @@ namespace GoedBezigWebApp.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired();
-
-                    b.Property<string>("Domain");
 
                     b.Property<string>("Logo")
                         .HasColumnName("logo")
@@ -399,11 +397,24 @@ namespace GoedBezigWebApp.Migrations
                     b.HasAnnotation("SqlServer:TableName", "user_tokens");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.ExternalOrganization", b =>
+                {
+                    b.HasBaseType("GoedBezigWebApp.Models.Organization");
+
+                    b.Property<bool>("hasGBLabel");
+
+                    b.ToTable("ExternalOrganization");
+
+                    b.HasDiscriminator().HasValue("ExternalOrganization");
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.GBOrganization", b =>
                 {
                     b.HasBaseType("GoedBezigWebApp.Models.Organization");
 
                     b.Property<bool>("ClosedGroups");
+
+                    b.Property<string>("Domain");
 
                     b.ToTable("GBOrganization");
 
