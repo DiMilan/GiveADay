@@ -9,7 +9,6 @@ namespace GoedBezigWebApp.Models.MotivationState
 {
     public abstract class MotivationState
     {
-        public int MotivationStatusId { get; set; }
         public Group Group;
         protected MotivationState(Group group)
         {
