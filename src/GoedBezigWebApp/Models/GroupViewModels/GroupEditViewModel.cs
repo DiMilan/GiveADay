@@ -15,16 +15,25 @@ namespace GoedBezigWebApp.Models.GroupViewModels
         public bool ClosedGroup { get; set; }
         [Display(Name = "Motivatie")]
         public string Motivation { get; set; }
-
         public bool MotivationEditable { get; set; }
         public bool MotivationSubmittable { get; set; }
+        [Display(Name = "Bedrijfsnaam")]
         public string CompanyName { get; set; }
+        [Display(Name = "Adres")]
         public string CompanyAddress { get; set; }
+        [Display(Name = "Website")]
         public string CompanyWebsite { get; set; }
+        [Display(Name = "E-mail")]
+        [EmailAddress]
         public string CompanyEmail { get; set; }
+        [Display(Name = "Voornaam")]
         public string CompanyContactName { get; set; }
+        [Display(Name = "Familienaam")]
         public string CompanyContactSurname { get; set; }
+        [Display(Name = "E-mail")]
+        [EmailAddress]
         public string CompanyContactEmail { get; set; }
+        [Display(Name = "Functie")]
         public string CompanyContactTitle { get; set; }
 
         public GroupEditViewModel()

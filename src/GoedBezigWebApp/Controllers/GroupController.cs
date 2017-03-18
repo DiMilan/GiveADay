@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using GoedBezigWebApp.Models.MotivationState;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -40,10 +41,11 @@ namespace GoedBezigWebApp.Controllers
                 // van de organisatie waar de ingelogde user deel van uitmaakt => CHECK
                 // die niet gesloten zijn => CHECK
                 // met een motivatie die nog niet goegekeurd is 
-                    return View(_groupRepository.GetAll().Where(
-                        g => g.GBOrganization == user.Organization 
-                    && g.ClosedGroup == false 
-          //          && g.MotivationStatus == 1 //wat is de status voor GOEDGEKEURD ?  
+                    return View(_groupRepository.GetAll()
+                        .Where(
+                        (g => g.GBOrganization == user.Organization 
+                        && g.ClosedGroup == false 
+                        && !(g.MotivationStatus is ApprovedState))//wat is de status voor GOEDGEKEURD ?  
                     ));
             }
         }
@@ -67,8 +69,8 @@ namespace GoedBezigWebApp.Controllers
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
                         group = _groupRepository.GetBy(groupEditViewModel.Name);
-
-                            group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
+                        
+                        group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
 
                         
                         _groupRepository.SaveChanges();
@@ -114,6 +116,7 @@ namespace GoedBezigWebApp.Controllers
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
                         Group group = user.Organization.AddGroup(groupEditViewModel.Name);
+                        group.Users.Add(user);
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
                         _groupRepository.SaveChanges();
 

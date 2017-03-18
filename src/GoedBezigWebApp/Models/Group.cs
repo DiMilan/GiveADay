@@ -17,6 +17,14 @@ namespace GoedBezigWebApp.Models
         public DateTime Timestamp { get; set; }
         public bool ClosedGroup { get; set; }
         public string Motivation { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
+        public string CompanyWebsite { get; set; }
+        public string CompanyEmail { get; set; }
+        public string CompanyContactName { get; set; }
+        public string CompanyContactSurname { get; set; }
+        public string CompanyContactEmail { get; set; }
+        public string CompanyContactTitle { get; set; }
         [NotMapped]
         public MotivationState.MotivationState MotivationStatus { get; set; }
         public Organization GBOrganization { get; set; }

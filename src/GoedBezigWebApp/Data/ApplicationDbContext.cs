@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GoedBezigWebApp.Models;
-using GoedBezigWebApp.Models.MotivationState;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -13,7 +12,6 @@ namespace GoedBezigWebApp.Data
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
         public virtual DbSet<Invitation> Invitations { get; set; }
-        public virtual DbSet<Invitation> MotivationState { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -32,12 +30,6 @@ namespace GoedBezigWebApp.Data
             MapUserGroup(modelBuilder.Entity<Invitation>());
             MapEvent(modelBuilder.Entity<Event>());
             MapMessage(modelBuilder.Entity<Message>());
-
-            modelBuilder.Entity<MotivationState>().HasKey(k => k.MotivationStatusId);
-            modelBuilder.Entity<OpenState>();
-            modelBuilder.Entity<SubmittedState>();
-            modelBuilder.Entity<ApprovedState>();
-            modelBuilder.Entity<DeclinedState>();
         }
 
         private static void MapIdentity(ModelBuilder modelBuilder)
