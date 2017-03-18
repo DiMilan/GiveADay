@@ -50,6 +50,10 @@
                         <textarea asp-for="Motivation" class="form-control" value=@Model.Motivation rows="3" disabeled></textarea>
                     }
                     <span asp-validation-for="Motivation" class="text-danger"></span>
+                    @if (Model.EntitledToGiveGBLabel)
+                    {
+                        <br />@Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
+                    }
                 </div>
             </div>
         </div>

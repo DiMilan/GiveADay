@@ -17,6 +17,7 @@ namespace GoedBezigWebApp.Models.GroupViewModels
         public string Motivation { get; set; }
         public bool MotivationEditable { get; set; }
         public bool MotivationSubmittable { get; set; }
+        public bool EntitledToGiveGBLabel { get; set; }
         [Display(Name = "Bedrijfsnaam")]
         public string CompanyName { get; set; }
         [Display(Name = "Adres")]
@@ -59,6 +60,7 @@ namespace GoedBezigWebApp.Models.GroupViewModels
             CompanyContactName = group.CompanyContactName;
             CompanyContactSurname = group.CompanyContactSurname;
             CompanyContactTitle = group.CompanyContactTitle;
+            EntitledToGiveGBLabel = group.entitledToGiveGBLabel();
         }
     }
 }

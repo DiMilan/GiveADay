@@ -25,8 +25,19 @@
             Search location: <select name="searchLocation" asp-for="@ViewData["searchLocation"]" asp-items="ViewBag.Cities">
                 <option value="">---Select a city---</option>
             </select>
-            <input type="submit" value="Search" class="btn btn-default" /> <br />
-            <a asp-action="Index">All GB Organizations</a> | @Html.ActionLink("Ext. With Label", "Index", "Organization", new { isExternalWithLabel = true }) | @Html.ActionLink("Ext. Without Label","Index","Organization",new {isExternalWithoutLabel=true})
+            @if (ViewBag.Group != null)
+            {
+                <input name="groupId" type="hidden" value="@ViewBag.Group.GroupName"/>
+            }
+            <input type="submit" value="Search" class="btn btn-default" />
+            @if (ViewBag.Group == null)
+            {
+                <br />
+                <a asp-action="Index">All GB Organizations</a><span> | </span>
+                @Html.ActionLink("Ext. With Label", "Index", "Organization", new { isExternalWithLabel = true }) <span> | </span>
+                @Html.ActionLink("Ext. Without Label", "Index", "Organization", new { isExternalWithoutLabel = true })
+
+            }
         </p>
     </div>
 </form>
@@ -67,12 +78,10 @@
                 @Html.DisplayFor(modelItem => item.Address.AddressCountry)
             </td>
             <td>
-                @if (ViewBag.User.Organization == null)
+                @if (ViewBag.User.Organization == null && ViewBag.Group == null && ViewBag.isExternalWithLabel == false && ViewBag.isExternalWithoutLabel == false )
                 {
                     @Html.ActionLink("Register", "Register", new { id = item.OrgId })
                 }
-                
-               @* Milan 17/03 : GBOrganization kan je geen GB label assignen*@
                 
                 @if (ViewBag.Group != null)
                 {

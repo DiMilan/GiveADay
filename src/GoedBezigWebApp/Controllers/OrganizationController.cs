@@ -53,6 +53,7 @@ namespace GoedBezigWebApp.Controllers
             {
                 //Load only external orgs with Label
                 ViewData["title"] = "External Organizations with GBLabel";
+                ViewBag.isExternalWithLabel = true;
                 ViewBag.Cities = _organizationRepository.GetAllExternalWithLabelUniqueCities();
                 return View(_organizationRepository.GetAllExternalWithLabelFilteredByNameAndLocation(searchName, searchLocation));
             }
@@ -61,11 +62,12 @@ namespace GoedBezigWebApp.Controllers
             {
                 //Load only external orgs without label
                 ViewData["title"] = "External Organizations without GBLabel";
+                ViewBag.isExternalWithoutLabel = true;
                 ViewBag.Cities = _organizationRepository.GetAllExternalWithoutLabelUniqueCities();
                 return View(_organizationRepository.GetAllExternalWithoutLabelFilteredByNameAndLocation(searchName, searchLocation));
             }
 
-            else if (_groupRepository.GetBy(groupId).entitledToGiveGBLabel())
+            else if (!groupId.IsNullOrEmpty() && _groupRepository.GetBy(groupId).entitledToGiveGBLabel())
             {
                 //Load only external orgs without label - ready to give label
                 ViewData["title"] = "Give GBLabel to External Organization";
@@ -97,15 +99,12 @@ namespace GoedBezigWebApp.Controllers
                 _userRepository.SaveChanges();
                 TempData["message"] = $"You have been added to the organization succesfully!";
                 return RedirectToAction("Index");
-
             }
             catch (OrganizationException error)
             {
                 TempData["error"] = error.Message;
                 return RedirectToAction("Index");
             }
-
-
         }
 
         private async Task<User> GetCurrentUserAsync()
@@ -115,8 +114,29 @@ namespace GoedBezigWebApp.Controllers
             return user;
         }
 
-        public async Task<IActionResult> AssignLabel(string id)
+        public async Task<IActionResult> AssignGBLabel(int id, string groupId)
         {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null || id == 0)
+            {
+                return View("Error");
+            }
+
+            ViewBag.Group = _groupRepository.GetBy(groupId);
+            return View(_organizationRepository.GetExternalOrganizationBy(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignGBLabel(int id, string groupId, string[] notifyUsers)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null || id == 0)
+            {
+                return View("Error");
+            }
+
             //to be implemented
             TempData["message"] = $"TO BE DONE";
 
