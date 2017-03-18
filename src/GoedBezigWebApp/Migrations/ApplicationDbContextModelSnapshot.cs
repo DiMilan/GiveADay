@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
-using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Migrations
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using GoedBezigWebApp.Models.Exceptions;
+﻿using GoedBezigWebApp.Models.Exceptions;
 
 namespace GoedBezigWebApp.Models
 {

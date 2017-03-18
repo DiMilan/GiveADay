@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Security.Claims;
 using System.Security.Principal;
 using GoedBezigWebApp.Controllers;
 using GoedBezigWebApp.Models;
