@@ -36,167 +36,171 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="Motivation" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <textarea asp-for="Motivation" class="form-control" rows="3" placeholder="Geef de motivatie voor het aanmaken van de groep"></textarea>
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.Motivation)
-                        <textarea asp-for="Motivation" class="form-control" value=@Model.Motivation rows="3" disabeled></textarea>
-                    }
-                    <span asp-validation-for="Motivation" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <hr/>
-        <h5>Bedrijfsgegevens</h5>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyName" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
 
-                        <input asp-for="CompanyName" class="form-control" />
+        @if (Model.Name != null)
+        {
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="Motivation" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <textarea asp-for="Motivation" class="form-control" rows="3" placeholder="Geef de motivatie voor het aanmaken van de groep"></textarea>
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.Motivation)
+                            <textarea asp-for="Motivation" class="form-control" value=@Model.Motivation rows="3" disabeled></textarea>
+                        }
+                        <span asp-validation-for="Motivation" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <h5>Bedrijfsgegevens</h5>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyName" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
 
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyName)
-                        <input asp-for="CompanyName" class="form-control" disabled />
+                            <input asp-for="CompanyName" class="form-control" />
 
-                    }
-                    <span asp-validation-for="CompanyName" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyAddress" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <input asp-for="CompanyAddress" class="form-control" />
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyAddress)
-                        <input asp-for="CompanyAddress" class="form-control" disabled />
-                    }
-                    <span asp-validation-for="CompanyAddress" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyName)
+                            <input asp-for="CompanyName" class="form-control" disabled />
 
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyEmail" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <input asp-for="CompanyEmail" class="form-control" />
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyEmail)
-                        <input asp-for="CompanyEmail" class="form-control" disabled />
-                    }
-                    <span asp-validation-for="CompanyEmail" class="text-danger"></span>
+                        }
+                        <span asp-validation-for="CompanyName" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyWebsite" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <input asp-for="CompanyWebsite" class="form-control" />
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyWebsite)
-                        <input asp-for="CompanyWebsite" class="form-control" disabled />
-                    }
-                    <span asp-validation-for="CompanyWebsite" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyAddress" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <input asp-for="CompanyAddress" class="form-control" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyAddress)
+                            <input asp-for="CompanyAddress" class="form-control" disabled />
+                        }
+                        <span asp-validation-for="CompanyAddress" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr />
-        <h5>Contactpersoon</h5>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyContactName" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <input asp-for="CompanyContactName" class="form-control" />
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyContactName)
-                        <input asp-for="CompanyContactName" class="form-control" disabled />
-                    }
-                    <span asp-validation-for="CompanyContactName" class="text-danger"></span>
+
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyEmail" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <input asp-for="CompanyEmail" class="form-control" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyEmail)
+                            <input asp-for="CompanyEmail" class="form-control" disabled />
+                        }
+                        <span asp-validation-for="CompanyEmail" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyContactSurname" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <input asp-for="CompanyContactSurname" class="form-control" />
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyContactSurname)
-                        <input asp-for="CompanyContactSurname" class="form-control" disabled />
-                    }
-                    <span asp-validation-for="CompanyContactSurname" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyWebsite" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <input asp-for="CompanyWebsite" class="form-control" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyWebsite)
+                            <input asp-for="CompanyWebsite" class="form-control" disabled />
+                        }
+                        <span asp-validation-for="CompanyWebsite" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyContactTitle" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <input asp-for="CompanyContactTitle" class="form-control" />
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyContactTitle)
-                        <input asp-for="CompanyContactTitle" class="form-control" disabled />
-                    }
-                    <span asp-validation-for="CompanyContactTitle" class="text-danger"></span>
+            <hr />
+            <h5>Contactpersoon</h5>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactName" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <input asp-for="CompanyContactName" class="form-control" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactName)
+                            <input asp-for="CompanyContactName" class="form-control" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactName" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="CompanyContactEmail" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @if (Model.MotivationEditable)
-                    {
-                        <input asp-for="CompanyContactEmail" class="form-control" />
-                    }
-                    else
-                    {
-                        @Html.HiddenFor(a => a.CompanyContactEmail)
-                        <input asp-for="CompanyContactEmail" class="form-control" disabled />
-                    }
-                    <span asp-validation-for="CompanyContactEmail" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactSurname" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <input asp-for="CompanyContactSurname" class="form-control" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactSurname)
+                            <input asp-for="CompanyContactSurname" class="form-control" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactSurname" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactTitle" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <input asp-for="CompanyContactTitle" class="form-control" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactTitle)
+                            <input asp-for="CompanyContactTitle" class="form-control" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactTitle" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactEmail" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        @if (Model.MotivationEditable)
+                {
+                            <input asp-for="CompanyContactEmail" class="form-control" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactEmail)
+                            <input asp-for="CompanyContactEmail" class="form-control" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactEmail" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
     <div class="row">
         <div class="col-md-offset-2 col-md-10">
