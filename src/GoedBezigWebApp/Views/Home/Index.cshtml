@@ -1,9 +1,89 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject SignInManager<User> SignInManager
 @inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = "Home Page";
+    bool memberOfOrg = (bool)ViewData["MemberOfOrganization"];
+    bool memberOfGroup = (bool)ViewData["MemberOfGroup"];
 }
+
+
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="well">
+        <div class="row">
+            <div class="col-md-8">
+                <p>Welkom op de Goed Bezig website. Registreer of Log in om verder te gaan. </p>
+            </div>
+            <div class="col-md-4">
+                <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-lg btn-default btn-block">
+                    <span>Registreren</span>
+                </a>
+                <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-lg btn-default btn-block">
+                    <span>Log in</span>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+else if (!memberOfOrg)
+{
+    <div class="well">
+        <div class="row">
+            <div class="col-md-8">
+                <p>U bent nog geen lid van een Organisatie. <br /> Registreer bij een organisatie om verder te gaan. </p>
+            </div>
+            <div class="col-md-4">
+                <a asp-area="" asp-controller="Organization" asp-action="Index" class="btn btn-lg btn-default btn-block">
+                    <span>Registreer bij een Organisatie</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+}
+else if (!memberOfGroup)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Wordt lid van een groep</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
+                    <a asp-area="" asp-controller="Group" asp-action="Index" class="btn btn-default">Registreer in een open groep</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Bekijk de uitnodigingen</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Bepaalde groepen zijn enkel toegankelijk op uitnodiging</p>
+                    <a asp-area="" asp-controller="Invitation" asp-action="Index" class="btn btn-default">Bekijk mijn uitnodigingen</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Maak een groep aan</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
+                    <a asp-area="" asp-controller="Group" asp-action="Create" class="btn btn-default">Maak een groep aan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <!--
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
