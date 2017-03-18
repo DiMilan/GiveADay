@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Razor.Chunks;
+﻿using System.Collections.Generic;
 
 namespace GoedBezigWebApp.Models
 {

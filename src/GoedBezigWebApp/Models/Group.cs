@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Castle.Core.Internal;
 using GoedBezigWebApp.Models.Exceptions;
-using GoedBezigWebApp.Models.GroupViewModels;
 using GoedBezigWebApp.Models.MotivationState;
 
 namespace GoedBezigWebApp.Models
@@ -87,6 +86,7 @@ namespace GoedBezigWebApp.Models
         {
             Invitations = new List<Invitation>();
             MotivationStatus = new OpenState(this);
+            Events = new List<Event>();
         }
         public Group(string groupName, bool ClosedGroup) : this()
         {

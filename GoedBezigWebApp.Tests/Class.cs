@@ -5,20 +5,15 @@ namespace GoedBezigWebApp.Tests
     public class Class
     {
         [Fact]
-        public void PassingTest()
+        public void PassingTest()//test ter referentie dat slagende testen effectief slagen
         {
-            Assert.Equal(4, Add(2, 2));
+            Assert.Equal(4,4);
         }
 
         [Fact]
-        public void FailingTest()
+        public void FailingTest()//test ter referentie dat falende testen effectief als falend worden gemarkeerd
         {
-            Assert.Equal(5, Add(2, 2));
-        }
-
-        int Add(int x, int y)
-        {
-            return x + y;
+            Assert.Equal(5, 4);
         }
     }
 }
