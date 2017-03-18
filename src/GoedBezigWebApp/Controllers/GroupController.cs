@@ -214,7 +214,7 @@ namespace GoedBezigWebApp.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             return user != null ? _userRepository.GetBy(user.UserName) : null;
         }
-        private async Task<IActionResult> AddUser(Group group)
+        public async Task<IActionResult> AddUser(String id)
         {
             var user = await GetCurrentUserAsync();
 
@@ -224,10 +224,11 @@ namespace GoedBezigWebApp.Controllers
                 return View("Error");
             }
             else
+            {
 
                 try
                 {
-                    group.AddUser(user);
+                    _groupRepository.GetBy(id).AddUser(user);
                     _groupRepository.SaveChanges();
                     TempData["message"] = $"User successfully added to group!";
                     return RedirectToAction("Index");
@@ -238,6 +239,7 @@ namespace GoedBezigWebApp.Controllers
                     TempData["error"] = error.Message;
                     return RedirectToAction("Index");
                 }
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ namespace GoedBezigWebApp.Models
         public Organization()
         {
             Groups = new List<Group>();
+            Users = new List<User>();
         }
 
         public int OrgId { get; set; }
@@ -22,6 +23,7 @@ namespace GoedBezigWebApp.Models
         public bool ClosedGroups { get; set; }
         public virtual OrganizationalAddress Address { get; set; }
         public List<Group> Groups { get; set; }
+        public List<User> Users { get; set; }
 
         public Group AddGroup(string groupName)
         {
