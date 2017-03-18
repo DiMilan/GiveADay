@@ -55,7 +55,7 @@ namespace GoedBezigWebApp.Data
             entity.Property(e => e.FamilyName).HasColumnName("family_name");
 
             entity.HasMany(u => u.Invitations).WithOne(i => i.User);
-
+            entity.HasOne(u => u.Organization).WithMany(o => o.Users);
             entity.HasOne(o => o.LectorUser).WithMany();
         }
 
@@ -122,6 +122,8 @@ namespace GoedBezigWebApp.Data
                 .IsRequired()
                 .HasColumnName("name")
                 .HasMaxLength(255);
+
+            entity.HasMany(e => e.Users).WithOne(u => u.Organization);
 
             entity.HasOne(d => d.Address)
                 .WithMany(p => p.Organization)

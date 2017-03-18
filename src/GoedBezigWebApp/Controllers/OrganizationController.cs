@@ -40,6 +40,7 @@ namespace GoedBezigWebApp.Controllers
 
             ViewData["searchName"] = searchName;
             ViewData["searchLocation"] = searchLocation;
+            
             ViewBag.User = user;
             if (groupId.IsNullOrEmpty())
             {
@@ -90,9 +91,11 @@ namespace GoedBezigWebApp.Controllers
 
         }
 
-        private Task<User> GetCurrentUserAsync()
+        private async Task<User> GetCurrentUserAsync()
         {
-            return _userManager.GetUserAsync(HttpContext.User);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            _userRepository.LoadOrganization(user);
+            return user;
         }
 
         public async Task<IActionResult> AssignLabel(string id)
