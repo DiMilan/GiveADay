@@ -8,5 +8,6 @@ namespace GoedBezigWebApp.Models
     public class ExternalOrganization : Organization
     {
         public bool hasGBLabel { get; set; }
+        public List<OrganizationContact> Contacts { get; set; }
     }
 }
