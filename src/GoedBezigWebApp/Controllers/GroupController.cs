@@ -26,6 +26,13 @@ namespace GoedBezigWebApp.Controllers
             _userManager = userManager;
         }
 
+        //constructor for tests
+        public GroupController(IGroupRepository groupRepository, IUserRepository userRepository)
+        {
+            _groupRepository = groupRepository;
+            _userRepository = userRepository;
+        }
+
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
@@ -41,12 +48,12 @@ namespace GoedBezigWebApp.Controllers
                 // van de organisatie waar de ingelogde user deel van uitmaakt => CHECK
                 // die niet gesloten zijn => CHECK
                 // met een motivatie die nog niet goegekeurd is 
-                    return View(_groupRepository.GetAll()
-                        .Where(
-                        (g => g.GBOrganization == user.Organization 
-                        && g.ClosedGroup == false 
-                        && !(g.MotivationStatus is ApprovedState))//wat is de status voor GOEDGEKEURD ?  
-                    ));
+                return View(_groupRepository.GetAll()
+                    .Where(
+                    (g => g.GBOrganization == user.Organization
+                    && g.ClosedGroup == false
+                    && !(g.MotivationStatus is ApprovedState))//wat is de status voor GOEDGEKEURD ?  
+                ));
             }
         }
 
@@ -68,7 +75,7 @@ namespace GoedBezigWebApp.Controllers
                     {
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
-                        group = _groupRepository.GetBy(groupEditViewModel.Name);              
+                        group = _groupRepository.GetBy(groupEditViewModel.Name);
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
                         group.MotivationStatus.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
                         group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
@@ -131,7 +138,7 @@ namespace GoedBezigWebApp.Controllers
                             "Group has been added",
                             String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.GroupName),
                             String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.GroupName));
-                        return View(nameof(Index));
+                        return RedirectToAction(nameof(Index));
                     }
                 }
                 catch (GroupExistsException)

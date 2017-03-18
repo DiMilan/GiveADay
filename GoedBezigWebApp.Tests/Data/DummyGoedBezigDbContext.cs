@@ -10,13 +10,7 @@ namespace GoedBezigWebApp.Tests.Data
 
         public DummyGoedBezigDbContext()
         {
-            Test123 = new Group()
-            {
-                GroupName = "Test123",
-                Timestamp = new DateTime(2017,2,15,19,04,07),
-                ClosedGroup = true
-
-            };
+            Test123 = new Group("test123", true);
         }
     }
 }
