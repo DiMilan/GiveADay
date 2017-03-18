@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
+using GoedBezigWebApp.Models.MotivationState;
 using Microsoft.AspNetCore.Identity;
 
 namespace GoedBezigWebApp.Data
@@ -147,6 +148,8 @@ namespace GoedBezigWebApp.Data
             if (_context.Groups.Any()) return;
 
             var groupHogent = HoGent.AddGroup("Test1");
+            var groupUgent2 = UGent.AddGroup("Ugent2-Approved");
+            groupUgent2.MotivationStatus = new ApprovedState(groupHogent);
             var groupUGent = UGent.AddGroup("Test2");
             var groupSolvay = Solvay.AddGroup("Test3");
 
