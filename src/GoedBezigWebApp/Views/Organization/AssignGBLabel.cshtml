@@ -1,4 +1,4 @@
-@model GoedBezigWebApp.Models.Organization
+@model GoedBezigWebApp.Models.ExternalOrganization
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,7 +12,19 @@
 
 <form asp-action="View">
     <div class="form-horizontal">
-        <h4>Organization</h4>
+        <h4>Organization @Model.Name</h4>
+        <table class="table">
+            @for (int i = 0; i < Model.Contacts.Count(); i++)
+            {
+                <tr>
+                    <td><input type="checkbox" name="notifyUsers[@i]" value="@Model.Contacts[i].ContactId" /></td>
+                    <td>@Model.Contacts[i].Voornaam @Model.Contacts[i].Naam</td>
+                    <td>@Model.Contacts[i].Functie</td>
+                    <td>@Model.Contacts[i].Email</td>
+                </tr>
+            }
+        </table>
+
         <hr />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

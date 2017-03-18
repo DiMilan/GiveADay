@@ -22,5 +22,7 @@ namespace GoedBezigWebApp.Models
             this.Email = email;
             this.Organization = organization;
         }
+
+        public OrganizationContact () { }
     }
 }

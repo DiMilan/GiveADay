@@ -85,7 +85,7 @@
                 
                 @if (ViewBag.Group != null)
                 {
-                   @Html.ActionLink("Assign GB Label", "AssignLabel", new { id = item.OrgId, groupId = ViewBag.Group.GroupName })
+                   @Html.ActionLink("Assign GB Label", "AssignGBLabel", new { id = item.OrgId, groupId = ViewBag.Group.GroupName })
                 }
 
             </td>
