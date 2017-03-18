@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GoedBezigWebApp.Migrations
 {
-    public partial class Test4 : Migration
+    public partial class OrganizationSplit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

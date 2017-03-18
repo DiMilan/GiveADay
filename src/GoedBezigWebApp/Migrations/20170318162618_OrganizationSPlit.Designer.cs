@@ -9,8 +9,8 @@ using GoedBezigWebApp.Models;
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170318162618_Test4")]
-    partial class Test4
+    [Migration("20170318162618_OrganizationSplit")]
+    partial class OrganizationSplit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
