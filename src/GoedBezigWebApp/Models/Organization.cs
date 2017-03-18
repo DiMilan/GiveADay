@@ -10,7 +10,6 @@ namespace GoedBezigWebApp.Models
         public string Logo { get; set; }
         public string Btw { get; set; }
         public string Description { get; set; }
-        public string Domain { get; set; }
 
         public int? AddressId { get; set; }
         public virtual OrganizationalAddress Address { get; set; }

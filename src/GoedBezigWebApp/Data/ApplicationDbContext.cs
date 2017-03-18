@@ -29,6 +29,7 @@ namespace GoedBezigWebApp.Data
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
             MapGBOrganization(modelBuilder.Entity<GBOrganization>());
+            MapExternalOrganization(modelBuilder.Entity<ExternalOrganization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
             MapEvent(modelBuilder.Entity<Event>());
@@ -134,8 +135,11 @@ namespace GoedBezigWebApp.Data
 
         private static void MapGBOrganization(EntityTypeBuilder<GBOrganization> entity)
         {
-
             entity.HasMany(e => e.Users).WithOne(u => u.Organization);
+        }
+
+        private static void MapExternalOrganization(EntityTypeBuilder<ExternalOrganization> entity)
+        {
         }
 
         private static void MapOrganizationalAddress(EntityTypeBuilder<OrganizationalAddress> entity)

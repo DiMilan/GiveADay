@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
+using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Migrations
 {
@@ -138,8 +140,6 @@ namespace GoedBezigWebApp.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired();
-
-                    b.Property<string>("Domain");
 
                     b.Property<string>("Logo")
                         .HasColumnName("logo")
@@ -396,11 +396,24 @@ namespace GoedBezigWebApp.Migrations
                     b.HasAnnotation("SqlServer:TableName", "user_tokens");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.ExternalOrganization", b =>
+                {
+                    b.HasBaseType("GoedBezigWebApp.Models.Organization");
+
+                    b.Property<bool>("hasGBLabel");
+
+                    b.ToTable("ExternalOrganization");
+
+                    b.HasDiscriminator().HasValue("ExternalOrganization");
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.GBOrganization", b =>
                 {
                     b.HasBaseType("GoedBezigWebApp.Models.Organization");
 
                     b.Property<bool>("ClosedGroups");
+
+                    b.Property<string>("Domain");
 
                     b.ToTable("GBOrganization");
 

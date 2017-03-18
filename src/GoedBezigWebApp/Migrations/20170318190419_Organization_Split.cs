@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GoedBezigWebApp.Migrations
 {
-    public partial class OrganizationSplit : Migration
+    public partial class Organization_Split : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,6 +23,11 @@ namespace GoedBezigWebApp.Migrations
                 table: "organization",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "hasGBLabel",
+                table: "organization",
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "CompanyAddress",
@@ -69,6 +74,10 @@ namespace GoedBezigWebApp.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Discriminator",
+                table: "organization");
+
+            migrationBuilder.DropColumn(
+                name: "hasGBLabel",
                 table: "organization");
 
             migrationBuilder.DropColumn(

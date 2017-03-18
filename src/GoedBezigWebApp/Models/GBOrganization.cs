@@ -11,6 +11,7 @@ namespace GoedBezigWebApp.Models
         public List<Group> Groups { get; set; }
         public List<User> Users { get; set; }
         public bool ClosedGroups { get; set; }
+        public string Domain { get; set; }
 
         public GBOrganization()
         {
