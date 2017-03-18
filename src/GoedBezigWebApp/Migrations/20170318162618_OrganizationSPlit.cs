@@ -5,12 +5,24 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GoedBezigWebApp.Migrations
 {
-    public partial class MotivationCompany : Migration
+    public partial class OrganizationSplit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "MotivationState");
+
+            migrationBuilder.AlterColumn<bool>(
+                name: "ClosedGroups",
+                table: "organization",
+                nullable: true,
+                oldClrType: typeof(bool));
+
+            migrationBuilder.AddColumn<string>(
+                name: "Discriminator",
+                table: "organization",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "CompanyAddress",
@@ -56,6 +68,10 @@ namespace GoedBezigWebApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
+                name: "Discriminator",
+                table: "organization");
+
+            migrationBuilder.DropColumn(
                 name: "CompanyAddress",
                 table: "groups");
 
@@ -86,6 +102,13 @@ namespace GoedBezigWebApp.Migrations
             migrationBuilder.DropColumn(
                 name: "CompanyWebsite",
                 table: "groups");
+
+            migrationBuilder.AlterColumn<bool>(
+                name: "ClosedGroups",
+                table: "organization",
+                nullable: false,
+                oldClrType: typeof(bool),
+                oldNullable: true);
 
             migrationBuilder.CreateTable(
                 name: "MotivationState",

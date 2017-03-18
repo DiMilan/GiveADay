@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
-using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Migrations
 {
@@ -134,11 +132,12 @@ namespace GoedBezigWebApp.Migrations
                         .HasColumnName("btw")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("ClosedGroups");
-
                     b.Property<string>("Description")
                         .HasColumnName("description")
                         .HasMaxLength(800);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<string>("Domain");
 
@@ -158,6 +157,8 @@ namespace GoedBezigWebApp.Migrations
                         .HasName("FK_org_address_id_ref");
 
                     b.ToTable("organization");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Organization");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.OrganizationalAddress", b =>
@@ -395,6 +396,17 @@ namespace GoedBezigWebApp.Migrations
                     b.HasAnnotation("SqlServer:TableName", "user_tokens");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.GBOrganization", b =>
+                {
+                    b.HasBaseType("GoedBezigWebApp.Models.Organization");
+
+                    b.Property<bool>("ClosedGroups");
+
+                    b.ToTable("GBOrganization");
+
+                    b.HasDiscriminator().HasValue("GBOrganization");
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.Event", b =>
                 {
                     b.HasOne("GoedBezigWebApp.Models.Group", "Group")
@@ -405,7 +417,7 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.Organization", "GBOrganization")
+                    b.HasOne("GoedBezigWebApp.Models.GBOrganization", "GBOrganization")
                         .WithMany("Groups")
                         .HasForeignKey("GBOrganizationOrgId");
                 });
@@ -446,7 +458,7 @@ namespace GoedBezigWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("LectorUserId");
 
-                    b.HasOne("GoedBezigWebApp.Models.Organization", "Organization")
+                    b.HasOne("GoedBezigWebApp.Models.GBOrganization", "Organization")
                         .WithMany("Users")
                         .HasForeignKey("OrganizationOrgId");
                 });

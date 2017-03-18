@@ -22,7 +22,7 @@ namespace GoedBezigWebApp.Models
             }
         }
 
-        public Organization Organization { get; set; }
+        public GBOrganization Organization { get; set; }
 
         public User LectorUser { get; set; }
 
@@ -46,12 +46,12 @@ namespace GoedBezigWebApp.Models
             invitation.Decline();
         }
 
-        public void RegisterInOrganization(Organization organization)
+        public void RegisterInOrganization(GBOrganization gbOrganization)
         {
-            if (!this.Email.Split('@')[1].Contains(organization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
+            if (!this.Email.Split('@')[1].Contains(gbOrganization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
             if (this.Organization != null) throw new OrganizationException($"You are already registered in organization {this.Organization.Name}.");
-            this.Organization = organization;
-            organization.Users.Add(this);
+            this.Organization = gbOrganization;
+            gbOrganization.Users.Add(this);
         }
     }
 }

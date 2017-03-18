@@ -52,7 +52,7 @@ namespace GoedBezigWebApp.Data.Repositories
                 .Load();
         }
 
-        public void LoadOrganization(User user)
+        public void LoadGbOrganization(User user)
         {
             _dbContext.Entry(user)
                 .Reference(u => u.Organization)

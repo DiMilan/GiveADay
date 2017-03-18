@@ -10,6 +10,8 @@ namespace GoedBezigWebApp.Data
     {
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
+        public virtual DbSet<GBOrganization> GbOrganizations { get; set; }
+        public virtual DbSet<ExternalOrganization> ExternalOrganizations { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
         public virtual DbSet<Invitation> Invitations { get; set; }
 
@@ -26,6 +28,7 @@ namespace GoedBezigWebApp.Data
             MapRole(modelBuilder.Entity<Role>().ForSqlServerToTable("roles"));
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
+            MapGBOrganization(modelBuilder.Entity<GBOrganization>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
             MapEvent(modelBuilder.Entity<Event>());
@@ -123,12 +126,16 @@ namespace GoedBezigWebApp.Data
                 .HasColumnName("name")
                 .HasMaxLength(255);
 
-            entity.HasMany(e => e.Users).WithOne(u => u.Organization);
-
             entity.HasOne(d => d.Address)
                 .WithMany(p => p.Organization)
                 .HasForeignKey(d => d.AddressId)
                 .HasConstraintName("organization$FK_org_address_id_ref");
+        }
+
+        private static void MapGBOrganization(EntityTypeBuilder<GBOrganization> entity)
+        {
+
+            entity.HasMany(e => e.Users).WithOne(u => u.Organization);
         }
 
         private static void MapOrganizationalAddress(EntityTypeBuilder<OrganizationalAddress> entity)

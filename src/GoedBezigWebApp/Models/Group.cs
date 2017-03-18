@@ -26,7 +26,7 @@ namespace GoedBezigWebApp.Models
         public string CompanyContactTitle { get; set; }
         [NotMapped]
         public MotivationState.MotivationState MotivationStatus { get; set; }
-        public Organization GBOrganization { get; set; }
+        public GBOrganization GBOrganization { get; set; }
         public int StateType
         {
             get

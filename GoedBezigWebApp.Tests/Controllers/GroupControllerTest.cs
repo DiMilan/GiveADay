@@ -64,7 +64,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         [Fact]
         public void CreateRedirectsToActionIndexWhenSuccessfull()
         {
-            testUser.Organization = new Organization();
+            testUser.Organization = new GBOrganization();
             _userRepository.Setup(p => p.GetBy("testUser")).Returns(testUser);
             GroupEditViewModel groupEditViewModel = new GroupEditViewModel(new Group()
             {
@@ -80,7 +80,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         [Fact]
         public void CreateCreatesAndPersistsGroupWhenSuccesfull()
         {
-            testUser.Organization = new Organization();
+            testUser.Organization = new GBOrganization();
             _userRepository.Setup(p => p.GetBy("testUser")).Returns(testUser);
             GroupEditViewModel brewerEvm = new GroupEditViewModel(_dummyContext.Test123);
             _controller.Create(brewerEvm);
