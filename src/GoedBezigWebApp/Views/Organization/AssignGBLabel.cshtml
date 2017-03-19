@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model GoedBezigWebApp.Models.ExternalOrganization
 
 @{
@@ -10,9 +13,10 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="View">
+<form asp-action="AssignGBLabel">
     <div class="form-horizontal">
         <h4>Organization @Model.Name</h4>
+        <p>@Localizer["Great to see that you want to add the GB Label to this organization. As soon as you confirm that this organization will get the GB-label, a confirmation email is sent to one or multiple contacts in this organization. Please select these contacts below."]</p>
         <table class="table">
             @for (int i = 0; i < Model.Contacts.Count(); i++)
             {
@@ -28,14 +32,23 @@
         <hr />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Confirm" class="btn btn-default" />
+                @if (Model.Contacts.Count > 0)
+                {
+                    <input name="id" type="hidden" value="@Model.OrgId" />
+                    <input name="groupId" type="hidden" value="@ViewBag.Group.GroupName" />
+                    <input type="submit" value="@Localizer["Confirm GB-label and send email(s)"]" class="btn btn-default"/>
+                }
+                else
+                {
+                    <p style="color: red;">@Localizer["Assigning the GB-Label to this organization is not yet possible. Please ask the organization to register one or multiple contacts for their organization."]</p>
+                }
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Back to List", "Index", "Organization", new { groupId = ViewBag.Group.GroupName })
 </div>
 
 @section Scripts {

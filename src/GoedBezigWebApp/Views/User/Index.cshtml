@@ -13,6 +13,7 @@
 @if (ViewBag.Group != null)
 {
 <p>@Localizer["Member of group:"] @ViewBag.Group</p>
+<p>@Localizer["click to invite"]</p>
 }
 <p>
     @if (ViewBag.Group == null)
@@ -23,7 +24,7 @@
     }
    <!-- <a asp-action="Create">Create New</a> -->
 </p>
-<p>@Localizer["click to invite"]</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -92,7 +93,7 @@
         {
             <tr>
                 <td>
-                    <a href="" > @Html.DisplayFor(modelItem => item.UserName) </a>
+                    <a asp-action="InviteUser" asp-route-id="@item.UserName"> @Html.DisplayFor(modelItem => item.UserName) </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add Users To Group" xml:space="preserve">
-    <value>Gebruikers toevoegen aan groep</value>
+    <value>Gebruikers uitnodigen voor groep</value>
   </data>
   <data name="click to invite" xml:space="preserve">
     <value>Klik op de emailadressen om de gebruikers uit te nodigen</value>

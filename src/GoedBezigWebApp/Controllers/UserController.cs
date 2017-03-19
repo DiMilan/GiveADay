@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using GoedBezigWebApp.Models;
 using System.Threading.Tasks;
+using System;
+using GoedBezigWebApp.Models.Exceptions;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -28,14 +30,14 @@ namespace GoedBezigWebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
-            
+
             if (user == null)
             {
                 return View("Error");
             }
             ViewBag.User = user;
-            if (user.Group != null) { ViewBag.Group = user.Group.GroupName; }   
-            return View(_userRepository.GetAll().OrderBy(u =>u.FamilyName).ThenBy(u2 =>u2.FirstName));
+            if (user.Group != null) { ViewBag.Group = user.Group.GroupName; }
+            return View(_userRepository.GetAll().OrderBy(u => u.FamilyName).ThenBy(u2 => u2.FirstName));
 
 
         }
@@ -46,7 +48,26 @@ namespace GoedBezigWebApp.Controllers
             _userRepository.LoadInvitations(user);
             return user;
         }
+        public async Task<IActionResult> InviteUser(String name)
+        {
+            var user = await GetCurrentUserAsync();
+            _userRepository.LoadInvitations(user);
+            try
+            {
+                _groupRepository.GetBy(user.Group.GroupName).InviteUser(_userRepository.GetBy(name));
+                //_groupRepository.SaveChanges();
+                TempData["message"] = $"User successfully invited in group!";
+                return RedirectToAction("Index");
 
+            }
+            catch (OrganizationException error)
+            {
+                TempData["error"] = error.Message;
+                return RedirectToAction("Index");
+            }
 
+        }
     }
+
+
 }

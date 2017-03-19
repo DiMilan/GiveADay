@@ -38,7 +38,7 @@
          {
              <tr>
                  <td>
-                     <a href=""> @Html.DisplayFor(modelItem => item.GroupName) </a>
+                     <a asp-action="Edit" asp-route-id="@item.GroupName"> @Html.DisplayFor(modelItem => item.GroupName) </a>
                  </td>
                  <td>
                      @Html.DisplayFor(modelItem => item.Timestamp)
