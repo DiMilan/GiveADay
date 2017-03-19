@@ -25,21 +25,9 @@ namespace GoedBezigWebApp.Controllers
 
         public IActionResult Index()
         {
-            var activities = new List<Activity>()
-            {
-                new Activity() { Title = "Activity 1", Accepted = true },
-                new Activity() { Title = "Activity 2", Accepted = true },
-                new Activity() { Title = "Activity 3", Accepted = false },
+            var activities = new List<Activity>();
 
-            };
-
-            var events = new List<Event>()
-            {
-                new Event() { Title = "Event 1", Date = DateTime.Now.AddDays(2), Accepted = true },
-                new Event() { Title = "Event 4", Date = DateTime.Now.AddDays(35), Accepted = true },
-                new Event() { Title = "Event 3", Date = DateTime.Now.AddDays(25), Accepted = false },
-                new Event() { Title = "Event 2", Date = DateTime.Now.AddDays(12), Accepted = false }
-            };
+            var events = new List<Event>();
 
             return View(new ActivityEventViewModel(activities, events));
         }

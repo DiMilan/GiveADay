@@ -13,6 +13,20 @@ namespace GoedBezigWebApp.Models
         public string Description { get; set; }
         public bool Accepted { get; set; }
         public ICollection<Message> Messages { get; set; }
-        public virtual Group Group { get; set; }
+        public Group Group { get; set; }
+
+        public Activity()
+        {
+            Accepted = false;
+            Messages = new List<Message>();
+
+        }
+
+        public Activity(string title, string description, Group group) : this()
+        {
+            Title = title;
+            Description = description;
+            Group = group;
+        }
     }
 }
