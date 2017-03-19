@@ -148,6 +148,20 @@ namespace GoedBezigWebApp.Models
             activity.Group = this;
             Activities.Add(activity);
         }
+
+        public ICollection<Activity> GetActivities()
+        {
+            var activities = new List<Activity>(Activities);
+
+            activities.RemoveAll(a => a is Event);
+
+            return activities;
+        }
+
+        public ICollection<Event> GetEvents()
+        {
+            return Activities.OfType<Event>().ToList();
+        }
     }
 
 }

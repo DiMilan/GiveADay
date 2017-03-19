@@ -31,15 +31,16 @@ namespace GoedBezigWebApp.Data
         {
             // --> SEED Organizations
             if (_context.Organizations.Any()) return;
-                KebabHouse.Contacts.Add(new OrganizationContact("Jan", "Janssens", "CFO", "jan.janssens@mdware.org", KebabHouse));
-                KebabHouse.Contacts.Add(new OrganizationContact("Piet", "Pieters", "CEO", "piet.pieters@mdware.org", KebabHouse));
 
-                _context.GbOrganizations.Add(HoGent);
-                _context.GbOrganizations.Add(UGent);
-                _context.GbOrganizations.Add(Solvay);
-                _context.GbOrganizations.Add(TestOrg);
-                _context.ExternalOrganizations.Add(KebabHouse);
-                _context.ExternalOrganizations.Add(PizzaRoma);
+            KebabHouse.Contacts.Add(new OrganizationContact("Jan", "Janssens", "CFO", "jan.janssens@mdware.org", KebabHouse));
+            KebabHouse.Contacts.Add(new OrganizationContact("Piet", "Pieters", "CEO", "piet.pieters@mdware.org", KebabHouse));
+
+            _context.GbOrganizations.Add(HoGent);
+            _context.GbOrganizations.Add(UGent);
+            _context.GbOrganizations.Add(Solvay);
+            _context.GbOrganizations.Add(TestOrg);
+            _context.ExternalOrganizations.Add(KebabHouse);
+            _context.ExternalOrganizations.Add(PizzaRoma);
 
             _context.SaveChanges();
         }
@@ -126,7 +127,7 @@ namespace GoedBezigWebApp.Data
                 AddressLine1 = "Kortrijksestraat 32",
                 AddressPostalCode = "8560"
             },
-            Contacts = new List<OrganizationContact> ()
+            Contacts = new List<OrganizationContact>()
         };
 
         private static readonly ExternalOrganization PizzaRoma = new ExternalOrganization
@@ -201,8 +202,8 @@ namespace GoedBezigWebApp.Data
             var invitation2 = new Invitation(UserTest, GroupHoGent2);
             var invitation3 = new Invitation(UserTest, GroupHoGent3);
 
-            var acceptedInvitation = new Invitation(UserHogent, GroupHoGent1) {Status = InvitationStatus.Accepted};
-            
+            var acceptedInvitation = new Invitation(UserHogent, GroupHoGent1) { Status = InvitationStatus.Accepted };
+
             _context.Add(invitation1);
             _context.Add(invitation2);
             _context.Add(invitation3);
@@ -273,6 +274,10 @@ namespace GoedBezigWebApp.Data
 
             UserTest.Organization = HoGent;
             UserHogent.Organization = HoGent;
+            UserBart.Organization = HoGent;
+            UserMax.Organization = HoGent;
+            UserMilan.Organization = HoGent;
+            UserTom.Organization = HoGent;
 
             await _context.SaveChangesAsync();
         }
