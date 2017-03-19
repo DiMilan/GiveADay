@@ -13,6 +13,7 @@ using GoedBezigWebApp.Models.MotivationState;
 
 namespace GoedBezigWebApp.Controllers
 {
+    [Authorize]
     public class GroupController : Controller
     {
         private readonly IGroupRepository _groupRepository;
@@ -97,7 +98,7 @@ namespace GoedBezigWebApp.Controllers
             return View(nameof(Edit), groupEditViewModel);
         }
 
-        [Authorize]
+        
         public IActionResult Create()
         {
             return View(nameof(Edit), new GroupEditViewModel(new Group()));
@@ -210,11 +211,17 @@ namespace GoedBezigWebApp.Controllers
         public async Task<IActionResult> AddUser(String id)
         {
             var user = await GetCurrentUserAsync();
+            _userRepository.LoadInvitations(user);
 
             if (user == null)
             {
                 TempData["error"] = "User not logged in";
                 return View("Error");
+            }
+            else if (user.Group != null)
+                {
+                    TempData["error"] = "User already member of a group";
+                    return RedirectToAction("Index");
             }
             else
             {
@@ -222,7 +229,9 @@ namespace GoedBezigWebApp.Controllers
                 try
                 {
                     _groupRepository.GetBy(id).AddUser(user);
-                    _groupRepository.SaveChanges();
+                     
+
+            _groupRepository.SaveChanges();
                     TempData["message"] = $"User successfully added to group!";
                     return RedirectToAction("Index");
 

@@ -27,7 +27,7 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public ExternalOrganization GetExternalOrganizationBy(int organizationId)
         {
-            return _externalOrganizations.SingleOrDefault((o => o.OrgId == organizationId));
+            return _externalOrganizations.Include(o => o.Contacts).SingleOrDefault(o => o.OrgId == organizationId);
         }
 
         public IEnumerable<Organization> GetAllGbOrganizations()
