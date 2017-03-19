@@ -20,6 +20,7 @@ namespace GoedBezigWebApp.Data.Repositories
         {
            return _user
                 .Include(u => u.Organization)
+                .Include(u => u.Invitations)
                 .SingleOrDefault((u => u.UserName == username));
         }
 
@@ -58,11 +59,6 @@ namespace GoedBezigWebApp.Data.Repositories
                 .Reference(u => u.Organization)
                 .Load();
         }
-        public void LoadGroups(User user)
-        {
-            _dbContext.Entry(user)
-                .Reference(u => u.Group)
-                .Load();
-        }
+        
     }
 }

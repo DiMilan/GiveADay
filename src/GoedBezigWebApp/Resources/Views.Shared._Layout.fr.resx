@@ -133,6 +133,6 @@
     <value>Organisations</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Utilisateurs</value>
+    <value>Inviters des utilisateurs</value>
   </data>
 </root>
