@@ -31,7 +31,10 @@
                         @Html.HiddenFor(a => a.Name)
                         <input asp-for="Name" class="form-control" disabled />
                         <span asp-validation-for="Name" class="text-danger"></span>
-
+                    }
+                    @if (Model.EntitledToGiveGBLabel)
+                    {
+                    <br /> @Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
                     }
                 </div>
             </div>

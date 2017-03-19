@@ -12,7 +12,7 @@ namespace GoedBezigWebApp.Models
         public string Description { get; set; }
 
         public int? AddressId { get; set; }
-        public virtual OrganizationalAddress Address { get; set; }
+        public OrganizationalAddress Address { get; set; }
 
     }
 }

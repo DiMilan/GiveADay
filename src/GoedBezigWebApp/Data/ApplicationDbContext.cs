@@ -12,6 +12,7 @@ namespace GoedBezigWebApp.Data
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<GBOrganization> GbOrganizations { get; set; }
         public virtual DbSet<ExternalOrganization> ExternalOrganizations { get; set; }
+        public virtual DbSet<OrganizationContact> OrganizationContacts { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
         public virtual DbSet<Invitation> Invitations { get; set; }
         public virtual DbSet<Activity> Activities { get; set; }
@@ -30,6 +31,7 @@ namespace GoedBezigWebApp.Data
             MapOrganization(modelBuilder.Entity<Organization>());
             MapGBOrganization(modelBuilder.Entity<GBOrganization>());
             MapExternalOrganization(modelBuilder.Entity<ExternalOrganization>());
+            MapOrganizationContact(modelBuilder.Entity<OrganizationContact>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
             MapActivity(modelBuilder.Entity<Activity>());
@@ -141,6 +143,7 @@ namespace GoedBezigWebApp.Data
 
         private static void MapExternalOrganization(EntityTypeBuilder<ExternalOrganization> entity)
         {
+           entity.HasMany(o => o.Contacts).WithOne(e => e.Organization).OnDelete(DeleteBehavior.Cascade);
         }
 
         private static void MapOrganizationalAddress(EntityTypeBuilder<OrganizationalAddress> entity)
@@ -176,6 +179,17 @@ namespace GoedBezigWebApp.Data
             entity.Property(e => e.AddressPostalCode)
                 .HasColumnName("address_postal_code")
                 .HasMaxLength(255);
+        }
+
+        private static void MapOrganizationContact(EntityTypeBuilder<OrganizationContact> entity)
+        {
+            entity.HasKey(e => e.ContactId)
+                .HasName("PK_organization_contacts_contact_id");
+
+            entity.ToTable("organization_contacts");
+
+            entity.Property(e => e.ContactId).HasColumnName("contact_id");
+            entity.HasOne(e => e.Organization).WithMany(o => o.Contacts).IsRequired();
         }
 
         private static void MapUserGroup(EntityTypeBuilder<Invitation> ug)

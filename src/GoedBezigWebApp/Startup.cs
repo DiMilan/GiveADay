@@ -150,7 +150,7 @@ namespace GoedBezigWebApp
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
+                
                 context.Database.EnsureCreated();
                 //context.Database.Migrate(); // Create new database and apply latest migrations
                 new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)

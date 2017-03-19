@@ -29,7 +29,9 @@ namespace GoedBezigWebApp.Data
         {
             // --> SEED Organizations
             if (_context.Organizations.Any()) return;
-            
+                KebabHouse.Contacts.Add(new OrganizationContact("Jan", "Janssens", "CFO", "jan.janssens@mdware.org", KebabHouse));
+                KebabHouse.Contacts.Add(new OrganizationContact("Piet", "Pieters", "CEO", "piet.pieters@mdware.org", KebabHouse));
+
                 _context.GbOrganizations.Add(HoGent);
                 _context.GbOrganizations.Add(UGent);
                 _context.GbOrganizations.Add(Solvay);
@@ -108,7 +110,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly ExternalOrganization KebabHouse = new ExternalOrganization
+        private ExternalOrganization KebabHouse = new ExternalOrganization
         {
             Name = "Kebab House",
             Logo = "https://eggthedail.files.wordpress.com/2010/08/100_2041.jpg",
@@ -121,7 +123,8 @@ namespace GoedBezigWebApp.Data
                 AddressCountry = "België",
                 AddressLine1 = "Kortrijksestraat 32",
                 AddressPostalCode = "8560"
-            }
+            },
+            Contacts = new List<OrganizationContact> ()
         };
 
         private static readonly ExternalOrganization PizzaRoma = new ExternalOrganization
