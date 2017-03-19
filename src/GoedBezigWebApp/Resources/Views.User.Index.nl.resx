@@ -120,11 +120,23 @@
   <data name="Add Users To Group" xml:space="preserve">
     <value>Gebruikers toevoegen aan groep</value>
   </data>
+  <data name="click to invite" xml:space="preserve">
+    <value>Klik op de emailadressen om de gebruikers uit te nodigen</value>
+  </data>
   <data name="FamilyName" xml:space="preserve">
     <value>Familienaam</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Voornaam</value>
+  </data>
+  <data name="Member of group:" xml:space="preserve">
+    <value>Je bent lid van de volgende groep:</value>
+  </data>
+  <data name="Not registred" xml:space="preserve">
+    <value>Je bent nog niet ingeschreven in een groep. Klik op de link hieronder om je in een open groep in te schrijven.</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registreren in een open groep</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Naam Gebruiker</value>

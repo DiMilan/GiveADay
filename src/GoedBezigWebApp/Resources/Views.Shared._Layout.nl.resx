@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActivityEvent" xml:space="preserve">
+    <value>Activiteiten</value>
+  </data>
   <data name="GroupIndex" xml:space="preserve">
-    <value>Groepenindex</value>
+    <value>Inschrijven in groep</value>
   </data>
   <data name="Invitation" xml:space="preserve">
     <value>Uitnodiging</value>
@@ -130,6 +133,6 @@
     <value>Organisaties</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Gebruikers</value>
+    <value>Gebruikers uitnodigen</value>
   </data>
 </root>

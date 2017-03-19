@@ -59,5 +59,6 @@ namespace GoedBezigWebApp.Data.Repositories
                 .Reference(u => u.Organization)
                 .Load();
         }
+        
     }
 }

@@ -136,6 +136,12 @@ namespace GoedBezigWebApp.Models
         {
             return (MotivationStatus is ApprovedState && GBOrganization == null);
         }
+        
+        public void AddActivity(Activity activity)
+        {
+            activity.Group = this;
+            Activities.Add(activity);
+        }
     }
 
 }

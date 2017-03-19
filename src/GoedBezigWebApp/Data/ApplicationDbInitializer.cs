@@ -23,6 +23,8 @@ namespace GoedBezigWebApp.Data
             //            EnsureSeedRoles(context).Wait();
             EnsureSeedUsers().Wait();
             EnsureSeedGroups();
+            EnsureSeedInvitations();
+            EnsureSeedActivities();
         }
 
         private void EnsureSeedOrganizations()
@@ -150,27 +152,86 @@ namespace GoedBezigWebApp.Data
             // --> SEED Groups
             if (_context.Groups.Any()) return;
 
-            var groupHogent = HoGent.AddGroup("Test1");
-            var groupUgent2 = UGent.AddGroup("Ugent2-Approved");
-            groupUgent2.MotivationStatus = new ApprovedState(groupHogent);
-            var groupUGent = UGent.AddGroup("Test2");
-            var groupSolvay = Solvay.AddGroup("Test3");
+            GroupUGent.MotivationStatus = new ApprovedState(GroupUGent);
+
+            _context.Groups.Add(GroupHoGent1);
+            _context.Groups.Add(GroupHoGent2);
+            _context.Groups.Add(GroupHoGent3);
+            _context.Groups.Add(GroupUGent);
+            _context.Groups.Add(GroupSolvay);
 
             _context.SaveChanges();
-
-            _context.Invitations.Add(new Invitation(UserTest, groupHogent));
-            //_context.Invitations.Add(new Invitation(UserTest, groupUGent));
-            //_context.Invitations.Add(new Invitation(UserCursist, groupSolvay));
-
-            _context.SaveChanges();
-
         }
 
         #region Group Data
 
+        private static readonly Group GroupHoGent1 = new Group("GroupHogent1", true)
+        {
+            GBOrganization = HoGent
+        };
 
+        private static readonly Group GroupHoGent2 = new Group("GroupHogent2", true)
+        {
+            GBOrganization = HoGent
+        };
+
+        private static readonly Group GroupHoGent3 = new Group("GroupHogent3", true)
+        {
+            GBOrganization = HoGent
+        };
+
+        private static readonly Group GroupUGent = new Group("GroupUgent", true)
+        {
+            GBOrganization = UGent
+        };
+
+        private static readonly Group GroupSolvay = new Group("GroupSolvay", false)
+        {
+            GBOrganization = Solvay
+        };
 
         #endregion
+
+
+        private void EnsureSeedInvitations()
+        {
+            if (_context.Invitations.Any()) return;
+
+            var invitation1 = new Invitation(UserTest, GroupHoGent1);
+            var invitation2 = new Invitation(UserTest, GroupHoGent2);
+            var invitation3 = new Invitation(UserTest, GroupHoGent3);
+
+            var acceptedInvitation = new Invitation(UserHogent, GroupHoGent1) {Status = InvitationStatus.Accepted};
+            
+            _context.Add(invitation1);
+            _context.Add(invitation2);
+            _context.Add(invitation3);
+            _context.Add(acceptedInvitation);
+
+            _context.SaveChanges();
+        }
+
+        private void EnsureSeedActivities()
+        {
+            if (_context.Activities.Any()) return;
+
+            var activity1 = new Activity("Activity1", "Activity description", GroupHoGent1);
+            var activity2 = new Activity("Activity2", "Activity description", GroupHoGent1);
+            var activity3 = new Activity("Activity3", "Activity description", GroupHoGent1);
+
+            var event1 = new Event("Event1", "Event description", DateTime.Today.AddDays(5), GroupHoGent1);
+            var event2 = new Event("Event2", "Event description", DateTime.Today.AddDays(25), GroupHoGent1);
+            var event3 = new Event("Event3", "Event description", DateTime.Today.AddDays(45), GroupHoGent1);
+
+            _context.Activities.Add(activity1);
+            _context.Activities.Add(activity2);
+            _context.Activities.Add(activity3);
+            _context.Activities.Add(event1);
+            _context.Activities.Add(event2);
+            _context.Activities.Add(event3);
+
+            _context.SaveChanges();
+        }
 
         private async Task EnsureSeedRoles()
         {
@@ -190,6 +251,7 @@ namespace GoedBezigWebApp.Data
         private async Task EnsureSeedUsers()
         {
             // --> SEED Users
+
             foreach (var user in Users)
             {
                 var passwordHasher = new PasswordHasher<User>();
@@ -208,7 +270,10 @@ namespace GoedBezigWebApp.Data
                 //await userStore.AddToRoleAsync(user, UserRoles[user]);
                 //await userManager.AddToRolesAsync(user, UserRoles[user]);
             }
+
             UserTest.Organization = HoGent;
+            UserHogent.Organization = HoGent;
+
             await _context.SaveChangesAsync();
         }
 
@@ -226,6 +291,7 @@ namespace GoedBezigWebApp.Data
 
         private static readonly User UserLector = GenerateTestUser("giveaday", "mdware.org");
         private static readonly User UserTest = GenerateTestUser("test", "test.be");
+        private static readonly User UserHogent = GenerateTestUser("test", "hogent.be");
         private static readonly User UserVrijwilliger = GenerateTestUser("vrijwilliger", "test.be");
         private static readonly User UserCursist = GenerateTestUser("cursist", "test.be");
         private static readonly User UserMilan = GenerateTestUser("milandimax", "gmail.com", "Milan", "Dima");
@@ -233,7 +299,7 @@ namespace GoedBezigWebApp.Data
         private static readonly User UserMax = GenerateTestUser("max.devloo", "lightspeedhq.com", "Maximiliaan", "Devloo");
         private static readonly User UserBart = GenerateTestUser("bartjevm", "gmail.com", "Bart", "Vanmarcke");
 
-        private static readonly User[] Users = new User[] { UserTest, UserVrijwilliger, UserCursist, UserMilan, UserTom, UserMax, UserBart };
+        private static readonly User[] Users = new User[] { UserLector, UserTest, UserHogent, UserVrijwilliger, UserCursist, UserMilan, UserTom, UserMax, UserBart };
 
         private static readonly Dictionary<User, string[]> UserRoles = new Dictionary<User, string[]>()
         {
@@ -275,12 +341,6 @@ namespace GoedBezigWebApp.Data
         }
 
         #endregion
-
-        private void EnsureSeedInvitations()
-        {
-            
-        }
-
 
     }
 }

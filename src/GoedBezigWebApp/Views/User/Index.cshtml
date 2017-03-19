@@ -10,9 +10,20 @@
 
 <h2>@Localizer["Add Users To Group"]</h2>
 
+@if (ViewBag.Group != null)
+{
+<p>@Localizer["Member of group:"] @ViewBag.Group</p>
+}
 <p>
+    @if (ViewBag.Group == null)
+            {
+        <br />
+<p>@Localizer["Not registred"]</p>
+    <a asp-action="../Group/Index">@Localizer["Register"] </a>
+    }
    <!-- <a asp-action="Create">Create New</a> -->
 </p>
+<p>@Localizer["click to invite"]</p>
 <table class="table">
     <thead>
         <tr>

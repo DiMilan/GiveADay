@@ -1,0 +1,81 @@
+@model GoedBezigWebApp.Models.ActivityEventViewModels.ActivityEventViewModel
+
+<div class="row">
+
+    <div class="col-md-6">
+        <div>
+            <h4>Activities</h4>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th class="fit" />
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Activities)
+                {
+                    <tr class="cursor-pointer" onclick="location.href = '@(Url.Action("Edit", new { id = item.Id }))'">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @if (item.Accepted)
+                            {
+                                <span class="text-success fa fa-check cursor-default" data-toggle="tooltip" title="Accepted"></span>
+                            }
+                            else
+                            {
+                                <span class="text-info fa fa-clock-o cursor-default" data-toggle="tooltip" title="Pending"></span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div>
+            <h4>Events</h4>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th class="fit" />
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Events)
+                {
+                    <tr class="cursor-pointer" onclick="location.href = '@(Url.Action("Edit", new { id = item.Id }))'">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @if (item.Accepted)
+                            {
+                                <span class="text-success fa fa-check" data-toggle="tooltip" title="Accepted"></span>
+                            }
+                            else
+                            {
+                                <span class="text-info fa fa-clock-o" data-toggle="tooltip" title="Pending"></span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
