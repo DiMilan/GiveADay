@@ -36,34 +36,31 @@
                 </div>
             </div>
         </div>
-
-        @if (Model.Name != null)
-        {
-            <div class="row">
-                <div class="form-group">
-                    <label asp-for="Motivation" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        @if (Model.MotivationEditable)
-                {
-                            <textarea asp-for="Motivation" class="form-control" rows="3" placeholder="Geef de motivatie voor het aanmaken van de groep"></textarea>
-                        }
-                        else
-                        {
-                            @Html.HiddenFor(a => a.Motivation)
-                            <textarea asp-for="Motivation" class="form-control" value=@Model.Motivation rows="3" disabeled></textarea>
-                        }
-                        <span asp-validation-for="Motivation" class="text-danger"></span>
-                    </div>
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="Motivation" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    @if (Model.MotivationEditable)
+                    {
+                        <textarea asp-for="Motivation" class="form-control" rows="3" placeholder="Geef de motivatie voor het aanmaken van de groep"></textarea>
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(a => a.Motivation)
+                        <textarea asp-for="Motivation" class="form-control" value=@Model.Motivation rows="3" disabeled></textarea>
+                    }
+                    <span asp-validation-for="Motivation" class="text-danger"></span>
                 </div>
             </div>
-            <hr />
-            <h5>Bedrijfsgegevens</h5>
-            <div class="row">
-                <div class="form-group">
-                    <label asp-for="CompanyName" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        @if (Model.MotivationEditable)
-                {
+        </div>
+        <hr/>
+        <h5>Bedrijfsgegevens</h5>
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="CompanyName" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    @if (Model.MotivationEditable)
+                    {
 
                             <input asp-for="CompanyName" class="form-control" />
 
