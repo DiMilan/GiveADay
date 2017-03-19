@@ -53,5 +53,12 @@ namespace GoedBezigWebApp.Data.Repositories
             }
             return true;
         }
+
+        public void LoadActivities(Group @group)
+        {
+            _dbContext.Entry(group)
+                .Collection(g => g.Activities)
+                .Load();
+        }
     }
 }
