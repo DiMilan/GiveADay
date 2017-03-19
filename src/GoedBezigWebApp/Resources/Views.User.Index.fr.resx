@@ -120,11 +120,23 @@
   <data name="Add Users To Group" xml:space="preserve">
     <value>Ajouter des utilisateurs au group</value>
   </data>
+  <data name="click to invite" xml:space="preserve">
+    <value>Appuyes sur les liens dans les addresses email pour inviter les utilisatuers</value>
+  </data>
   <data name="FamilyName" xml:space="preserve">
     <value>Nom</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Prénom</value>
+  </data>
+  <data name="Member of group:" xml:space="preserve">
+    <value>Vous etes membre du groupe:</value>
+  </data>
+  <data name="Not registred" xml:space="preserve">
+    <value>Vous n'etes pas enregistré dans un group. Appuyes sur le lien ici en bas pour vous enregistrer dans un groupe ouvert!</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrer dans un groupe ouvert</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Nom Utilisateur</value>
