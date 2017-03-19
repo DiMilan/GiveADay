@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GroupIndex" xml:space="preserve">
-    <value>Groepenindex</value>
+    <value>Inschrijven in groep</value>
   </data>
   <data name="Invitation" xml:space="preserve">
     <value>Uitnodiging</value>
