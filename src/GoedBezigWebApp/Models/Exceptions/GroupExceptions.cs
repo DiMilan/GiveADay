@@ -51,4 +51,16 @@ namespace GoedBezigWebApp.Models.Exceptions
 
         }
     }
+    public class TaskListException : ArgumentException
+    {
+
+        public TaskListException()
+        {
+
+        }
+        public TaskListException(string message) : base(message)
+        {
+
+        }
+    }
 }
