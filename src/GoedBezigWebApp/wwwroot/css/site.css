@@ -73,3 +73,17 @@ textarea {
   border-radius: 3px;
 }
 
+/* table column fit */
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.cursor-default {
+    cursor: default;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
