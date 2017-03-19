@@ -118,7 +118,7 @@ namespace GoedBezigWebApp.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            if (user == null || id == 0)
+            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !_groupRepository.GetBy(groupId).entitledToGiveGBLabel())
             {
                 return View("Error");
             }
@@ -132,10 +132,18 @@ namespace GoedBezigWebApp.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            if (user == null || id == 0)
+            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !_groupRepository.GetBy(groupId).entitledToGiveGBLabel())
             {
                 return View("Error");
             }
+
+            if (notifyUsers.IsNullOrEmpty())
+            {
+                TempData["Error"] = "Please select at least one contact!";
+                return RedirectToAction("AssignGBLabel", new {id = id, groupId = groupId});
+            }
+
+            return RedirectToAction("Index");
 
             //to be implemented
             TempData["message"] = $"TO BE DONE";

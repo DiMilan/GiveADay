@@ -40,6 +40,7 @@ namespace GoedBezigWebApp.Data
             _context.GbOrganizations.Add(Solvay);
             _context.GbOrganizations.Add(TestOrg);
             _context.ExternalOrganizations.Add(KebabHouse);
+            _context.ExternalOrganizations.Add(PitaHouse);
             _context.ExternalOrganizations.Add(PizzaRoma);
 
             _context.SaveChanges();
@@ -118,7 +119,7 @@ namespace GoedBezigWebApp.Data
             Name = "Kebab House",
             Logo = "https://eggthedail.files.wordpress.com/2010/08/100_2041.jpg",
             Btw = "BE045785456",
-            Description = "Kebab schnijden is onze specialiteit. Mohammed zegt dat ook altijd.",
+            Description = "Kebab schnijden is onze specialiteit. Mohammed zegt dat ook altijd. Ma zegt hij, zoals ik kebab...",
             hasGBLabel = false,
             Address = new OrganizationalAddress()
             {
@@ -126,6 +127,23 @@ namespace GoedBezigWebApp.Data
                 AddressCountry = "België",
                 AddressLine1 = "Kortrijksestraat 32",
                 AddressPostalCode = "8560"
+            },
+            Contacts = new List<OrganizationContact>()
+        };
+
+        private ExternalOrganization PitaHouse = new ExternalOrganization
+        {
+            Name = "Pita House",
+            Logo = "http://www.pitahouse.ca/wp-content/uploads/2016/05/cropped-thumbnail_PitaHouse_FINAL_LOGO2-1.jpg",
+            Btw = "BE045785456",
+            Description = "Pita vullen is onze specialiteit, njammie!",
+            hasGBLabel = false,
+            Address = new OrganizationalAddress()
+            {
+                AddressCity = "Antwerpen",
+                AddressCountry = "België",
+                AddressLine1 = "Steenstraat 102",
+                AddressPostalCode = "3000"
             },
             Contacts = new List<OrganizationContact>()
         };

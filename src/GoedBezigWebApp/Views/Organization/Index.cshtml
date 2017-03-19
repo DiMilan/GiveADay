@@ -78,7 +78,7 @@
                 @Html.DisplayFor(modelItem => item.Address.AddressCountry)
             </td>
             <td>
-                @if (ViewBag.User.Organization == null && ViewBag.Group == null && ViewBag.isExternalWithLabel == false && ViewBag.isExternalWithoutLabel == false )
+                @if (ViewBag.User.Organization == null && ViewBag.Group == null && ViewBag.isExternalWithLabel != true && ViewBag.isExternalWithoutLabel != true )
                 {
                     @Html.ActionLink("Register", "Register", new { id = item.OrgId })
                 }
