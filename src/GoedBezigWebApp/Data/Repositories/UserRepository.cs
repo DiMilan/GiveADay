@@ -58,11 +58,6 @@ namespace GoedBezigWebApp.Data.Repositories
                 .Reference(u => u.Organization)
                 .Load();
         }
-        public void LoadGroups(User user)
-        {
-            _dbContext.Entry(user)
-                .Reference(u => u.Group)
-                .Load();
-        }
+        
     }
 }

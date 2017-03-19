@@ -10,12 +10,12 @@
 
 <h2>@Localizer["Add Users To Group"]</h2>
 
-@if (ViewBag.User != null)
+@if (ViewBag.Group != null)
 {
-<p>@Localizer["Member of group:"] @ViewBag.User.Group.GroupName</p>
+<p>@Localizer["Member of group:"] @ViewBag.Group</p>
 }
 <p>
-    @if (ViewBag.User == null)
+    @if (ViewBag.Group == null)
             {
         <br />
 <p>@Localizer["Not registred"]</p>

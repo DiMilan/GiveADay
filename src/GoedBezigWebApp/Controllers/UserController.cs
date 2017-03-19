@@ -28,13 +28,13 @@ namespace GoedBezigWebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
-
+            
             if (user == null)
             {
                 return View("Error");
             }
-
-            ViewBag.User = user.Group;
+            ViewBag.User = user;
+            if (user.Group != null) { ViewBag.Group = user.Group.GroupName; }   
             return View(_userRepository.GetAll().OrderBy(u =>u.FamilyName).ThenBy(u2 =>u2.FirstName));
 
 
@@ -43,7 +43,7 @@ namespace GoedBezigWebApp.Controllers
         private async Task<User> GetCurrentUserAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            _userRepository.LoadGroups(user);
+            _userRepository.LoadInvitations(user);
             return user;
         }
 

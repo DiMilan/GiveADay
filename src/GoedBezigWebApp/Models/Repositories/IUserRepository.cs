@@ -11,7 +11,7 @@ namespace GoedBezigWebApp.Models.Repositories
         void SaveChanges();
         void LoadInvitations(User user);
         void LoadGbOrganization(User user);
-        void LoadGroups(User user);
+      
 
     }
 }
