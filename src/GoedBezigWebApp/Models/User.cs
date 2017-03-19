@@ -15,10 +15,11 @@ namespace GoedBezigWebApp.Models
         {
             get
             {
-                var accepted = Invitations.FirstOrDefault(i => i.Status == InvitationStatus.Accepted);
-                var group = accepted?.Group;
+                Group group = null;
+                Invitation accepted = Invitations.FirstOrDefault(i => i.Status == InvitationStatus.Accepted);
+                if (accepted != null) group = accepted.Group;
 
-                return @group;
+                return group;
             }
         }
 
@@ -48,9 +49,9 @@ namespace GoedBezigWebApp.Models
 
         public void RegisterInOrganization(GBOrganization gbOrganization)
         {
-            if (!this.Email.Split('@')[1].Contains(gbOrganization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
-            if (this.Organization != null) throw new OrganizationException($"You are already registered in organization {this.Organization.Name}.");
-            this.Organization = gbOrganization;
+            if (!Email.Split('@')[1].Contains(gbOrganization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
+            if (Organization != null) throw new OrganizationException($"You are already registered in organization {Organization.Name}.");
+            Organization = gbOrganization;
             gbOrganization.Users.Add(this);
         }
     }

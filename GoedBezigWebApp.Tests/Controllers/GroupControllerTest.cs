@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -85,13 +86,19 @@ namespace GoedBezigWebApp.Tests.Controllers
             GroupEditViewModel brewerEvm = new GroupEditViewModel(_dummyContext.Test123);
             _controller.Create(brewerEvm);
             _groupRepository.Verify(m => m.SaveChanges(), Times.Once());
+            Assert.True(testUser.Group != null);
         }
 
         [Fact]
         public void AddingExistingGroupThrowException()
         {
+            testUser.Organization = new GBOrganization();
+            _userRepository.Setup(p => p.GetBy("testUser")).Returns(testUser);
             _groupRepository.Setup(m => m.Present("Test")).Returns(true);
-            new GroupEditViewModel() { Name = "Test" };
+            GroupEditViewModel test = new GroupEditViewModel() {Name = "Test"};
+            _controller.Create(test);
+            Assert.True(test.Name == null);
+            Assert.True(testUser.Group == null);
         }
 
         #endregion

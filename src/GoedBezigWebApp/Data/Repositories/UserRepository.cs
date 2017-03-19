@@ -20,6 +20,7 @@ namespace GoedBezigWebApp.Data.Repositories
         {
            return _user
                 .Include(u => u.Organization)
+                .Include(u => u.Invitations)
                 .SingleOrDefault((u => u.UserName == username));
         }
 

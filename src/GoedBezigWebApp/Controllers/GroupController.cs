@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using GoedBezigWebApp.Models.MotivationState;
+using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -75,7 +76,7 @@ namespace GoedBezigWebApp.Controllers
                         group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
                         _groupRepository.SaveChanges();
                         TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangepast.";
-                        return View(nameof(Index));
+                        return RedirectToAction(nameof(Index), "Home");
                     }
                 }
                 catch (GroupExistsException)
@@ -107,16 +108,18 @@ namespace GoedBezigWebApp.Controllers
         [HttpPost]
         public IActionResult Create(GroupEditViewModel groupEditViewModel)
         {
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if(_groupRepository.Present(groupEditViewModel.Name)){ throw new GroupExistsException();}
                     if (User.Identity.IsAuthenticated)
                     {
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
                         Group group = user.Organization.AddGroup(groupEditViewModel.Name);
-                        group.Users.Add(user);
+                        user.Invitations.Add(new Invitation(user, group, InvitationStatus.Accepted));
                         group.MotivationStatus.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
                         group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
@@ -132,7 +135,7 @@ namespace GoedBezigWebApp.Controllers
                             "Group has been added",
                             String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.GroupName),
                             String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.GroupName));
-                        return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index), "Home");
                     }
                 }
                 catch (GroupExistsException)
@@ -186,7 +189,7 @@ namespace GoedBezigWebApp.Controllers
                             String.Format(
                                 "Hi Lector,\n\na motivation has been added to group {0} of the GiveADay Platform.\n\nKind regards,\nGiveADay Bot",
                                 group.GroupName));
-                        return View(nameof(Index));
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 catch (MotivationException e)
@@ -201,7 +204,7 @@ namespace GoedBezigWebApp.Controllers
                 //}
 
             }
-            return View(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
         private async Task<User> GetCurrentUserAsync()
         {
@@ -221,7 +224,7 @@ namespace GoedBezigWebApp.Controllers
             else if (user.Group != null)
                 {
                     TempData["error"] = "User already member of a group";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -233,15 +236,39 @@ namespace GoedBezigWebApp.Controllers
 
             _groupRepository.SaveChanges();
                     TempData["message"] = $"User successfully added to group!";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Home");
 
                 }
                 catch (OrganizationException error)
                 {
                     TempData["error"] = error.Message;
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Home");
                 }
             }
+        }
+
+        public IActionResult Approve(string id)
+        {
+            ViewData[nameof(Group.GroupName)] = _groupRepository.GetBy(id).GroupName;
+            return View();
+        }
+
+        [HttpPost, ActionName("Approve")]
+        public IActionResult ApproveConfirmed(string id)
+        {
+            if (ModelState.IsValid)
+            {
+                
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        Group group = _groupRepository.GetBy(id);
+                        group.MotivationStatus = new ApprovedState(group);
+                        _groupRepository.SaveChanges();
+                        TempData["message"] = $"De motivatie van {group.GroupName} werd op Approved gezet.";
+                        return RedirectToAction("Index", "Home");
+                    }
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

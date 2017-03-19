@@ -88,10 +88,10 @@ namespace GoedBezigWebApp.Models
             MotivationStatus = new OpenState(this);
             Activities = new List<Activity>();
         }
-        public Group(string groupName, bool ClosedGroup) : this()
+        public Group(string groupName, bool closedGroup) : this()
         {
             this.GroupName = groupName;
-            this.ClosedGroup = ClosedGroup;
+            this.ClosedGroup = closedGroup;
             Timestamp = DateTime.Now;
         }
 
@@ -122,6 +122,12 @@ namespace GoedBezigWebApp.Models
                     throw new MotivationException("De motivatie moet minstens 100 en maximum 250 woorden bevatten");
                 }
             }
+            else
+            {
+                
+                    throw new MotivationException("De motivatie mag niet leeg zijn");
+
+            }
         }
 
         public void checkMotivationCompany()
@@ -141,6 +147,20 @@ namespace GoedBezigWebApp.Models
         {
             activity.Group = this;
             Activities.Add(activity);
+        }
+
+        public ICollection<Activity> GetActivities()
+        {
+            var activities = new List<Activity>(Activities);
+
+            activities.RemoveAll(a => a is Event);
+
+            return activities;
+        }
+
+        public ICollection<Event> GetEvents()
+        {
+            return Activities.OfType<Event>().ToList();
         }
     }
 

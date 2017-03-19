@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.ActivityEventViewModels;
 using GoedBezigWebApp.Models.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoedBezigWebApp.Controllers
 {
+    [Authorize]
     public class ActivityEventController : Controller
     {
         private readonly IGroupRepository _groupRepository;
@@ -23,13 +25,33 @@ namespace GoedBezigWebApp.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var activities = new List<Activity>();
+            var user = await GetCurrentUserAsync();
 
-            var events = new List<Event>();
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            _userRepository.LoadInvitations(user);
+
+            if (user.Group == null)
+            {
+                TempData["Error"] = "You are not part of a group yet";
+                return RedirectToAction("Index", "Home");
+            }
+
+            _groupRepository.LoadActivities(user.Group);
+
+            var activities = user.Group.GetActivities();
+            var events = user.Group.GetEvents();
 
             return View(new ActivityEventViewModel(activities, events));
+        }
+        private async Task<User> GetCurrentUserAsync()
+        {
+            return await _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

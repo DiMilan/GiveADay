@@ -34,11 +34,13 @@
                     }
                     @if (Model.EntitledToGiveGBLabel)
                     {
-                    <br /> @Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
+                        <br /> @Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
                     }
                 </div>
             </div>
         </div>
+@if (Model.Name != null)
+{
         <div class="row">
             <div class="form-group">
                 <label asp-for="Motivation" class="col-md-2 control-label"></label>
@@ -50,7 +52,7 @@
                     else
                     {
                         @Html.HiddenFor(a => a.Motivation)
-                        <textarea asp-for="Motivation" class="form-control" value=@Model.Motivation rows="3" disabeled></textarea>
+                        <textarea asp-for="Motivation" class="form-control" rows="3" readonly="readonly">@Model.Motivation</textarea>
                     }
                     <span asp-validation-for="Motivation" class="text-danger"></span>
                 </div>
@@ -202,15 +204,19 @@
             </div>
         }
     </div>
-    <div class="row">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+    @if (Model.MotivationEditable)
+    {
+        <div class="row">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default"/>
+            </div>
         </div>
-    </div>
+    }
 </form>
-<p><a asp-controller="Group" asp-action="SubmitMotivation" asp-route-id="@Model.Name">Submit</a></p>
+<br/>
+<hr/>
 
-<p><a asp-action="Index">Back to List</a></p>
+<p><a asp-controller="Home" asp-action="Index">Terug naar Home</a></p>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
