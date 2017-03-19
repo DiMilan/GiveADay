@@ -246,5 +246,29 @@ namespace GoedBezigWebApp.Controllers
                 }
             }
         }
+
+        public IActionResult Approve(string id)
+        {
+            ViewData[nameof(Group.GroupName)] = _groupRepository.GetBy(id).GroupName;
+            return View();
+        }
+
+        [HttpPost, ActionName("Approve")]
+        public IActionResult ApproveConfirmed(string id)
+        {
+            if (ModelState.IsValid)
+            {
+                
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        Group group = _groupRepository.GetBy(id);
+                        group.MotivationStatus = new ApprovedState(group);
+                        _groupRepository.SaveChanges();
+                        TempData["message"] = $"De motivatie van {group.GroupName} werd op Approved gezet.";
+                        return RedirectToAction("Index", "Home");
+                    }
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

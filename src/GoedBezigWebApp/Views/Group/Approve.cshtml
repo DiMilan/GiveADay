@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Approve Motivation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewData["Title"]</h2>
+<h4>
+    Please confirm you want to approve the motivation of Group @ViewData["GroupName"]...
+</h4>
+<form asp-action="Approve" method="post">
+    <div>
+        <button class="btn btn-primary" type="submit">Approve</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>

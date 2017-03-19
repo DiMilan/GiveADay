@@ -8,6 +8,7 @@
     bool memberOfOrg = (bool)ViewData["MemberOfOrganization"];
     bool memberOfGroup = (bool)ViewData["MemberOfGroup"];
     bool groupApproved = (bool) ViewData["GroupApproved"];
+    bool groupSubmitted = (bool)ViewData["GroupSubmitted"];
     GroupEditViewModel group = (GroupEditViewModel)ViewData["GroupViewEditModel"];
 }
 
@@ -86,12 +87,12 @@ else if (!memberOfGroup)
         </div>
     </div>
 }
-else if(!groupApproved)
+else if(!groupSubmitted)
 {
     <div class="well">
         <div class="row">
             <div class="col-md-8">
-                <p>U bent lid van @group.Name. Klik Op"Editeren" om deze groep te editeren. Indien alle gegevens zijn ingevuld, kan u de bewerking indienen met de knop "Indienen"</p>
+                <p>U bent lid van @group.Name. Klik Op"Editeren" om de motivatie van de groep te editeren. Indien alle gegevens zijn ingevuld, kan u de bewerking indienen met de knop "Indienen"</p>
             </div>
             <div class="col-md-4">
                 <a asp-area="" asp-controller="Group" asp-action="Edit" asp-route-id=@group.Name class="btn btn-lg btn-default btn-block">
@@ -103,6 +104,22 @@ else if(!groupApproved)
             </div>
         </div>
     </div>
+}
+else if (!groupApproved)
+{
+    <div class="well">
+        <div class="row">
+            <div class="col-md-8">
+                <p>Groep @group.Name. Werd ingediend ter goedkeuring. Wacht op de geodkeuring van de lector om verder te kunnen.</p>
+            </div>
+            <div class="col-md-4">
+                <a asp-area="" asp-controller="Group" asp-action="Approve" asp-route-id=@group.Name class="btn btn-lg btn-succes btn-block">
+                    <span>Approve</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
 }
 else
 {
@@ -121,7 +138,7 @@ else
                 </div>
                 <div class="panel-body">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
-                    <a href=# class="btn btn-default">Registreer in een open groep</a>
+                    <a href=# class="btn btn-default">Registreer een Eventp</a>
                 </div>
             </div>
         </div>
@@ -133,7 +150,7 @@ else
                 </div>
                 <div class="panel-body">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
-                    <a href=# class="btn btn-default">Registreer in een open groep</a>
+                    <a href=# class="btn btn-default">Registreer een Activiteit</a>
                 </div>
             </div>
         </div>
@@ -145,7 +162,7 @@ else
                 </div>
                 <div class="panel-body">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
-                    <a href=# class="btn btn-default">Registreer in een open groep</a>
+                    <a asp-area="" asp-controller="ActivityEvent" asp-action="Index" class="btn btn-default">Toon Overzicht</a>
                 </div>
             </div>
         </div>

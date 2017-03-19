@@ -52,7 +52,7 @@
                     else
                     {
                         @Html.HiddenFor(a => a.Motivation)
-                        <textarea asp-for="Motivation" class="form-control" value=@Model.Motivation rows="3" disabeled></textarea>
+                        <textarea asp-for="Motivation" class="form-control" rows="3" readonly="readonly">@Model.Motivation</textarea>
                     }
                     <span asp-validation-for="Motivation" class="text-danger"></span>
                 </div>
@@ -204,11 +204,14 @@
             </div>
         }
     </div>
-    <div class="row">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+    @if (Model.MotivationEditable)
+    {
+        <div class="row">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default"/>
+            </div>
         </div>
-    </div>
+    }
 </form>
 <br/>
 <hr/>

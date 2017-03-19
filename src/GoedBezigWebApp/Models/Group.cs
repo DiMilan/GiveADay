@@ -122,6 +122,12 @@ namespace GoedBezigWebApp.Models
                     throw new MotivationException("De motivatie moet minstens 100 en maximum 250 woorden bevatten");
                 }
             }
+            else
+            {
+                
+                    throw new MotivationException("De motivatie mag niet leeg zijn");
+
+            }
         }
 
         public void checkMotivationCompany()

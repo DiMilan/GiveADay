@@ -30,6 +30,7 @@ namespace GoedBezigWebApp.Controllers
             ViewData["MemberOfOrganization"] = false;
             ViewData["MemberOfGroup"] = false;
             ViewData["GroupApproved"] = false;
+            ViewData["GroupSubmitted"] = false;
             if (User.Identity.IsAuthenticated)
             {
                 
@@ -40,8 +41,13 @@ namespace GoedBezigWebApp.Controllers
 
                     ViewData["GroupViewEditModel"] = new GroupEditViewModel(user.Group);
                     ViewData["MemberOfGroup"] = true;
+                    if (user.Group.MotivationStatus is SubmittedState)
+                    {
+                        ViewData["GroupSubmitted"] = true;
+                    }
                     if (user.Group.MotivationStatus is ApprovedState)
                     {
+                        ViewData["GroupSubmitted"] = true;
                         ViewData["GroupApproved"] = true;
                     }
                 }
