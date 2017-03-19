@@ -34,11 +34,13 @@
                     }
                     @if (Model.EntitledToGiveGBLabel)
                     {
-                    <br /> @Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
+                        <br /> @Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
                     }
                 </div>
             </div>
         </div>
+@if (Model.Name != null)
+{
         <div class="row">
             <div class="form-group">
                 <label asp-for="Motivation" class="col-md-2 control-label"></label>
@@ -208,9 +210,10 @@
         </div>
     </div>
 </form>
-<p><a asp-controller="Group" asp-action="SubmitMotivation" asp-route-id="@Model.Name">Submit</a></p>
+<br/>
+<hr/>
 
-<p><a asp-action="Index">Back to List</a></p>
+<p><a asp-controller="Home" asp-action="Index">Terug naar Home</a></p>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

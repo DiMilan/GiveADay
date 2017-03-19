@@ -88,10 +88,10 @@ namespace GoedBezigWebApp.Models
             MotivationStatus = new OpenState(this);
             Activities = new List<Activity>();
         }
-        public Group(string groupName, bool ClosedGroup) : this()
+        public Group(string groupName, bool closedGroup) : this()
         {
             this.GroupName = groupName;
-            this.ClosedGroup = ClosedGroup;
+            this.ClosedGroup = closedGroup;
             Timestamp = DateTime.Now;
         }
 

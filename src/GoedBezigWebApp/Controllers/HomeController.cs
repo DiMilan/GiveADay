@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Linq;
 using GoedBezigWebApp.Models;
+using GoedBezigWebApp.Models.GroupViewModels;
+using GoedBezigWebApp.Models.MotivationState;
 using GoedBezigWebApp.Models.Repositories;
 
 namespace GoedBezigWebApp.Controllers
@@ -26,16 +29,28 @@ namespace GoedBezigWebApp.Controllers
         {
             ViewData["MemberOfOrganization"] = false;
             ViewData["MemberOfGroup"] = false;
+            ViewData["GroupApproved"] = false;
             if (User.Identity.IsAuthenticated)
             {
+                
                 User user = _userRepository.GetBy(User.Identity.Name);
+                _userRepository.LoadInvitations(user);
+                if (user.Group != null)
+                {
+
+                    ViewData["GroupViewEditModel"] = new GroupEditViewModel(user.Group);
+                    ViewData["MemberOfGroup"] = true;
+                    if (user.Group.MotivationStatus is ApprovedState)
+                    {
+                        ViewData["GroupApproved"] = true;
+                    }
+                }
                 if (user.Organization!=null)
                 {
                     ViewData["MemberOfOrganization"] = true;
-                } else if (user.Group != null)
-                {
-                        ViewData["MemberOfGroup"] = true;
                 }
+                
+                
 
             }
             return View();
