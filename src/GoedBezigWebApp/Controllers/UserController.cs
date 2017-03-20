@@ -52,19 +52,29 @@ namespace GoedBezigWebApp.Controllers
         {
             var user = await GetCurrentUserAsync();
             _userRepository.LoadInvitations(user);
-            try
+            if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName)
             {
-                _groupRepository.GetBy(user.Group.GroupName).InviteUser(_userRepository.GetBy(name));
-                //_groupRepository.SaveChanges();
-                TempData["message"] = $"User successfully invited in group!";
-                return RedirectToAction("Index");
+
+                try
+                {
+                    _groupRepository.GetBy(user.Group.GroupName).InviteUser(_userRepository.GetBy(name));
+                    //_groupRepository.SaveChanges();
+                    TempData["message"] = $"User successfully invited in group!";
+                    return RedirectToAction("Index");
+
+                }
+                catch (OrganizationException error)
+                {
+                    TempData["error"] = error.Message;
+                    return RedirectToAction("Index");
+                }
 
             }
-            catch (OrganizationException error)
-            {
-                TempData["error"] = error.Message;
+            else {
+                TempData["message"] = $"User already invited in this group!";
                 return RedirectToAction("Index");
             }
+
 
         }
     }
