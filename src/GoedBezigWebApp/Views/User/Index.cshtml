@@ -93,7 +93,14 @@
         {
             <tr>
                 <td>
-                    <a asp-action="InviteUser" asp-route-id="@item.UserName"> @Html.DisplayFor(modelItem => item.UserName) </a>
+
+                   
+                    <p>
+                  
+                    @if (ViewBag.Group != null)
+                    {
+                     <a asp-action="InviteUser" asp-route-id="@item.UserName"> @Html.DisplayFor(modelItem => item.UserName) </a>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
