@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GoedBezigWebApp.Models.Repositories
@@ -16,5 +17,6 @@ namespace GoedBezigWebApp.Models.Repositories
         IEnumerable<Organization> GetAllGbFilteredByNameAndLocation(string searchName, string searchLocation);
         IEnumerable<Organization> GetAllExternalWithLabelFilteredByNameAndLocation(string searchName, string searchLocation);
         IEnumerable<Organization> GetAllExternalWithoutLabelFilteredByNameAndLocation(string searchName, string searchLocation);
+        void SaveChanges();
     }
 }

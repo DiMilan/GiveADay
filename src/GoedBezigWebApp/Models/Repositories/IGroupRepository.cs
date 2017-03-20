@@ -11,5 +11,7 @@ namespace GoedBezigWebApp.Models.Repositories
         void SaveChanges();
         bool Present(string groupName);
         void LoadActivities(Group group);
+        void LoadOrganizations(Group group);
+        void LoadUsers(Group group);
     }
 }

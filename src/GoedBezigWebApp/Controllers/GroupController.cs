@@ -55,6 +55,8 @@ namespace GoedBezigWebApp.Controllers
         public IActionResult Edit(string id)
         {
             Group group = _groupRepository.GetBy(id);
+            _groupRepository.LoadOrganizations(group);
+            ViewBag.ExternalOrganization = group.ExternalOrganization;
             return View(new GroupEditViewModel(group));
         }
 
@@ -187,7 +189,7 @@ namespace GoedBezigWebApp.Controllers
                                 "Hi Lector,\n\na motivation has been added to group {0} of the GiveADay Platform.\n\nKind regards,\nGiveADay Bot",
                                 group.GroupName),
                             String.Format(
-                                "Hi Lector,\n\na motivation has been added to group {0} of the GiveADay Platform.\n\nKind regards,\nGiveADay Bot",
+                                "Hi Lector,<br><br>a motivation has been added to group {0} of the GiveADay Platform.<br><br>Kind regards,<br>GiveADay Bot",
                                 group.GroupName));
                         return RedirectToAction("Index", "Home");
                     }

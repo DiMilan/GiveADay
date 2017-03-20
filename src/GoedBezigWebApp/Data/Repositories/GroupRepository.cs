@@ -60,5 +60,22 @@ namespace GoedBezigWebApp.Data.Repositories
                 .Collection(g => g.Activities)
                 .Load();
         }
+
+        public void LoadOrganizations(Group group)
+        {
+            _dbContext.Entry(group)
+                .Reference (g => g.GBOrganization)
+                .Load();
+            _dbContext.Entry(group)
+                .Reference (g => g.ExternalOrganization)
+                .Load();
+        }
+
+        public void LoadUsers(Group group)
+        {
+            _dbContext.Entry(group)
+                .Collection(g => g.Users)
+                .Load();
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace GoedBezigWebApp.Models
         [NotMapped]
         public MotivationState.MotivationState MotivationStatus { get; set; }
         public GBOrganization GBOrganization { get; set; }
+        public ExternalOrganization ExternalOrganization { get; set; }
         public int StateType
         {
             get
@@ -140,7 +141,7 @@ namespace GoedBezigWebApp.Models
 
         public bool entitledToGiveGBLabel()
         {
-            return (MotivationStatus is ApprovedState && GBOrganization == null);
+            return (MotivationStatus is ApprovedState && ExternalOrganization == null);
         }
         
         public void AddActivity(Activity activity)
