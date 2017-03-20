@@ -16,6 +16,7 @@ namespace GoedBezigWebApp.Data
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
         public virtual DbSet<Invitation> Invitations { get; set; }
         public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<ActivityTask> ActivityTasks { get; set; }
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -35,9 +36,12 @@ namespace GoedBezigWebApp.Data
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
             MapActivity(modelBuilder.Entity<Activity>());
+            MapActivityTasks(modelBuilder.Entity<ActivityTask>());
+            MapActivityTasksUser(modelBuilder.Entity<ActivityTaskUser>());
             MapEvent(modelBuilder.Entity<Event>());
             MapMessage(modelBuilder.Entity<Message>());
         }
+
 
         private static void MapIdentity(ModelBuilder modelBuilder)
         {
@@ -64,6 +68,7 @@ namespace GoedBezigWebApp.Data
             entity.HasMany(u => u.Invitations).WithOne(i => i.User);
             entity.HasOne(u => u.Organization).WithMany(o => o.Users);
             entity.HasOne(o => o.LectorUser).WithMany();
+            entity.HasMany(o => o.ActivityTaskUsers).WithOne(o => o.User);
         }
 
         private static void MapRole(EntityTypeBuilder<Role> entity)
@@ -94,7 +99,6 @@ namespace GoedBezigWebApp.Data
 
             g.Property(p => p.StateType)
                 .HasColumnName("MotivationStatus");
-
 
 
         }
@@ -221,6 +225,44 @@ namespace GoedBezigWebApp.Data
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
             type.HasMany(t => t.Messages).WithOne(t => t.Activity);
+        }
+
+        private void MapActivityTasks(EntityTypeBuilder<ActivityTask> at)
+        {
+            at.HasKey(k => k.Id);
+            at.Property(p => p.Id).ValueGeneratedOnAdd();
+
+            at.Property(p => p.Description)
+                .IsRequired()
+                .HasColumnName("description")
+                .HasMaxLength(255);
+
+            at.Property(p => p.FromDateTime)
+                .IsRequired()
+                .HasColumnName("fromDateTime");
+
+            at.Property(p => p.ToDateTime)
+                .IsRequired()
+                .HasColumnName("toDateTime");
+            at.HasOne(o => o.Event)
+                .WithMany()
+                .HasForeignKey(e => e.Id)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+        }
+
+        private void MapActivityTasksUser(EntityTypeBuilder<ActivityTaskUser> atu)
+        {
+            atu.HasKey(x => new {x.UserId, x.ActivityTaskId});
+
+            atu.HasOne(o => o.User)
+                .WithMany(m => m.ActivityTaskUsers)
+                .HasForeignKey(fk => fk.UserId);
+
+            atu.HasOne(o => o.ActivityTask)
+                .WithMany(m => m.ActivityTaskUsers)
+                .HasForeignKey(fk => fk.ActivityTaskId);
         }
 
         private static void MapEvent(EntityTypeBuilder<Event> type)

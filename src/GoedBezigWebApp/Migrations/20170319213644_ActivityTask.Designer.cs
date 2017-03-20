@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
+using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170319213644_ActivityTask")]
+    partial class ActivityTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -109,8 +111,6 @@ namespace GoedBezigWebApp.Migrations
 
                     b.Property<string>("CompanyWebsite");
 
-                    b.Property<int?>("ExternalOrganizationOrgId");
-
                     b.Property<int?>("GBOrganizationOrgId");
 
                     b.Property<string>("Motivation")
@@ -124,8 +124,6 @@ namespace GoedBezigWebApp.Migrations
                         .HasColumnName("CreationTime");
 
                     b.HasKey("GroupName");
-
-                    b.HasIndex("ExternalOrganizationOrgId");
 
                     b.HasIndex("GBOrganizationOrgId");
 
@@ -541,10 +539,6 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.ExternalOrganization", "ExternalOrganization")
-                        .WithMany()
-                        .HasForeignKey("ExternalOrganizationOrgId");
-
                     b.HasOne("GoedBezigWebApp.Models.GBOrganization", "GBOrganization")
                         .WithMany("Groups")
                         .HasForeignKey("GBOrganizationOrgId");

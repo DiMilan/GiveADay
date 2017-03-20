@@ -54,5 +54,6 @@ namespace GoedBezigWebApp.Models
             Organization = gbOrganization;
             gbOrganization.Users.Add(this);
         }
+        public ICollection<ActivityTaskUser> ActivityTaskUsers { get; set; }
     }
 }

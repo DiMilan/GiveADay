@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.MotivationState;
@@ -16,6 +17,7 @@ namespace GoedBezigWebApp.Tests.Model
             _testGroup = new Group("testGroup", false);
             GeldigeMotivation = @"Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! Wij schenken het label van ""goed bezig"" aan Sanctuary De Zonnegloed. Dit is een toevluchtsoord voor verwaarloosde en in beslag genomen wilde dieren. De vrijwilligers zetten zich elke dag belangeloos in! Ze zijn Goed bezig! ";
         }
+        #region Constructors
 
         [Fact]
         private void NewGroupWithNameIsCreatedCorrectly()
@@ -38,6 +40,9 @@ namespace GoedBezigWebApp.Tests.Model
             Assert.Null(group.CompanyContactEmail);
 
         }
+        #endregion
+
+        #region Moivation
         [Fact]
         private void SavingMotivationInOpenGroup()
         {
@@ -189,7 +194,75 @@ namespace GoedBezigWebApp.Tests.Model
             Assert.Throws<MotivationException>(() => group.MotivationStatus.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite));
 
         }
+        #endregion
 
+        #region Tasks
 
+        [Fact]
+        private void AddingTaskWithoutTasklist()
+        {
+            ActivityTask task = new ActivityTask(null, null, null, TaskState.Done);
+            Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+
+        [Fact]
+        private void AddingTaskSucceeds()
+        {
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            _testGroup.InitiateTaskList();
+            ActivityTask task = new ActivityTask("description", null, activityEvent, TaskState.Done);
+            _testGroup.AddTask(task);
+            Assert.Equal(_testGroup.TaskList.FirstOrDefault().Event, activityEvent);
+            Assert.Equal(_testGroup.TaskList.FirstOrDefault().Description, "description");
+            Assert.Equal(_testGroup.TaskList.FirstOrDefault().CurrentState, TaskState.Done);
+            Assert.Equal(_testGroup.TaskList.FirstOrDefault().Users, null);
+        }
+        [Fact]
+        private void AddingTaskWithoutDescription()
+        {
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            _testGroup.InitiateTaskList();
+            ActivityTask task = new ActivityTask(null, null, activityEvent, TaskState.Done);
+            Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+        [Fact]
+        private void AddingTaskWithFromDateInPast()
+        {
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            _testGroup.InitiateTaskList();
+            ActivityTask task = new ActivityTask("description", null, new DateTime(2016, 1,1), DateTime.Now, activityEvent, TaskState.Done);
+            Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+        [Fact]
+        private void AddingTaskWithToDateInPast()
+        {
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            ActivityTask task = new ActivityTask("description", null, DateTime.MaxValue, new DateTime(2016, 1, 1), activityEvent, TaskState.Done);
+            Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+        [Fact]
+        private void AddingTaskWithoutApprovedEvent()
+        {
+            _testGroup.InitiateTaskList();
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) {Accepted = false};
+            ActivityTask task = new ActivityTask("description", null, DateTime.MaxValue, new DateTime(2016, 1, 1), activityEvent, TaskState.Done);
+            Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+        [Fact]
+        private void AddingTaskWithoutDates()
+        {
+            _testGroup.InitiateTaskList();
+            ActivityTask task = new ActivityTask("description", null, null, TaskState.Done);
+            Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+        [Fact]
+        private void AddingTaskWithoutUsers()
+        {
+            _testGroup.InitiateTaskList();
+            ActivityTask task = new ActivityTask("description", null, DateTime.MaxValue, DateTime.MaxValue, null, TaskState.Done);
+            Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+
+        #endregion
     }
 }

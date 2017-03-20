@@ -18,14 +18,14 @@
     <div class="well">
         <div class="row">
             <div class="col-md-8">
-                <p>Welkom op de Goed Bezig website. Registreer of Log in om verder te gaan. </p>
+                <p>@Localizer["WelcomeText"]</p>
             </div>
             <div class="col-md-4">
                 <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-lg btn-default btn-block">
-                    <span>Registreren</span>
+                    <span>@Localizer["Register"]</span>
                 </a>
                 <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-lg btn-default btn-block">
-                    <span>Log in</span>
+                    <span>@Localizer["LogIn"]</span>
                 </a>
             </div>
         </div>
@@ -36,7 +36,7 @@ else if (!memberOfOrg)
     <div class="well">
         <div class="row">
             <div class="col-md-8">
-                <p>U bent nog geen lid van een Organisatie. <br /> Registreer bij een organisatie om verder te gaan. </p>
+                <p>@Localizer["NoMemberOfOrgText"]</p>
             </div>
             <div class="col-md-4">
                 <a asp-area="" asp-controller="Organization" asp-action="Index" class="btn btn-lg btn-default btn-block">
@@ -126,7 +126,7 @@ else
     <div class="well">
         <div class="row">
             <div class="col-md-12">
-                <p>U bent lid van @group.Name. Maak een evenement of een actie aan</p>
+                <p>U bent lid van @group.Name. U kan een evenement of een actie aanmaken of deenemen aan bestaande acties en evenementen.</p>
             </div>
         </div>
     </div>

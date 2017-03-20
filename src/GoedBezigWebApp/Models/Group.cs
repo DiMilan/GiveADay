@@ -6,6 +6,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.MotivationState;
+using GoedBezigWebApp.Services;
 
 namespace GoedBezigWebApp.Models
 {
@@ -82,12 +83,14 @@ namespace GoedBezigWebApp.Models
         }
 
         public ICollection<Activity> Activities { get; set; }
+        public ICollection<ActivityTask> TaskList { get; private set; }
 
         public Group()
         {
             Invitations = new List<Invitation>();
             MotivationStatus = new OpenState(this);
             Activities = new List<Activity>();
+            TaskList = null;//no tasklist initiated yet
         }
         public Group(string groupName, bool closedGroup) : this()
         {
@@ -125,15 +128,15 @@ namespace GoedBezigWebApp.Models
             }
             else
             {
-                
-                    throw new MotivationException("De motivatie mag niet leeg zijn");
+
+                throw new MotivationException("De motivatie mag niet leeg zijn");
 
             }
         }
 
         public void checkMotivationCompany()
         {
-            if(CompanyName == null) throw new MotivationException("Het opgegeven berijf bevat geen naam");
+            if (CompanyName == null) throw new MotivationException("Het opgegeven berijf bevat geen naam");
             if (CompanyAddress == null) throw new MotivationException("Het opgegeven berijf bevat geen adres");
             if (CompanyEmail == null) throw new MotivationException("Het opgegeven berijf bevat geen e-mailadres");
             if (CompanyWebsite == null) throw new MotivationException("Het opgegeven berijf bevat geen naam");
@@ -143,7 +146,7 @@ namespace GoedBezigWebApp.Models
         {
             return (MotivationStatus is ApprovedState && ExternalOrganization == null);
         }
-        
+
         public void AddActivity(Activity activity)
         {
             activity.Group = this;
@@ -162,6 +165,29 @@ namespace GoedBezigWebApp.Models
         public ICollection<Event> GetEvents()
         {
             return Activities.OfType<Event>().ToList();
+        }
+
+        public void InitiateTaskList()
+        {
+            TaskList = new List<ActivityTask>();
+        }
+
+        public void AddTask(ActivityTask task)
+        {
+            if (TaskList == null)
+            {
+                throw new TaskListException("Nog geen draaiboek geïnitialiseerd");
+            }
+            if (task.Description.IsNullOrEmpty()) throw new TaskListException("de omschrijving van een taak is verplicht");
+            if (task.FromDateTime != DateTime.MinValue & task.ToDateTime != DateTime.MinValue)
+            {
+                if (task.FromDateTime < DateTime.Now) throw new TaskListException("de begintijd moet in de toekomst liggen");
+                if (task.ToDateTime < DateTime.Now) throw new TaskListException("de eindtijd moet in de toekomst liggen");
+            }
+
+            if (task.Event == null) throw new TaskListException("geen event opgegeven");
+            if (task.Event.Accepted == false) throw new TaskListException("Enkel goedgekeurde evenementen komen in aanmerking");
+            TaskList.Add(task);
         }
     }
 
