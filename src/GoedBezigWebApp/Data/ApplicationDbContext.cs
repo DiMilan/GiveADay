@@ -248,7 +248,7 @@ namespace GoedBezigWebApp.Data
             at.Property(p => p.ToDateTime)
                 .IsRequired()
                 .HasColumnName("toDateTime");
-            at.HasOne(o => o.Event)
+            at.HasOne(o => o.Activity)
                 .WithMany()
                 .HasForeignKey(e => e.Id)
                 .OnDelete(DeleteBehavior.Restrict)

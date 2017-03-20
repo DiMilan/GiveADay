@@ -185,8 +185,8 @@ namespace GoedBezigWebApp.Models
                 if (task.ToDateTime < DateTime.Now) throw new TaskListException("de eindtijd moet in de toekomst liggen");
             }
 
-            if (task.Event == null) throw new TaskListException("geen event opgegeven");
-            if (task.Event.Accepted == false) throw new TaskListException("Enkel goedgekeurde evenementen komen in aanmerking");
+            if (task.Activity == null) throw new TaskListException("geen event opgegeven");
+            if (task.Activity.Accepted == false) throw new TaskListException("Enkel goedgekeurde evenementen komen in aanmerking");
             TaskList.Add(task);
         }
     }

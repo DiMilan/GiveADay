@@ -18,10 +18,10 @@ namespace GoedBezigWebApp.Models
         }
         public DateTime FromDateTime { get; set; }
         public DateTime ToDateTime { get; set; }
-        public Event Event { get; set; }
+        public Activity Activity { get; set; }
         public TaskState CurrentState { get; set; }
         [NotMapped]
-        public Group Group => Event.Group;
+        public Group Group => Activity.Group;
 
 
         public ActivityTask(string description, ICollection<User> users, Event activityEvent, TaskState currentState) :
@@ -36,7 +36,7 @@ namespace GoedBezigWebApp.Models
             {
                 ActivityTaskUsers.Add(new ActivityTaskUser(user, this));
             }
-            Event = activityEvent;
+            Activity = activityEvent;
             CurrentState = currentState;
             FromDateTime = fromDateTime;
             ToDateTime = toDateTime;

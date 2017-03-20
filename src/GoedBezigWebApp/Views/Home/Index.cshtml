@@ -93,15 +93,56 @@ else if(!groupSubmitted)
     <div class="well">
         <div class="row">
             <div class="col-md-8">
-                <p>U bent lid van @group.Name. Klik Op"Editeren" om de motivatie van de groep te editeren. Indien alle gegevens zijn ingevuld, kan u de bewerking indienen met de knop "Indienen"</p>
+                <p>U bent lid van de Groep @group.Name. Klik op een van de onderstaande acties om verder te gaan</p>
             </div>
             <div class="col-md-4">
-                <a asp-area="" asp-controller="Group" asp-action="Edit" asp-route-id=@group.Name class="btn btn-lg btn-default btn-block">
-                    <span>Editeren</span>
-                </a>
-                <a asp-area="" asp-controller="Group" asp-action="SubmitMotivation" asp-route-id=@group.Name class="btn btn-lg btn-default btn-block">
-                    <span>Indienen</span>
-                </a>
+                
+                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Verstuur uitnodigingen</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Nodig andere gebruikers uit voor uw groep</p>
+                    <a asp-area="" asp-controller="User" asp-action="Index" class="btn btn-lg btn-success btn-block">Uitnodigen</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Motivatie editeren</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Klik Op"Editeren" om de motivatie van de groep te editeren.</p>
+                    <a asp-area="" asp-controller="Group" asp-action="Edit" asp-route-id=@group.Name class="btn btn-lg btn-success btn-block">
+                        <span>Editeren</span>
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Motivatie Indienen</h4>
+                </div>
+                <div class="panel-body">
+                    <p>Als de groep volledig is gevormd en de motivatie volledig is, kan u de motivatie insturen naar de lector ter goedkeuring</p>
+                    <a asp-area="" asp-controller="Group" asp-action="SubmitMotivation" asp-route-id=@group.Name class="btn btn-lg btn-danger btn-block">
+                        <span>Indienen</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
