@@ -23,7 +23,7 @@ namespace GoedBezigWebApp.Models
             }
         }
 
-        public GBOrganization Organization { get; set; }
+        public GbOrganization Organization { get; set; }
 
         public User LectorUser { get; set; }
 
@@ -47,7 +47,7 @@ namespace GoedBezigWebApp.Models
             invitation.Decline();
         }
 
-        public void RegisterInOrganization(GBOrganization gbOrganization)
+        public void RegisterInOrganization(GbOrganization gbOrganization)
         {
             if (!Email.Split('@')[1].Contains(gbOrganization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
             if (Organization != null) throw new OrganizationException($"You are already registered in organization {Organization.Name}.");

@@ -31,7 +31,7 @@
         public override void SubmitMotivation()
         {
             Group.CheckMotivation(Group.Motivation);
-            Group.checkMotivationCompany();
+            Group.CheckMotivationCompany();
             ToState(new SubmittedState(Group));
         }
 

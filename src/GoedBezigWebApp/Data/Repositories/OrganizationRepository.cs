@@ -11,7 +11,7 @@ namespace GoedBezigWebApp.Data.Repositories
     public class OrganizationRepository : IOrganizationRepository
     {
         private readonly DbSet<Organization> _organizations;
-        private readonly DbSet<GBOrganization> _gbOrganizations;
+        private readonly DbSet<GbOrganization> _gbOrganizations;
         private readonly DbSet<ExternalOrganization> _externalOrganizations;
         private readonly ApplicationDbContext _dbContext;
         public OrganizationRepository(ApplicationDbContext dbContext)
@@ -22,7 +22,7 @@ namespace GoedBezigWebApp.Data.Repositories
             _externalOrganizations = dbContext.ExternalOrganizations;
         }
 
-        public GBOrganization GetGbOrganizationBy(int organizationId)
+        public GbOrganization GetGbOrganizationBy(int organizationId)
         {
             return _gbOrganizations.SingleOrDefault((o => o.OrgId == organizationId));
         }
@@ -41,7 +41,7 @@ namespace GoedBezigWebApp.Data.Repositories
         {
             return _externalOrganizations
                 .Include(o => o.Address)
-                .Where(o => o.hasGBLabel)
+                .Where(o => o.HasGbLabel)
                 .ToList();
         }
 
@@ -49,7 +49,7 @@ namespace GoedBezigWebApp.Data.Repositories
         {
             return _externalOrganizations
                 .Include(o => o.Address)
-                .Where(o => !o.hasGBLabel)
+                .Where(o => !o.HasGbLabel)
                 .ToList();
         }
 
@@ -90,34 +90,34 @@ namespace GoedBezigWebApp.Data.Repositories
         {
             if (!string.IsNullOrEmpty(searchName) && !string.IsNullOrEmpty(searchLocation))
             {
-                return _externalOrganizations.Include(o => o.Address).Where(o => o.hasGBLabel && o.Name.Contains(searchName) && o.Address.AddressCity.Equals(searchLocation)).ToList();
+                return _externalOrganizations.Include(o => o.Address).Where(o => o.HasGbLabel && o.Name.Contains(searchName) && o.Address.AddressCity.Equals(searchLocation)).ToList();
             }
             if (!string.IsNullOrEmpty(searchName))
             {
-                return _externalOrganizations.Include(o => o.Address).Where(o => o.hasGBLabel && o.Name.Contains(searchName)).ToList();
+                return _externalOrganizations.Include(o => o.Address).Where(o => o.HasGbLabel && o.Name.Contains(searchName)).ToList();
             }
             if (!string.IsNullOrEmpty(searchLocation))
             {
-                return _externalOrganizations.Include(o => o.Address).Where(o => o.hasGBLabel && o.Address.AddressCity.Equals(searchLocation)).ToList();
+                return _externalOrganizations.Include(o => o.Address).Where(o => o.HasGbLabel && o.Address.AddressCity.Equals(searchLocation)).ToList();
             }
-            return _externalOrganizations.Include(o => o.Address).Where(o => o.hasGBLabel).ToList();
+            return _externalOrganizations.Include(o => o.Address).Where(o => o.HasGbLabel).ToList();
         }
 
         public IEnumerable<Organization> GetAllExternalWithoutLabelFilteredByNameAndLocation(string searchName, string searchLocation)
         {
             if (!string.IsNullOrEmpty(searchName) && !string.IsNullOrEmpty(searchLocation))
             {
-                return _externalOrganizations.Include(o => o.Address).Where(o => !o.hasGBLabel && o.Name.Contains(searchName) && o.Address.AddressCity.Equals(searchLocation)).ToList();
+                return _externalOrganizations.Include(o => o.Address).Where(o => !o.HasGbLabel && o.Name.Contains(searchName) && o.Address.AddressCity.Equals(searchLocation)).ToList();
             }
             if (!string.IsNullOrEmpty(searchName))
             {
-                return _externalOrganizations.Include(o => o.Address).Where(o => !o.hasGBLabel && o.Name.Contains(searchName)).ToList();
+                return _externalOrganizations.Include(o => o.Address).Where(o => !o.HasGbLabel && o.Name.Contains(searchName)).ToList();
             }
             if (!string.IsNullOrEmpty(searchLocation))
             {
-                return _externalOrganizations.Include(o => o.Address).Where(o => !o.hasGBLabel && o.Address.AddressCity.Equals(searchLocation)).ToList();
+                return _externalOrganizations.Include(o => o.Address).Where(o => !o.HasGbLabel && o.Address.AddressCity.Equals(searchLocation)).ToList();
             }
-            return _externalOrganizations.Include(o => o.Address).Where(o => !o.hasGBLabel).ToList();
+            return _externalOrganizations.Include(o => o.Address).Where(o => !o.HasGbLabel).ToList();
         }
 
         public SelectList GetAllGbUniqueCities()
@@ -127,12 +127,12 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public SelectList GetAllExternalWithLabelUniqueCities()
         {
-            return new SelectList(_externalOrganizations.Include(o => o.Address).Where(o => o.hasGBLabel).Select(o => o.Address.AddressCity).ToList().Distinct().ToList());
+            return new SelectList(_externalOrganizations.Include(o => o.Address).Where(o => o.HasGbLabel).Select(o => o.Address.AddressCity).ToList().Distinct().ToList());
         }
 
         public SelectList GetAllExternalWithoutLabelUniqueCities()
         {
-            return new SelectList(_externalOrganizations.Include(o => o.Address).Where(o => !o.hasGBLabel).Select(o => o.Address.AddressCity).ToList().Distinct().ToList());
+            return new SelectList(_externalOrganizations.Include(o => o.Address).Where(o => !o.HasGbLabel).Select(o => o.Address.AddressCity).ToList().Distinct().ToList());
         }
         public void SaveChanges()
         {

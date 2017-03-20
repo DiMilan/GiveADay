@@ -212,7 +212,7 @@ namespace GoedBezigWebApp.Tests.Model
             _testGroup.InitiateTaskList();
             ActivityTask task = new ActivityTask("description", null, activityEvent, TaskState.Done);
             _testGroup.AddTask(task);
-            Assert.Equal(_testGroup.TaskList.FirstOrDefault().Event, activityEvent);
+            Assert.Equal(_testGroup.TaskList.FirstOrDefault().Activity, activityEvent);
             Assert.Equal(_testGroup.TaskList.FirstOrDefault().Description, "description");
             Assert.Equal(_testGroup.TaskList.FirstOrDefault().CurrentState, TaskState.Done);
             Assert.Equal(_testGroup.TaskList.FirstOrDefault().Users, null);

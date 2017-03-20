@@ -45,7 +45,7 @@ namespace GoedBezigWebApp.Controllers
                 // met een motivatie die nog niet goegekeurd is 
                 return View(_groupRepository.GetAll()
                     .Where(
-                    (g => g.GBOrganization == user.Organization
+                    (g => g.GbOrganization == user.Organization
                     && g.ClosedGroup == false
                     && !(g.MotivationStatus is ApprovedState))//wat is de status voor GOEDGEKEURD ?  
                 ));

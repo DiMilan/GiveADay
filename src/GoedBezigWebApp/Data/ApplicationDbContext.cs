@@ -10,7 +10,7 @@ namespace GoedBezigWebApp.Data
     {
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
-        public virtual DbSet<GBOrganization> GbOrganizations { get; set; }
+        public virtual DbSet<GbOrganization> GbOrganizations { get; set; }
         public virtual DbSet<ExternalOrganization> ExternalOrganizations { get; set; }
         public virtual DbSet<OrganizationContact> OrganizationContacts { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
@@ -30,7 +30,7 @@ namespace GoedBezigWebApp.Data
             MapRole(modelBuilder.Entity<Role>().ForSqlServerToTable("roles"));
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
-            MapGBOrganization(modelBuilder.Entity<GBOrganization>());
+            MapGBOrganization(modelBuilder.Entity<GbOrganization>());
             MapExternalOrganization(modelBuilder.Entity<ExternalOrganization>());
             MapOrganizationContact(modelBuilder.Entity<OrganizationContact>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
@@ -100,7 +100,7 @@ namespace GoedBezigWebApp.Data
             g.Property(p => p.StateType)
                 .HasColumnName("MotivationStatus");
 
-            g.HasOne(p => p.GBOrganization)
+            g.HasOne(p => p.GbOrganization)
                 .WithMany(a => a.Groups)
                 .IsRequired(false);
 
@@ -144,7 +144,7 @@ namespace GoedBezigWebApp.Data
                 .HasConstraintName("organization$FK_org_address_id_ref");
         }
 
-        private static void MapGBOrganization(EntityTypeBuilder<GBOrganization> entity)
+        private static void MapGBOrganization(EntityTypeBuilder<GbOrganization> entity)
         {
             entity.HasMany(e => e.Users).WithOne(u => u.Organization);
         }

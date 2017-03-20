@@ -471,7 +471,7 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.GBOrganization", "GBOrganization")
+                    b.HasOne("GoedBezigWebApp.Models.GBOrganization", "GbOrganization")
                         .WithMany("Groups")
                         .HasForeignKey("GBOrganizationOrgId");
                 });
