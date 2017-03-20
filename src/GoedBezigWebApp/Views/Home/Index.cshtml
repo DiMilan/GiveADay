@@ -56,9 +56,9 @@ else if (!memberOfGroup)
                 <div class="panel-heading">
                     <h4>Word lid van een groep</h4>
                 </div>
-                <div class="panel-body">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
-                    <a asp-area="" asp-controller="Group" asp-action="Index" class="btn btn-default">Registreer in een open groep</a>
+                <div class="panel-body text-center">
+                    <p>Schrijf in in een open groep</p>
+                    <a asp-area="" asp-controller="Group" asp-action="Index" class="btn btn-lg btn-info">Registreer in een open groep</a>
                 </div>
             </div>
         </div>
@@ -68,9 +68,9 @@ else if (!memberOfGroup)
                 <div class="panel-heading">
                     <h4>Bekijk de uitnodigingen</h4>
                 </div>
-                <div class="panel-body">
-                    <p>Bepaalde groepen zijn enkel toegankelijk op uitnodiging</p>
-                    <a asp-area="" asp-controller="Invitation" asp-action="Index" class="btn btn-default">Bekijk mijn uitnodigingen</a>
+                <div class="panel-body text-center">
+                    <p>Gesloten groepen zijn enkel toegankelijk op uitnodiging</p>
+                    <a asp-area="" asp-controller="Invitation" asp-action="Index" class="btn btn-lg btn-info">Bekijk mijn uitnodigingen</a>
                 </div>
             </div>
         </div>
@@ -80,9 +80,9 @@ else if (!memberOfGroup)
                 <div class="panel-heading">
                     <h4>Maak een groep aan</h4>
                 </div>
-                <div class="panel-body">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>
-                    <a asp-area="" asp-controller="Group" asp-action="Create" class="btn btn-default">Maak een groep aan</a>
+                <div class="panel-body text-center">
+                    <p>Nog geen groep die de organisatie die u voor ogen had beoogt? Maak gier zelf een groep aan</p>
+                    <a asp-area="" asp-controller="Group" asp-action="Create" class="btn btn-lg btn-info">Maak een groep aan</a>
                 </div>
             </div>
         </div>
@@ -152,10 +152,10 @@ else if (!groupApproved)
     <div class="well">
         <div class="row">
             <div class="col-md-8">
-                <p>Groep @group.Name. Werd ingediend ter goedkeuring. Wacht op de geodkeuring van de lector om verder te kunnen.</p>
+                <p>Groep @group.Name werd ingediend ter goedkeuring. Wacht op de goedkeuring van de lector om verder te kunnen.</p>
             </div>
             <div class="col-md-4">
-                <a asp-area="" asp-controller="Group" asp-action="Approve" asp-route-id=@group.Name class="btn btn-lg btn-succes btn-block">
+                <a asp-area="" asp-controller="Group" asp-action="Approve" asp-route-id=@group.Name class="btn btn-lg btn-success btn-block">
                     <span>Approve</span>
                 </a>
             </div>

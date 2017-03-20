@@ -17,6 +17,12 @@ textarea {
     max-width: 280px;
 }
 
+input.fullWidth,
+select.fullWidth,
+textarea.fullWidth {
+    max-width: 2800px;
+}
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

@@ -170,7 +170,7 @@ namespace GoedBezigWebApp.Data
         {
             // --> SEED Groups
             if (_context.Groups.Any()) return;
-
+            GroupHoGent1.ClosedGroup = false;
             GroupUGent.Motivation = "TestMotivation";
             GroupUGent.MotivationStatus = new ApprovedState(GroupUGent);
 
@@ -217,13 +217,11 @@ namespace GoedBezigWebApp.Data
         {
             if (_context.Invitations.Any()) return;
 
-            var invitation1 = new Invitation(UserTest, GroupHoGent1);
             var invitation2 = new Invitation(UserTest, GroupHoGent2);
             var invitation3 = new Invitation(UserTest, GroupHoGent3);
 
             var acceptedInvitation = new Invitation(UserHogent, GroupHoGent1) { Status = InvitationStatus.Accepted };
 
-            _context.Add(invitation1);
             _context.Add(invitation2);
             _context.Add(invitation3);
             _context.Add(acceptedInvitation);
