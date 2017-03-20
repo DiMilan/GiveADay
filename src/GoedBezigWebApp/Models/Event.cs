@@ -8,7 +8,7 @@ namespace GoedBezigWebApp.Models
         {
         }
 
-        public Event(string title, string description, DateTime date, Group group) : base(title, description, @group)
+        public Event(string title, string description, DateTime date) : base(title, description)
         {
             Date = date;
         }

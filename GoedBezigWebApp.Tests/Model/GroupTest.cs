@@ -208,7 +208,7 @@ namespace GoedBezigWebApp.Tests.Model
         [Fact]
         private void AddingTaskSucceeds()
         {
-            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today) { Accepted = true };
             _testGroup.InitiateTaskList();
             ActivityTask task = new ActivityTask("description", null, activityEvent, TaskState.Done);
             _testGroup.AddTask(task);
@@ -220,7 +220,7 @@ namespace GoedBezigWebApp.Tests.Model
         [Fact]
         private void AddingTaskWithoutDescription()
         {
-            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today) { Accepted = true };
             _testGroup.InitiateTaskList();
             ActivityTask task = new ActivityTask(null, null, activityEvent, TaskState.Done);
             Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
@@ -228,7 +228,7 @@ namespace GoedBezigWebApp.Tests.Model
         [Fact]
         private void AddingTaskWithFromDateInPast()
         {
-            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today) { Accepted = true };
             _testGroup.InitiateTaskList();
             ActivityTask task = new ActivityTask("description", null, new DateTime(2016, 1,1), DateTime.Now, activityEvent, TaskState.Done);
             Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
@@ -236,7 +236,7 @@ namespace GoedBezigWebApp.Tests.Model
         [Fact]
         private void AddingTaskWithToDateInPast()
         {
-            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) { Accepted = true };
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today) { Accepted = true };
             ActivityTask task = new ActivityTask("description", null, DateTime.MaxValue, new DateTime(2016, 1, 1), activityEvent, TaskState.Done);
             Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
         }
@@ -244,7 +244,7 @@ namespace GoedBezigWebApp.Tests.Model
         private void AddingTaskWithoutApprovedEvent()
         {
             _testGroup.InitiateTaskList();
-            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today, _testGroup) {Accepted = false};
+            Event activityEvent = new Event("test", "testOmschrijving", DateTime.Today) {Accepted = false};
             ActivityTask task = new ActivityTask("description", null, DateTime.MaxValue, new DateTime(2016, 1, 1), activityEvent, TaskState.Done);
             Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
         }

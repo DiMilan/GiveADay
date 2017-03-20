@@ -13,6 +13,7 @@ using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
+using GoedBezigWebApp.Filters;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 
@@ -63,6 +64,9 @@ namespace GoedBezigWebApp
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+
+            //Filters
+            services.AddScoped<UserFilter>();
 
             services.AddSession();
             services.AddMvc();

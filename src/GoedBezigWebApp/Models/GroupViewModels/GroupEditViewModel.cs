@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using GoedBezigWebApp.Models.GroupState;
 
 namespace GoedBezigWebApp.Models.GroupViewModels
 {
@@ -50,8 +51,8 @@ namespace GoedBezigWebApp.Models.GroupViewModels
             Timestamp = group.Timestamp;
             ClosedGroup = group.ClosedGroup;
             Motivation = group.Motivation;
-            MotivationSubmittable = group.GroupState.MotivationSubmittable();
-            MotivationEditable = group.GroupState.MotivationEditable();
+            MotivationSubmittable = (group.GroupState is MotivationOpenState);
+            MotivationEditable = (group.GroupState is MotivationOpenState || group.GroupState is MotivationDeclinedState);
             CompanyName = group.CompanyName;
             CompanyAddress = group.CompanyAddress;
             CompanyEmail = group.CompanyEmail;

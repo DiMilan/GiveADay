@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models.GroupState;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,25 +62,23 @@ namespace GoedBezigWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(GroupEditViewModel groupEditViewModel)
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Edit(GroupEditViewModel groupEditViewModel, User user)
         {
             if (ModelState.IsValid)
             {
                 Group group = null;
                 try
                 {
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        string username = User.Identity.Name;
-                        User user = _userRepository.GetBy(username);
-                        group = _groupRepository.GetBy(groupEditViewModel.Name);
-                        group.SaveMotivation(groupEditViewModel.Motivation);
-                        group.GroupState.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
-                        group.GroupState.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
-                        _groupRepository.SaveChanges();
-                        TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangepast.";
-                        return RedirectToAction(nameof(Index), "Home");
-                    }
+
+                    group = _groupRepository.GetBy(groupEditViewModel.Name);
+                    group.SaveMotivation(groupEditViewModel.Motivation);
+                    group.GroupState.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
+                    group.GroupState.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
+                    _groupRepository.SaveChanges();
+                    TempData["message"] = $"{user.UserName} De groep {group.GroupName} werd succesvol aangepast.";
+                    return RedirectToAction(nameof(Index), "Home");
+
                 }
                 catch (GroupExistsException)
                 {
@@ -101,44 +100,41 @@ namespace GoedBezigWebApp.Controllers
             return View(nameof(Edit), groupEditViewModel);
         }
 
-        
+
         public IActionResult Create()
         {
             return View(nameof(Edit), new GroupEditViewModel(new Group()));
         }
 
         [HttpPost]
-        public IActionResult Create(GroupEditViewModel groupEditViewModel)
+        [ServiceFilter(typeof(UserFilter))]
+
+        public IActionResult Create(GroupEditViewModel groupEditViewModel, User user)
         {
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if(_groupRepository.Present(groupEditViewModel.Name)){ throw new GroupExistsException();}
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        string username = User.Identity.Name;
-                        User user = _userRepository.GetBy(username);
-                        Group group = user.Organization.AddGroup(groupEditViewModel.Name, user);
-                        group.SaveMotivation(groupEditViewModel.Motivation);
-                        group.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
-                        group.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
-                        _groupRepository.SaveChanges();
-                        //group.GBOrganization = null;//op de een of andere manier zet EF de GB-Organisatie op 1 bij oproepen SaveChanges()...
-                        //_groupRepository.SaveChanges();
-                        TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangemaakt. U kan de groep nog bewerken om zaken aan te passen.";
+                    if (_groupRepository.Present(groupEditViewModel.Name)) { throw new GroupExistsException(); }
 
-                        //Mail notification to lector
-                        //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
+                    Group group = user.Organization.AddGroup(groupEditViewModel.Name, user);
+                    group.SaveMotivation(groupEditViewModel.Motivation);
+                    group.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
+                    group.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
+                    _groupRepository.SaveChanges();
+                    TempData["message"] = $"{user.UserName} De groep {group.GroupName} werd succesvol aangemaakt. U kan de groep nog bewerken om zaken aan te passen.";
 
-                        var mailer = new AuthMessageSender();
-                        var sendMail = mailer.SendEmailAsync("bartjevm@gmail.com",
-                            "Group has been added",
-                            String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.GroupName),
-                            String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.GroupName));
-                        return RedirectToAction(nameof(Index), "Home");
-                    }
+                    //Mail notification to lector
+                    //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
+
+                    var mailer = new AuthMessageSender();
+                    var sendMail = mailer.SendEmailAsync("bartjevm@gmail.com",
+                        "Group has been added",
+                        String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.GroupName),
+                        String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.GroupName));
+                    return RedirectToAction(nameof(Index), "Home");
+
                 }
                 catch (GroupExistsException)
                 {
@@ -166,38 +162,44 @@ namespace GoedBezigWebApp.Controllers
         }
 
         [HttpPost, ActionName("SubmitMotivation")]
-        public IActionResult SubmitConfirmed(string id)
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult SubmitConfirmed(string id, User user)
         {
+            GroupEditViewModel groupEditViewModel = null;
+            Group group = null;
+
             if (ModelState.IsValid)
             {
+                
+                
                 try
                 {
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        Group group = _groupRepository.GetBy(id);
-                        group.GroupState.SubmitMotivation();
-                        _groupRepository.SaveChanges();
-                        TempData["message"] = $"De motivatie van {group.GroupName} werd succesvol doorgestuurd.";
 
-                        //Mail notification to lector
-                        //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
+                    group = _groupRepository.GetBy(id);
+                    group.GroupState.SubmitMotivation();
+                    _groupRepository.SaveChanges();
+                    TempData["message"] = $"De motivatie van {group.GroupName} werd succesvol doorgestuurd.";
 
-                        var mailer = new AuthMessageSender();
-                        var sendMail = mailer.SendEmailAsync("bartjevm@gmail.com",
-                            "Motivation has been submitted",
-                            String.Format(
-                                "Hi Lector,\n\na motivation has been added to group {0} of the GiveADay Platform.\n\nKind regards,\nGiveADay Bot",
-                                group.GroupName),
-                            String.Format(
-                                "Hi Lector,<br><br>a motivation has been added to group {0} of the GiveADay Platform.<br><br>Kind regards,<br>GiveADay Bot",
-                                group.GroupName));
-                        return RedirectToAction("Index", "Home");
-                    }
+                    //Mail notification to lector
+                    //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
+
+                    var mailer = new AuthMessageSender();
+                    var sendMail = mailer.SendEmailAsync("bartjevm@gmail.com",
+                        "Motivation has been submitted",
+                        String.Format(
+                            "Hi Lector,\n\na motivation has been added to group {0} of the GiveADay Platform.\n\nKind regards,\nGiveADay Bot",
+                            group.GroupName),
+                        String.Format(
+                            "Hi Lector,<br><br>a motivation has been added to group {0} of the GiveADay Platform.<br><br>Kind regards,<br>GiveADay Bot",
+                            group.GroupName));
+                    return RedirectToAction("Index", "Home");
+
                 }
                 catch (MotivationException e)
                 {
 
                     TempData["error"] = $"De motivatie werd niet ingediend. {e.Message.ToString()}";
+                    groupEditViewModel = new GroupEditViewModel(group);
                 }
                 //catch (Exception)
                 //{
@@ -206,7 +208,7 @@ namespace GoedBezigWebApp.Controllers
                 //}
 
             }
-            return RedirectToAction("Index", "Home");
+            return View(nameof(Edit), groupEditViewModel);
         }
         private async Task<User> GetCurrentUserAsync()
         {
@@ -224,9 +226,9 @@ namespace GoedBezigWebApp.Controllers
                 return View("Error");
             }
             else if (user.Group != null)
-                {
-                    TempData["error"] = "User already member of a group";
-                    return RedirectToAction("Index", "Home");
+            {
+                TempData["error"] = "User already member of a group";
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -234,9 +236,9 @@ namespace GoedBezigWebApp.Controllers
                 try
                 {
                     _groupRepository.GetBy(id).AddUser(user);
-                     
 
-            _groupRepository.SaveChanges();
+
+                    _groupRepository.SaveChanges();
                     TempData["message"] = $"User successfully added to group!";
                     return RedirectToAction("Index", "Home");
 
@@ -260,15 +262,15 @@ namespace GoedBezigWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        Group group = _groupRepository.GetBy(id);
-                        group.GroupState = new MotivationApprovedState(group);
-                        _groupRepository.SaveChanges();
-                        TempData["message"] = $"De motivatie van {group.GroupName} werd op Approved gezet.";
-                        return RedirectToAction("Index", "Home");
-                    }
+
+                if (User.Identity.IsAuthenticated)
+                {
+                    Group group = _groupRepository.GetBy(id);
+                    group.GroupState = new MotivationApprovedState(group);
+                    _groupRepository.SaveChanges();
+                    TempData["message"] = $"De motivatie van {group.GroupName} werd op Approved gezet.";
+                    return RedirectToAction("Index", "Home");
+                }
             }
             return RedirectToAction("Index", "Home");
         }

@@ -172,7 +172,7 @@ namespace GoedBezigWebApp.Data
             if (_context.Groups.Any()) return;
             GroupHoGent1.ClosedGroup = false;
             GroupUGent.Motivation = "TestMotivation";
-            GroupUGent.GroupState = new ApprovedState(GroupUGent);
+            GroupUGent.GroupState = new MotivationApprovedState(GroupUGent);
 
             _context.Groups.Add(GroupHoGent1);
             _context.Groups.Add(GroupHoGent2);
@@ -233,13 +233,13 @@ namespace GoedBezigWebApp.Data
         {
             if (_context.Activities.Any()) return;
 
-            var activity1 = new Activity("Activity1", "Activity description", GroupHoGent1);
-            var activity2 = new Activity("Activity2", "Activity description", GroupHoGent1);
-            var activity3 = new Activity("Activity3", "Activity description", GroupHoGent1);
+            var activity1 = new Activity("Activity1", "Activity description");
+            var activity2 = new Activity("Activity2", "Activity description");
+            var activity3 = new Activity("Activity3", "Activity description");
 
-            var event1 = new Event("Event1", "Event description", DateTime.Today.AddDays(5), GroupHoGent1);
-            var event2 = new Event("Event2", "Event description", DateTime.Today.AddDays(25), GroupHoGent1);
-            var event3 = new Event("Event3", "Event description", DateTime.Today.AddDays(45), GroupHoGent1);
+            var event1 = new Event("Event1", "Event description", DateTime.Today.AddDays(5));
+            var event2 = new Event("Event2", "Event description", DateTime.Today.AddDays(25));
+            var event3 = new Event("Event3", "Event description", DateTime.Today.AddDays(45));
 
             _context.Activities.Add(activity1);
             _context.Activities.Add(activity2);

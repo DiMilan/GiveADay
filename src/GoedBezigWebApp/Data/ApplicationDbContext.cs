@@ -224,10 +224,6 @@ namespace GoedBezigWebApp.Data
             type.HasDiscriminator<string>("Type")
                 .HasValue<Event>("Event")
                 .HasValue<Activity>("Activity");
-            type.HasOne(e => e.Group)
-                .WithMany(g => g.Activities)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
             type.HasMany(t => t.Messages).WithOne(t => t.Activity);
         }
 
