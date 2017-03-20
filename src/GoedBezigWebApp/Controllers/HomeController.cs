@@ -16,11 +16,13 @@ namespace GoedBezigWebApp.Controllers
         //added for localization
         private readonly IStringLocalizer<HomeController> _localizer;
         private readonly IUserRepository _userRepository;
+        private readonly IGroupRepository _groupRepository;
 
-        public HomeController(IStringLocalizer<HomeController> localizer, IUserRepository userRepository)
+        public HomeController(IStringLocalizer<HomeController> localizer, IUserRepository userRepository, IGroupRepository groupRepository)
         {
             _localizer = localizer;
             _userRepository = userRepository;
+            _groupRepository = groupRepository;
         }
         //end localization
 
@@ -51,8 +53,10 @@ namespace GoedBezigWebApp.Controllers
                         ViewData["GroupSubmitted"] = true;
                         ViewData["GroupApproved"] = true;
 
+                       
                     }
-                    if (user.Group.GBOrganization != null)
+                    _groupRepository.LoadOrganizations(user.Group);
+                    if (user.Group.ExternalOrganization != null)
                     {
                         ViewData["GBOrgAssigned"] = true;
                     }
