@@ -13,8 +13,10 @@ namespace GoedBezigWebApp.Data.Repositories
         private readonly DbSet<Organization> _organizations;
         private readonly DbSet<GBOrganization> _gbOrganizations;
         private readonly DbSet<ExternalOrganization> _externalOrganizations;
+        private readonly ApplicationDbContext _dbContext;
         public OrganizationRepository(ApplicationDbContext dbContext)
         {
+            _dbContext = dbContext;
             _organizations = dbContext.Organizations;
             _gbOrganizations = dbContext.GbOrganizations;
             _externalOrganizations = dbContext.ExternalOrganizations;
@@ -131,6 +133,10 @@ namespace GoedBezigWebApp.Data.Repositories
         public SelectList GetAllExternalWithoutLabelUniqueCities()
         {
             return new SelectList(_externalOrganizations.Include(o => o.Address).Where(o => !o.hasGBLabel).Select(o => o.Address.AddressCity).ToList().Distinct().ToList());
+        }
+        public void SaveChanges()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

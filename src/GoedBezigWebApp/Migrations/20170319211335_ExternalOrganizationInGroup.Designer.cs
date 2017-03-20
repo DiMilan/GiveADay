@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using GoedBezigWebApp.Data;
+using GoedBezigWebApp.Models;
 
 namespace GoedBezigWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170319211335_ExternalOrganizationInGroup")]
+    partial class ExternalOrganizationInGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -42,46 +44,6 @@ namespace GoedBezigWebApp.Migrations
                     b.ToTable("events");
 
                     b.HasDiscriminator<string>("Type").HasValue("Activity");
-                });
-
-            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTask", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CurrentState");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnName("description")
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("FromDateTime")
-                        .HasColumnName("fromDateTime");
-
-                    b.Property<string>("GroupName");
-
-                    b.Property<DateTime>("ToDateTime")
-                        .HasColumnName("toDateTime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupName");
-
-                    b.ToTable("ActivityTasks");
-                });
-
-            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTaskUser", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<int>("ActivityTaskId");
-
-                    b.HasKey("UserId", "ActivityTaskId");
-
-                    b.HasIndex("ActivityTaskId");
-
-                    b.ToTable("ActivityTaskUser");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
@@ -307,8 +269,6 @@ namespace GoedBezigWebApp.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<int?>("ActivityTaskId");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -356,8 +316,6 @@ namespace GoedBezigWebApp.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ActivityTaskId");
 
                     b.HasIndex("GroupName");
 
@@ -515,30 +473,6 @@ namespace GoedBezigWebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTask", b =>
-                {
-                    b.HasOne("GoedBezigWebApp.Models.Group")
-                        .WithMany("TaskList")
-                        .HasForeignKey("GroupName");
-
-                    b.HasOne("GoedBezigWebApp.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("Id");
-                });
-
-            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTaskUser", b =>
-                {
-                    b.HasOne("GoedBezigWebApp.Models.ActivityTask", "ActivityTask")
-                        .WithMany("ActivityTaskUsers")
-                        .HasForeignKey("ActivityTaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("GoedBezigWebApp.Models.User", "User")
-                        .WithMany("ActivityTaskUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
                     b.HasOne("GoedBezigWebApp.Models.ExternalOrganization", "ExternalOrganization")
@@ -586,10 +520,6 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.User", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.ActivityTask")
-                        .WithMany("Users")
-                        .HasForeignKey("ActivityTaskId");
-
                     b.HasOne("GoedBezigWebApp.Models.Group")
                         .WithMany("Users")
                         .HasForeignKey("GroupName");

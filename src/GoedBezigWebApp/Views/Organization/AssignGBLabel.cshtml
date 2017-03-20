@@ -21,7 +21,11 @@
             @for (int i = 0; i < Model.Contacts.Count(); i++)
             {
                 <tr>
-                    <td><input type="checkbox" name="notifyUsers[@i]" value="@Model.Contacts[i].ContactId" /></td>
+                    <td>
+                        <input type="checkbox" name="notifyContacts[@i].Selected" value="true"/>
+                        <input name="notifyContacts[@i].ContactId" type="hidden" value="@Model.Contacts[i].ContactId" />
+                        <input name="notifyContacts[@i].Email" type="hidden" value="@Model.Contacts[i].Email" />
+                    </td>
                     <td>@Model.Contacts[i].Voornaam @Model.Contacts[i].Naam</td>
                     <td>@Model.Contacts[i].Functie</td>
                     <td>@Model.Contacts[i].Email</td>

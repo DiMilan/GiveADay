@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
 using GoedBezigWebApp.Models;
@@ -67,7 +68,7 @@ namespace GoedBezigWebApp.Controllers
                 return View(_organizationRepository.GetAllExternalWithoutLabelFilteredByNameAndLocation(searchName, searchLocation));
             }
 
-            else if (!groupId.IsNullOrEmpty() && _groupRepository.GetBy(groupId).entitledToGiveGBLabel())
+            else if (!groupId.IsNullOrEmpty() && checkEntitledToGiveGBLabel(groupId))
             {
                 //Load only external orgs without label - ready to give label
                 ViewData["title"] = "Give GBLabel to External Organization";
@@ -78,7 +79,7 @@ namespace GoedBezigWebApp.Controllers
             else
             {
                 TempData["error"] =
-                    "The request is not valid or the GroupId is either not valid or not entitled to give a GBLabel to an organization.";
+                    "The request is not valid or the GroupId is either not valid or the group is not entitled to give a GBLabel to an organization.";
                 return View("Error");
             }
 
@@ -98,7 +99,7 @@ namespace GoedBezigWebApp.Controllers
                 _userRepository.GetBy(user.UserName).RegisterInOrganization(_organizationRepository.GetGbOrganizationBy(id));
                 _userRepository.SaveChanges();
                 TempData["message"] = $"You have been added to the organization succesfully!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             catch (OrganizationException error)
             {
@@ -118,45 +119,52 @@ namespace GoedBezigWebApp.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !_groupRepository.GetBy(groupId).entitledToGiveGBLabel())
+            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
             {
                 return View("Error");
             }
+
+
 
             ViewBag.Group = _groupRepository.GetBy(groupId);
             return View(_organizationRepository.GetExternalOrganizationBy(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignGBLabel(int id, string groupId, string[] notifyUsers)
+        public async Task<IActionResult> AssignGBLabel(int id, string groupId, List<ContactRecord> notifyContacts)
         {
             var user = await GetCurrentUserAsync();
+            
 
-            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !_groupRepository.GetBy(groupId).entitledToGiveGBLabel())
+            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
             {
+                TempData["error"] =
+                    "The request is not valid or the GroupId is either not valid or the group is not entitled to give a GBLabel to an organization.";
                 return View("Error");
             }
 
-            if (notifyUsers.IsNullOrEmpty())
+            try
             {
-                TempData["Error"] = "Please select at least one contact!";
-                return RedirectToAction("AssignGBLabel", new {id = id, groupId = groupId});
+                _organizationRepository.GetExternalOrganizationBy(id).AssignGbLabel(_groupRepository.GetBy(groupId),notifyContacts);
+                _organizationRepository.SaveChanges();
+                TempData["message"] = "The organization has succesfully been given a GB label, the selected stakeholders have been contacted.";
             }
 
-            return RedirectToAction("Index", "Home");
+            catch (OrganizationException error)
+            {
+                TempData["error"] = error.Message;
+                return RedirectToAction("AssignGBLabel", new { id = id, groupId = groupId });
+            }
 
-            //to be implemented
-            TempData["message"] = $"TO BE DONE";
+            return RedirectToAction("Edit","Group", new { id = groupId });
+        }
 
-            //Move to OrganizationModel
-
-            var mailer = new AuthMessageSender();
-            var sendMail = mailer.SendEmailAsync("devloomax@mdware.org",
-                            "Organization X got the GB Label",
-                            String.Format("XXX\nXXX"),
-                            String.Format("XXX<br>XXX"));
-
-            return RedirectToAction("Index");
+        private bool checkEntitledToGiveGBLabel(string groupId)
+        {
+            var group = _groupRepository.GetBy(groupId);
+            _groupRepository.LoadOrganizations(group);
+            _groupRepository.LoadUsers(group);
+            return group.entitledToGiveGBLabel();
         }
     }
 }

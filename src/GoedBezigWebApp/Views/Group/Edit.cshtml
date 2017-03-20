@@ -36,6 +36,10 @@
                     {
                         <br /> @Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
                     }
+                    else if (ViewBag.ExternalOrganization != null)
+                    {
+                        <br /><span style="font-weight: bold;">This group has given a GB-Label to @ViewBag.ExternalOrganization.Name</span>
+                    }
                 </div>
             </div>
         </div>

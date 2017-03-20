@@ -171,6 +171,7 @@ namespace GoedBezigWebApp.Data
             // --> SEED Groups
             if (_context.Groups.Any()) return;
 
+            GroupUGent.Motivation = "TestMotivation";
             GroupUGent.MotivationStatus = new ApprovedState(GroupUGent);
 
             _context.Groups.Add(GroupHoGent1);
