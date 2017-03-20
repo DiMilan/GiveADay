@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GoedBezigWebApp.Models
 {
-    public class GBOrganization : Organization
+    public class GbOrganization : Organization
     {
 
         public List<Group> Groups { get; set; }
@@ -13,7 +10,7 @@ namespace GoedBezigWebApp.Models
         public bool ClosedGroups { get; set; }
         public string Domain { get; set; }
 
-        public GBOrganization()
+        public GbOrganization()
         {
             Groups = new List<Group>();
             Users = new List<User>();
@@ -21,9 +18,9 @@ namespace GoedBezigWebApp.Models
 
         public Group AddGroup(string groupName)
         {
-            Group NewGroup = new Group(groupName, this.ClosedGroups);
-            Groups.Add(NewGroup);
-            return NewGroup;
+            Group newGroup = new Group(groupName, ClosedGroups);
+            Groups.Add(newGroup);
+            return newGroup;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace GoedBezigWebApp.Data
 
         #region Organization Data
 
-        private static readonly GBOrganization HoGent = new GBOrganization
+        private static readonly GbOrganization HoGent = new GbOrganization
         {
             Name = "HoGent",
             Logo = "https://upload.wikimedia.org/wikipedia/commons/1/10/HoGent_Logo.png",
@@ -65,7 +65,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly GBOrganization UGent = new GBOrganization
+        private static readonly GbOrganization UGent = new GbOrganization
         {
             Name = "UGent",
             Logo = "https://webster.ugent.be/alumnivacatures/invoeren/static/images/logo-ugent_org.svg",
@@ -81,7 +81,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly GBOrganization Solvay = new GBOrganization
+        private static readonly GbOrganization Solvay = new GbOrganization
         {
             Name = "Solvay Economics & Management",
             Logo =
@@ -98,7 +98,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly GBOrganization TestOrg = new GBOrganization
+        private static readonly GbOrganization TestOrg = new GbOrganization
         {
             Name = "Test University",
             Logo = "http://users.hogent.be/~533031md/eportfolio/spost/images/cap.png",
@@ -120,7 +120,7 @@ namespace GoedBezigWebApp.Data
             Logo = "https://eggthedail.files.wordpress.com/2010/08/100_2041.jpg",
             Btw = "BE045785456",
             Description = "Kebab schnijden is onze specialiteit. Mohammed zegt dat ook altijd. Ma zegt hij, zoals ik kebab...",
-            hasGBLabel = false,
+            HasGbLabel = false,
             Address = new OrganizationalAddress()
             {
                 AddressCity = "Wevelgem",
@@ -137,7 +137,7 @@ namespace GoedBezigWebApp.Data
             Logo = "http://www.pitahouse.ca/wp-content/uploads/2016/05/cropped-thumbnail_PitaHouse_FINAL_LOGO2-1.jpg",
             Btw = "BE045785456",
             Description = "Pita vullen is onze specialiteit, njammie!",
-            hasGBLabel = false,
+            HasGbLabel = false,
             Address = new OrganizationalAddress()
             {
                 AddressCity = "Antwerpen",
@@ -154,7 +154,7 @@ namespace GoedBezigWebApp.Data
             Logo = "http://www.pizzaroma.be/assets/images/pizza-roma-gent.png",
             Btw = "BE066585456",
             Description = "Pizza Roma, de nr. 1 pizzamaker uit Gent!",
-            hasGBLabel = true,
+            HasGbLabel = true,
             Address = new OrganizationalAddress()
             {
                 AddressCity = "Gent",
@@ -187,27 +187,27 @@ namespace GoedBezigWebApp.Data
 
         private static readonly Group GroupHoGent1 = new Group("GroupHogent1", true)
         {
-            GBOrganization = HoGent
+            GbOrganization = HoGent
         };
 
         private static readonly Group GroupHoGent2 = new Group("GroupHogent2", true)
         {
-            GBOrganization = HoGent
+            GbOrganization = HoGent
         };
 
         private static readonly Group GroupHoGent3 = new Group("GroupHogent3", true)
         {
-            GBOrganization = HoGent
+            GbOrganization = HoGent
         };
 
         private static readonly Group GroupUGent = new Group("GroupUgent", true)
         {
-            GBOrganization = UGent
+            GbOrganization = UGent
         };
 
         private static readonly Group GroupSolvay = new Group("GroupSolvay", false)
         {
-            GBOrganization = Solvay
+            GbOrganization = Solvay
         };
 
         #endregion

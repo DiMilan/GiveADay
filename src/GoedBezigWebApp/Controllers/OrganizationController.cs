@@ -164,7 +164,7 @@ namespace GoedBezigWebApp.Controllers
             var group = _groupRepository.GetBy(groupId);
             _groupRepository.LoadOrganizations(group);
             _groupRepository.LoadUsers(group);
-            return group.entitledToGiveGBLabel();
+            return group.EntitledToGiveGbLabel();
         }
     }
 }

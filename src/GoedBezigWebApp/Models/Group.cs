@@ -6,7 +6,6 @@ using System.Linq;
 using Castle.Core.Internal;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.MotivationState;
-using GoedBezigWebApp.Services;
 
 namespace GoedBezigWebApp.Models
 {
@@ -27,7 +26,7 @@ namespace GoedBezigWebApp.Models
         public string CompanyContactTitle { get; set; }
         [NotMapped]
         public MotivationState.MotivationState MotivationStatus { get; set; }
-        public GBOrganization GBOrganization { get; set; }
+        public GbOrganization GbOrganization { get; set; }
         public ExternalOrganization ExternalOrganization { get; set; }
         public int StateType
         {
@@ -113,7 +112,7 @@ namespace GoedBezigWebApp.Models
 
         private int GetNrOfWords(string s)
         {
-            return s.Split(new char[] { ' ', '.', ',', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
+            return s.Split(new[] { ' ', '.', ',', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
         public void CheckMotivation(string motivation)
@@ -134,7 +133,7 @@ namespace GoedBezigWebApp.Models
             }
         }
 
-        public void checkMotivationCompany()
+        public void CheckMotivationCompany()
         {
             if (CompanyName == null) throw new MotivationException("Het opgegeven berijf bevat geen naam");
             if (CompanyAddress == null) throw new MotivationException("Het opgegeven berijf bevat geen adres");
@@ -142,7 +141,7 @@ namespace GoedBezigWebApp.Models
             if (CompanyWebsite == null) throw new MotivationException("Het opgegeven berijf bevat geen naam");
         }
 
-        public bool entitledToGiveGBLabel()
+        public bool EntitledToGiveGbLabel()
         {
             return (MotivationStatus is ApprovedState && ExternalOrganization == null);
         }

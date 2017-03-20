@@ -5,9 +5,9 @@ namespace GoedBezigWebApp.Models
     public class Invitation
     {
         public string UserId { get; set; }
-        public virtual User User { get; set; }
+        public User User { get; set; }
         public string GroupId { get; set; }
-        public virtual Group Group { get; set; }
+        public Group Group { get; set; }
         public InvitationStatus Status { get; set; }
 
         public Invitation()
@@ -18,14 +18,14 @@ namespace GoedBezigWebApp.Models
         public Invitation(User user, Group group)
         {
             User = user;
-            Group = @group;
+            Group = group;
             Status = InvitationStatus.Pending;
         }
 
-        public Invitation(User user, Group @group, InvitationStatus status)
+        public Invitation(User user, Group group, InvitationStatus status)
         {
             User = user;
-            Group = @group;
+            Group = group;
             Status = status;
         }
 

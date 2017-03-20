@@ -64,7 +64,7 @@ namespace GoedBezigWebApp.Data.Repositories
         public void LoadOrganizations(Group group)
         {
             _dbContext.Entry(group)
-                .Reference (g => g.GBOrganization)
+                .Reference (g => g.GbOrganization)
                 .Load();
             _dbContext.Entry(group)
                 .Reference (g => g.ExternalOrganization)

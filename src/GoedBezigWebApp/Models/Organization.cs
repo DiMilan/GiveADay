@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GoedBezigWebApp.Models
+﻿namespace GoedBezigWebApp.Models
 {
     public abstract class Organization
     {

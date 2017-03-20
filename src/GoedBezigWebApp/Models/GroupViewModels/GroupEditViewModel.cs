@@ -60,7 +60,7 @@ namespace GoedBezigWebApp.Models.GroupViewModels
             CompanyContactName = group.CompanyContactName;
             CompanyContactSurname = group.CompanyContactSurname;
             CompanyContactTitle = group.CompanyContactTitle;
-            EntitledToGiveGBLabel = group.entitledToGiveGBLabel();
+            EntitledToGiveGBLabel = group.EntitledToGiveGbLabel();
         }
     }
 }
