@@ -20,8 +20,7 @@ namespace GoedBezigWebApp.Models
         public DateTime ToDateTime { get; set; }
         public Activity Activity { get; set; }
         public TaskState CurrentState { get; set; }
-        [NotMapped]
-        public Group Group => Activity.Group;
+        public  string Remarks { get; set; }
 
 
         public ActivityTask(string description, ICollection<User> users, Event activityEvent, TaskState currentState) :
