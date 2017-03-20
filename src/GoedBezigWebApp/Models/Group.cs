@@ -153,7 +153,6 @@ namespace GoedBezigWebApp.Models
 
         public void AddActivity(Activity activity)
         {
-            activity.Group = this;
             Activities.Add(activity);
         }
 
