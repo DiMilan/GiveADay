@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Castle.Core.Internal;
 using GoedBezigWebApp.Models.Exceptions;
-using GoedBezigWebApp.Models.MotivationState;
+using GoedBezigWebApp.Models.GroupState;
 
 namespace GoedBezigWebApp.Models
 {
@@ -25,26 +25,26 @@ namespace GoedBezigWebApp.Models
         public string CompanyContactEmail { get; set; }
         public string CompanyContactTitle { get; set; }
         [NotMapped]
-        public MotivationState.MotivationState MotivationStatus { get; set; }
+        public GroupState.GroupState GroupState { get; set; }
         public GbOrganization GbOrganization { get; set; }
         public ExternalOrganization ExternalOrganization { get; set; }
         public int StateType
         {
             get
             {
-                if (MotivationStatus is OpenState)
+                if (GroupState is MotivationOpenState)
                 {
                     return 0;
                 }
-                else if (MotivationStatus is SubmittedState)
+                else if (GroupState is MotivationSubmittedState)
                 {
                     return 1;
                 }
-                else if (MotivationStatus is DeclinedState)
+                else if (GroupState is MotivationDeclinedState)
                 {
                     return 2;
                 }
-                else if (MotivationStatus is ApprovedState)
+                else if (GroupState is MotivationApprovedState)
                 {
                     return 3;
                 }
@@ -59,16 +59,16 @@ namespace GoedBezigWebApp.Models
                 switch (value)
                 {
                     case 0:
-                        MotivationStatus = new OpenState(this);
+                        GroupState = new MotivationOpenState(this);
                         break;
                     case 1:
-                        MotivationStatus = new SubmittedState(this);
+                        GroupState = new MotivationSubmittedState(this);
                         break;
                     case 2:
-                        MotivationStatus = new DeclinedState(this);
+                        GroupState = new MotivationDeclinedState(this);
                         break;
                     case 3:
-                        MotivationStatus = new ApprovedState(this);
+                        GroupState = new MotivationApprovedState(this);
                         break;
                     default:
                         throw new NoStateException("Given value does not correspond with a state");
@@ -87,7 +87,7 @@ namespace GoedBezigWebApp.Models
         public Group()
         {
             Invitations = new List<Invitation>();
-            MotivationStatus = new OpenState(this);
+            GroupState = new MotivationOpenState(this);
             Activities = new List<Activity>();
             TaskList = null;//no tasklist initiated yet
         }
@@ -115,11 +115,16 @@ namespace GoedBezigWebApp.Models
             return s.Split(new[] { ' ', '.', ',', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
-        public void CheckMotivation(string motivation)
+        public void SaveMotivation(string motivation)
         {
-            if (!motivation.IsNullOrEmpty())
+            GroupState.SaveMotivation(motivation);
+        }
+
+        public void CheckMotivation()
+        {
+            if (!Motivation.IsNullOrEmpty())
             {
-                int nrOfWords = GetNrOfWords(motivation);
+                int nrOfWords = GetNrOfWords(Motivation);
                 if (nrOfWords < 100 || nrOfWords > 250)
                 {
                     throw new MotivationException("De motivatie moet minstens 100 en maximum 250 woorden bevatten");
@@ -143,7 +148,7 @@ namespace GoedBezigWebApp.Models
 
         public bool EntitledToGiveGbLabel()
         {
-            return (MotivationStatus is ApprovedState && ExternalOrganization == null);
+            return (GroupState is MotivationApprovedState && ExternalOrganization == null);
         }
 
         public void AddActivity(Activity activity)
@@ -187,6 +192,16 @@ namespace GoedBezigWebApp.Models
             if (task.Activity == null) throw new TaskListException("geen event opgegeven");
             if (task.Activity.Accepted == false) throw new TaskListException("Enkel goedgekeurde evenementen komen in aanmerking");
             TaskList.Add(task);
+        }
+
+        public void AddCompanyContact(string companyContactName, string companyContactSurname, string companyContactEmail, string companyContactTitle)
+        {
+            GroupState.AddCompanyContact(companyContactName,companyContactSurname, companyContactTitle,companyContactTitle);
+        }
+
+        public void AddCompanyDetails(string companyName, string companyAddress, string companyEmail, string companyWebsite)
+        {
+            GroupState.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite);
         }
     }
 

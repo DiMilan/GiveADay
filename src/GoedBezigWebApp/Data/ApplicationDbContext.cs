@@ -98,7 +98,7 @@ namespace GoedBezigWebApp.Data
                 .HasMaxLength(10000);
 
             g.Property(p => p.StateType)
-                .HasColumnName("MotivationStatus");
+                .HasColumnName("GroupState");
 
             g.HasOne(p => p.GbOrganization)
                 .WithMany(a => a.Groups)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
-using GoedBezigWebApp.Models.MotivationState;
+using GoedBezigWebApp.Models.GroupState;
 using Microsoft.AspNetCore.Identity;
 
 namespace GoedBezigWebApp.Data
@@ -172,7 +172,7 @@ namespace GoedBezigWebApp.Data
             if (_context.Groups.Any()) return;
             GroupHoGent1.ClosedGroup = false;
             GroupUGent.Motivation = "TestMotivation";
-            GroupUGent.MotivationStatus = new ApprovedState(GroupUGent);
+            GroupUGent.GroupState = new ApprovedState(GroupUGent);
 
             _context.Groups.Add(GroupHoGent1);
             _context.Groups.Add(GroupHoGent2);

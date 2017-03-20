@@ -16,10 +16,11 @@ namespace GoedBezigWebApp.Models
             Users = new List<User>();
         }
 
-        public Group AddGroup(string groupName)
+        public Group AddGroup(string groupName, User user)
         {
             Group newGroup = new Group(groupName, ClosedGroups);
             Groups.Add(newGroup);
+            user.Invitations.Add(new Invitation(user, newGroup, InvitationStatus.Accepted));
             return newGroup;
         }
     }

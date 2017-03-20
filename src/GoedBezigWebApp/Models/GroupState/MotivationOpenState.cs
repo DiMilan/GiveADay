@@ -1,17 +1,14 @@
-﻿using GoedBezigWebApp.Models.Exceptions;
-
-namespace GoedBezigWebApp.Models.MotivationState
+﻿namespace GoedBezigWebApp.Models.GroupState
 {
-    public class DeclinedState:MotivationState
+    public class MotivationOpenState : Models.GroupState.GroupState
     {
-        public DeclinedState(Group @group) : base(@group)
+
+        public MotivationOpenState(Group group) : base(group)
         {
         }
         public override void SaveMotivation(string motivation)
         {
-
             Group.Motivation = motivation;
-            ToState(new OpenState(Group));
         }
 
         public override void AddCompanyDetails(string name, string address, string email, string website)
@@ -32,17 +29,9 @@ namespace GoedBezigWebApp.Models.MotivationState
 
         public override void SubmitMotivation()
         {
-            throw new MotivationException("Een afgekeurde motivatie kan niet worden ingediend zonder wijzigingen");
-        }
-
-        public override bool MotivationEditable()
-        {
-            return true;
-        }
-
-        public override bool MotivationSubmittable()
-        {
-            return false;
+            Group.CheckMotivation();
+            Group.CheckMotivationCompany();
+            ToState(new MotivationSubmittedState(Group));
         }
     }
 }

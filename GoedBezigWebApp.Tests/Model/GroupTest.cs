@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Exceptions;
-using GoedBezigWebApp.Models.MotivationState;
+using GoedBezigWebApp.Models.GroupState;
 using Xunit;
 
 namespace GoedBezigWebApp.Tests.Model
@@ -26,7 +26,7 @@ namespace GoedBezigWebApp.Tests.Model
             Assert.Equal("testGroup", group.GroupName);
             Assert.Equal(false, group.ClosedGroup);
             Assert.InRange(group.Timestamp, DateTime.Now.Subtract(TimeSpan.FromSeconds(1)), DateTime.Now);
-            Assert.True(group.MotivationStatus is OpenState);
+            Assert.True(group.GroupState is MotivationOpenState);
             Assert.True(group.Invitations is List<Invitation>);
             Assert.True(group.Activities is List<Activity>);
             Assert.Null(group.Motivation);
@@ -47,7 +47,7 @@ namespace GoedBezigWebApp.Tests.Model
         private void SavingMotivationInOpenGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus.SaveMotivation(GeldigeMotivation);
+            group.GroupState.SaveMotivation(GeldigeMotivation);
             Assert.Equal(group.Motivation, GeldigeMotivation);
         }
 
@@ -55,25 +55,25 @@ namespace GoedBezigWebApp.Tests.Model
         private void SavingMotivationInDeclinedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new DeclinedState(group);
-            group.MotivationStatus.SaveMotivation(GeldigeMotivation);
+            group.GroupState = new MotivationDeclinedState(group);
+            group.GroupState.SaveMotivation(GeldigeMotivation);
             Assert.Equal(group.Motivation, GeldigeMotivation);
-            Assert.True(group.MotivationStatus is OpenState);
+            Assert.True(group.GroupState is MotivationOpenState);
         }
         [Fact]
         private void SavingMotivationInSubmittedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new SubmittedState(group);
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.SaveMotivation(GeldigeMotivation));
+            group.GroupState = new MotivationSubmittedState(group);
+            Assert.Throws<MotivationException>(() => group.GroupState.SaveMotivation(GeldigeMotivation));
 
         }
         [Fact]
         private void SavingMotivationInApprovedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new ApprovedState(group);
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.SaveMotivation(GeldigeMotivation));
+            group.GroupState = new MotivationApprovedState(group);
+            Assert.Throws<MotivationException>(() => group.GroupState.SaveMotivation(GeldigeMotivation));
 
         }
         [Fact]
@@ -86,7 +86,7 @@ namespace GoedBezigWebApp.Tests.Model
             group.CompanyAddress = "teststraat 23, 9000 Gent";
             group.CompanyEmail = "test@test.be";
             group.CompanyWebsite = "www.test.be";
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.SubmitMotivation());
+            Assert.Throws<MotivationException>(() => group.GroupState.SubmitMotivation());
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace GoedBezigWebApp.Tests.Model
             group.CompanyAddress = "teststraat 23, 9000 Gent";
             group.CompanyEmail = "test@test.be";
             group.CompanyWebsite = "www.test.be";
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.SubmitMotivation());
+            Assert.Throws<MotivationException>(() => group.GroupState.SubmitMotivation());
         }
 
         [Fact]
@@ -111,31 +111,31 @@ namespace GoedBezigWebApp.Tests.Model
             group.CompanyAddress = "teststraat 23, 9000 Gent";
             group.CompanyEmail = "test@test.be";
             group.CompanyWebsite = "www.test.be";
-            group.MotivationStatus.SubmitMotivation();
-            Assert.True(group.MotivationStatus is SubmittedState);
+            group.GroupState.SubmitMotivation();
+            Assert.True(group.GroupState is MotivationSubmittedState);
         }
 
         [Fact]
         private void SubmittingMotivationInDeclinedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new DeclinedState(group);
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.SubmitMotivation());
+            group.GroupState = new MotivationDeclinedState(group);
+            Assert.Throws<MotivationException>(() => group.GroupState.SubmitMotivation());
         }
         [Fact]
         private void SubmittingMotivationInSubmittedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new SubmittedState(group);
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.SubmitMotivation());
+            group.GroupState = new MotivationSubmittedState(group);
+            Assert.Throws<MotivationException>(() => group.GroupState.SubmitMotivation());
 
         }
         [Fact]
         private void SubmittingMotivationInApprovedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new ApprovedState(group);
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.SubmitMotivation());
+            group.GroupState = new MotivationApprovedState(group);
+            Assert.Throws<MotivationException>(() => group.GroupState.SubmitMotivation());
 
         }
 
@@ -148,7 +148,7 @@ namespace GoedBezigWebApp.Tests.Model
             string companyAddress = "teststraat 23, 9000 Gent";
             string companyEmail = "test@test.be";
             string companyWebsite = "www.test.be";
-            group.MotivationStatus.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite);
+            group.GroupState.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite);
             Assert.Equal(group.CompanyName, companyName);
             Assert.Equal(group.CompanyAddress, companyAddress);
             Assert.Equal(group.CompanyEmail, companyEmail);
@@ -159,12 +159,12 @@ namespace GoedBezigWebApp.Tests.Model
         private void SavingCompanyDetailsInDeclinedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new DeclinedState(group);
+            group.GroupState = new MotivationDeclinedState(group);
             string companyName = "testBedrijf";
             string companyAddress = "teststraat 23, 9000 Gent";
             string companyEmail = "test@test.be";
             string companyWebsite = "www.test.be";
-            group.MotivationStatus.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite);
+            group.GroupState.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite);
             Assert.Equal(group.CompanyName, companyName);
             Assert.Equal(group.CompanyAddress, companyAddress);
             Assert.Equal(group.CompanyEmail, companyEmail);
@@ -174,24 +174,24 @@ namespace GoedBezigWebApp.Tests.Model
         private void SavingCompanyDetailsInSubmittedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new SubmittedState(group);
+            group.GroupState = new MotivationSubmittedState(group);
             string companyName = "testBedrijf";
             string companyAddress = "teststraat 23, 9000 Gent";
             string companyEmail = "test@test.be";
             string companyWebsite = "www.test.be";
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite));
+            Assert.Throws<MotivationException>(() => group.GroupState.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite));
 
         }
         [Fact]
         private void SavingCompanyDetailsInApprovedGroup()
         {
             Group group = new Group("testGroup", false);
-            group.MotivationStatus = new ApprovedState(group);
+            group.GroupState = new MotivationApprovedState(group);
             string companyName = "testBedrijf";
             string companyAddress = "teststraat 23, 9000 Gent";
             string companyEmail = "test@test.be";
             string companyWebsite = "www.test.be";
-            Assert.Throws<MotivationException>(() => group.MotivationStatus.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite));
+            Assert.Throws<MotivationException>(() => group.GroupState.AddCompanyDetails(companyName, companyAddress, companyEmail, companyWebsite));
 
         }
         #endregion

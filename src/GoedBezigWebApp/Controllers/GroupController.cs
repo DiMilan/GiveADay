@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
-using GoedBezigWebApp.Models.MotivationState;
+using GoedBezigWebApp.Models.GroupState;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Controllers
@@ -47,7 +47,7 @@ namespace GoedBezigWebApp.Controllers
                     .Where(
                     (g => g.GbOrganization == user.Organization
                     && g.ClosedGroup == false
-                    && !(g.MotivationStatus is ApprovedState))//wat is de status voor GOEDGEKEURD ?  
+                    && !(g.GroupState is MotivationApprovedState))//wat is de status voor GOEDGEKEURD ?  
                 ));
             }
         }
@@ -73,9 +73,9 @@ namespace GoedBezigWebApp.Controllers
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
                         group = _groupRepository.GetBy(groupEditViewModel.Name);
-                        group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
-                        group.MotivationStatus.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
-                        group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
+                        group.SaveMotivation(groupEditViewModel.Motivation);
+                        group.GroupState.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
+                        group.GroupState.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
                         _groupRepository.SaveChanges();
                         TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangepast.";
                         return RedirectToAction(nameof(Index), "Home");
@@ -120,11 +120,10 @@ namespace GoedBezigWebApp.Controllers
                     {
                         string username = User.Identity.Name;
                         User user = _userRepository.GetBy(username);
-                        Group group = user.Organization.AddGroup(groupEditViewModel.Name);
-                        user.Invitations.Add(new Invitation(user, group, InvitationStatus.Accepted));
-                        group.MotivationStatus.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
-                        group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
-                        group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
+                        Group group = user.Organization.AddGroup(groupEditViewModel.Name, user);
+                        group.SaveMotivation(groupEditViewModel.Motivation);
+                        group.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
+                        group.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
                         _groupRepository.SaveChanges();
                         //group.GBOrganization = null;//op de een of andere manier zet EF de GB-Organisatie op 1 bij oproepen SaveChanges()...
                         //_groupRepository.SaveChanges();
@@ -176,7 +175,7 @@ namespace GoedBezigWebApp.Controllers
                     if (User.Identity.IsAuthenticated)
                     {
                         Group group = _groupRepository.GetBy(id);
-                        group.MotivationStatus.SubmitMotivation();
+                        group.GroupState.SubmitMotivation();
                         _groupRepository.SaveChanges();
                         TempData["message"] = $"De motivatie van {group.GroupName} werd succesvol doorgestuurd.";
 
@@ -265,7 +264,7 @@ namespace GoedBezigWebApp.Controllers
                     if (User.Identity.IsAuthenticated)
                     {
                         Group group = _groupRepository.GetBy(id);
-                        group.MotivationStatus = new ApprovedState(group);
+                        group.GroupState = new MotivationApprovedState(group);
                         _groupRepository.SaveChanges();
                         TempData["message"] = $"De motivatie van {group.GroupName} werd op Approved gezet.";
                         return RedirectToAction("Index", "Home");

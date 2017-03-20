@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.GroupViewModels;
-using GoedBezigWebApp.Models.MotivationState;
+using GoedBezigWebApp.Models.GroupState;
 using GoedBezigWebApp.Models.Repositories;
 
 namespace GoedBezigWebApp.Controllers
@@ -44,11 +44,11 @@ namespace GoedBezigWebApp.Controllers
 
                     ViewData["GroupViewEditModel"] = new GroupEditViewModel(user.Group);
                     ViewData["MemberOfGroup"] = true;
-                    if (user.Group.MotivationStatus is SubmittedState)
+                    if (user.Group.GroupState is MotivationSubmittedState)
                     {
                         ViewData["GroupSubmitted"] = true;
                     }
-                    if (user.Group.MotivationStatus is ApprovedState)
+                    if (user.Group.GroupState is MotivationApprovedState)
                     {
                         ViewData["GroupSubmitted"] = true;
                         ViewData["GroupApproved"] = true;
