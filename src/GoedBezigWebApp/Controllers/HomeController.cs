@@ -31,9 +31,10 @@ namespace GoedBezigWebApp.Controllers
             ViewData["MemberOfGroup"] = false;
             ViewData["GroupApproved"] = false;
             ViewData["GroupSubmitted"] = false;
+            ViewData["GBOrgAssigned"] = false;
             if (User.Identity.IsAuthenticated)
             {
-                
+
                 User user = _userRepository.GetBy(User.Identity.Name);
                 _userRepository.LoadInvitations(user);
                 if (user.Group != null)
@@ -49,14 +50,20 @@ namespace GoedBezigWebApp.Controllers
                     {
                         ViewData["GroupSubmitted"] = true;
                         ViewData["GroupApproved"] = true;
+
                     }
+                    if (user.Group.GBOrganization != null)
+                    {
+                        ViewData["GBOrgAssigned"] = true;
+                    }
+
                 }
-                if (user.Organization!=null)
+                if (user.Organization != null)
                 {
                     ViewData["MemberOfOrganization"] = true;
                 }
-                
-                
+
+
 
             }
             return View();

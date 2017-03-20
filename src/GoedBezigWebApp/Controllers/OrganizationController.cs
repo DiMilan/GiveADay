@@ -143,7 +143,7 @@ namespace GoedBezigWebApp.Controllers
                 return RedirectToAction("AssignGBLabel", new {id = id, groupId = groupId});
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
 
             //to be implemented
             TempData["message"] = $"TO BE DONE";

@@ -124,7 +124,8 @@ namespace GoedBezigWebApp.Controllers
                         group.MotivationStatus.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
                         group.MotivationStatus.SaveMotivation(groupEditViewModel.Motivation);
                         _groupRepository.SaveChanges();
-
+                        group.GBOrganization = null;//op de een of andere manier zet EF de GB-Organisatie op 1 bij oproepen SaveChanges()...
+                        _groupRepository.SaveChanges();
                         TempData["message"] = $"{username} De groep {group.GroupName} werd succesvol aangemaakt. U kan de groep nog bewerken om zaken aan te passen.";
 
                         //Mail notification to lector

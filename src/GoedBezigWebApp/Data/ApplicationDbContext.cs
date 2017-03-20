@@ -95,10 +95,14 @@ namespace GoedBezigWebApp.Data
 
             g.Property(t => t.Motivation)
                 .HasColumnName("Motivatie")
-                .HasMaxLength(1000);
+                .HasMaxLength(10000);
 
             g.Property(p => p.StateType)
                 .HasColumnName("MotivationStatus");
+
+            g.HasOne(p => p.GBOrganization)
+                .WithMany(a => a.Groups)
+                .IsRequired(false);
 
 
         }

@@ -9,6 +9,7 @@
     bool memberOfGroup = (bool)ViewData["MemberOfGroup"];
     bool groupApproved = (bool) ViewData["GroupApproved"];
     bool groupSubmitted = (bool)ViewData["GroupSubmitted"];
+    bool GBOrgAssigned = (bool) ViewData["GBOrgAssigned"];
     GroupEditViewModel group = (GroupEditViewModel)ViewData["GroupViewEditModel"];
 }
 
@@ -115,6 +116,22 @@ else if (!groupApproved)
             <div class="col-md-4">
                 <a asp-area="" asp-controller="Group" asp-action="Approve" asp-route-id=@group.Name class="btn btn-lg btn-succes btn-block">
                     <span>Approve</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+}
+else if (!GBOrgAssigned)
+{
+    <div class="well">
+        <div class="row">
+            <div class="col-md-8">
+                <p>De Motivatie van Groep @group.Name. werd goedgekeurd. Klik Op"Editeren" om een GB-Label toe te kennen aan een organizatie.</p>
+            </div>
+            <div class="col-md-4">
+                <a asp-area="" asp-controller="Group" asp-action="Edit" asp-route-id=@group.Name class="btn btn-lg btn-default btn-block">
+                    <span>Editeren</span>
                 </a>
             </div>
         </div>

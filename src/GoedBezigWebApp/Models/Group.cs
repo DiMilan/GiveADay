@@ -94,8 +94,8 @@ namespace GoedBezigWebApp.Models
         }
         public Group(string groupName, bool closedGroup) : this()
         {
-            this.GroupName = groupName;
-            this.ClosedGroup = closedGroup;
+            GroupName = groupName;
+            ClosedGroup = closedGroup;
             Timestamp = DateTime.Now;
         }
 
