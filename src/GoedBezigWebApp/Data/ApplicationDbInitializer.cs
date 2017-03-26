@@ -241,12 +241,12 @@ namespace GoedBezigWebApp.Data
             var event2 = new Event("Event2", "Event description", DateTime.Today.AddDays(25));
             var event3 = new Event("Event3", "Event description", DateTime.Today.AddDays(45));
 
-            _context.Activities.Add(activity1);
-            _context.Activities.Add(activity2);
-            _context.Activities.Add(activity3);
-            _context.Activities.Add(event1);
-            _context.Activities.Add(event2);
-            _context.Activities.Add(event3);
+            GroupHoGent1.AddActivity(activity1);
+            GroupHoGent1.AddActivity(activity2);
+            GroupHoGent1.AddActivity(activity3);
+            GroupHoGent1.AddActivity(event1);
+            GroupHoGent1.AddActivity(event2);
+            GroupHoGent1.AddActivity(event3);
 
             _context.SaveChanges();
         }
