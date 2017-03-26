@@ -20,12 +20,10 @@ namespace GoedBezigWebApp.Tests.Controllers
         private readonly GroupController _controller;
         private readonly Mock<IGroupRepository> _groupRepository;
         private readonly Mock<IUserRepository> _userRepository;
-        private readonly Mock<UserManager<User>> _userManager;
         private readonly DummyGoedBezigDbContext _dummyContext;
         private User testUser { get; set; }
         public GroupControllerTest()
         {
-            var _dummyHttpContext = new Mock<HttpContext>();
             
             _dummyContext = new DummyGoedBezigDbContext();
             _groupRepository = new Mock<IGroupRepository>();
@@ -54,9 +52,9 @@ namespace GoedBezigWebApp.Tests.Controllers
 
         #region -- Create GET --
         [Fact]
-        public void CreateMustPassNewBrewerInEditViewModel()
+        public void CreateMustPassNewGroupInEditViewModel()
         {
-            IActionResult action = _controller.Create();
+            IActionResult action = _controller.Create(testUser);
             GroupEditViewModel groupEditViewModelEvm = (action as ViewResult)?.Model as GroupEditViewModel;
             Assert.Equal(null, groupEditViewModelEvm?.Name);
         }
@@ -74,7 +72,7 @@ namespace GoedBezigWebApp.Tests.Controllers
                 Timestamp = new DateTime(2017,02,15,18,52,45)
                         
             });
-            RedirectToActionResult action = _controller.Create(groupEditViewModel) as RedirectToActionResult;
+            RedirectToActionResult action = _controller.Create(groupEditViewModel, testUser) as RedirectToActionResult;
             Assert.Equal("Index", action?.ActionName);
         }
 
@@ -82,9 +80,8 @@ namespace GoedBezigWebApp.Tests.Controllers
         public void CreateCreatesAndPersistsGroupWhenSuccesfull()
         {
             testUser.Organization = new GbOrganization();
-            _userRepository.Setup(p => p.GetBy("testUser")).Returns(testUser);
-            GroupEditViewModel brewerEvm = new GroupEditViewModel(_dummyContext.Test123);
-            _controller.Create(brewerEvm);
+            GroupEditViewModel groupEditViewModel = new GroupEditViewModel(_dummyContext.Test123);
+            _controller.Create(groupEditViewModel, testUser);
             _groupRepository.Verify(m => m.SaveChanges(), Times.Once());
             Assert.True(testUser.Group != null);
         }
@@ -96,7 +93,7 @@ namespace GoedBezigWebApp.Tests.Controllers
             _userRepository.Setup(p => p.GetBy("testUser")).Returns(testUser);
             _groupRepository.Setup(m => m.Present("Test")).Returns(true);
             GroupEditViewModel test = new GroupEditViewModel() {Name = "Test"};
-            _controller.Create(test);
+            _controller.Create(test, testUser);
             Assert.True(test.Name == null);
             Assert.True(testUser.Group == null);
         }

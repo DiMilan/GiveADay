@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models.GroupState;
+using GoedBezigWebApp.Models.UserViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Controllers
@@ -28,11 +29,10 @@ namespace GoedBezigWebApp.Controllers
             _userRepository = userRepository;
             _userManager = userManager;
         }
-
-        public async Task<IActionResult> Index()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Index(User user)
         {
-            var user = await GetCurrentUserAsync();
-
+            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 TempData["error"] = "User not logged in";
@@ -52,9 +52,11 @@ namespace GoedBezigWebApp.Controllers
                 ));
             }
         }
-
-        public IActionResult Edit(string id)
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Edit(string id, User user)
         {
+            _userRepository.LoadInvitations(user);
+            ViewData["User"] = new UserViewModel(user);
             Group group = _groupRepository.GetBy(id);
             _groupRepository.LoadOrganizations(group);
             ViewBag.ExternalOrganization = group.ExternalOrganization;
@@ -67,6 +69,7 @@ namespace GoedBezigWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewData["User"] = new UserViewModel(user);
                 Group group = null;
                 try
                 {
@@ -100,9 +103,10 @@ namespace GoedBezigWebApp.Controllers
             return View(nameof(Edit), groupEditViewModel);
         }
 
-
-        public IActionResult Create()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Create(User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             return View(nameof(Edit), new GroupEditViewModel(new Group()));
         }
 
@@ -111,7 +115,7 @@ namespace GoedBezigWebApp.Controllers
 
         public IActionResult Create(GroupEditViewModel groupEditViewModel, User user)
         {
-
+            ViewData["User"] = new UserViewModel(user);
             if (ModelState.IsValid)
             {
                 try
@@ -155,8 +159,10 @@ namespace GoedBezigWebApp.Controllers
             }
             return View(nameof(Edit), groupEditViewModel);
         }
-        public IActionResult SubmitMotivation(string id)
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult SubmitMotivation(string id, User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             ViewData[nameof(Group.GroupName)] = _groupRepository.GetBy(id).GroupName;
             return View();
         }
@@ -165,13 +171,14 @@ namespace GoedBezigWebApp.Controllers
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult SubmitConfirmed(string id, User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             GroupEditViewModel groupEditViewModel = null;
             Group group = null;
 
             if (ModelState.IsValid)
             {
-                
-                
+
+
                 try
                 {
 
