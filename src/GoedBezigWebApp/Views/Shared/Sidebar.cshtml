@@ -46,6 +46,8 @@
                         <i class="fa fa-building"></i> <span>Organisaties</span>
                     </a>
                 </li>
+                @if (!user.Organization.IsNullOrEmpty())//Alles hieronder wordt pas getoond als de gebruiker is geregistreerd bij een Organisatie
+                {
                 @if (user.Group.IsNullOrEmpty())
                 {
                     <li>
@@ -57,28 +59,30 @@
                         </a>
                     </li>
                 }
-                <li class="active treeview">
-                    <a href="#">
-                        <i class="fa fa-users"></i> <span>Groepen</span>
-                        <span class="pull-right-container">
+                    <li class="active treeview">
+                        <a href="#">
+                            <i class="fa fa-users"></i> <span>Groepen</span>
+                            <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        @if (user.Group.IsNullOrEmpty())
-                        {
-                            <li class="active"><a asp-area="" asp-controller="Group" asp-action="Index"><i class="fa fa-circle-o"></i> Bekijk open groepen</a></li>
-                            <li class="active"><a asp-area="" asp-controller="Group" asp-action="Create"><i class="fa fa-circle-o"></i> Maak een groep aan</a></li>
-                        }
-                        else
-                        {
-                            <li class="active"><a asp-area="" asp-controller="Group" asp-action="Edit" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i> Bewerk groep</a></li>
-                            <li class="active"><a asp-area="" asp-controller="Group" asp-action="SubmitMotivation" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i>Motivatie Indienen</a></li>
-                            <li class="active"><a asp-area="" asp-controller="ActivityEvent" asp-action="Index"><i class="fa fa-circle-o"></i>Evenementen</a></li>
+                        </a>
+                        <ul class="treeview-menu">
+                            @if (user.Group.IsNullOrEmpty())
+                            {
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="Index"><i class="fa fa-circle-o"></i> Bekijk open groepen</a></li>
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="Create"><i class="fa fa-circle-o"></i> Maak een groep aan</a></li>
+                            }
+                            else
+                            {
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="Edit" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i> Bewerk groep</a></li>
+                                <li class="active"><a asp-area="" asp-controller="User" asp-action="Index" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i> Voeg Leden Toe</a></li>
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="SubmitMotivation" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i>Motivatie Indienen</a></li>
+                                <li class="active"><a asp-area="" asp-controller="ActivityEvent" asp-action="Index"><i class="fa fa-circle-o"></i>Evenementen</a></li>
 
-                        }
-                    </ul>
-                </li>
+                            }
+                        </ul>
+                    </li>
+                }
                 @*<li class="treeview">
         <a href="#">
             <i class="fa fa-files-o"></i>
