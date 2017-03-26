@@ -37,7 +37,6 @@ namespace GoedBezigWebApp.Controllers
             {
                 return View("Error");
             }
-            ViewBag.User = user;
             if (user.Group != null) { ViewBag.Group = user.Group.GroupName; }
             return View(_userRepository.GetAll().OrderBy(u => u.FamilyName).ThenBy(u2 => u2.FirstName));
 
