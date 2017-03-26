@@ -89,7 +89,7 @@ namespace GoedBezigWebApp.Controllers
         }
 
         [ServiceFilter(typeof(UserFilter))]
-        public async Task<IActionResult> Register(int id = 0, User user)
+        public async Task<IActionResult> Register(User user, int id = 0)
         {
             ViewData["User"] = new UserViewModel(user);
 
