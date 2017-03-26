@@ -44,7 +44,6 @@ namespace GoedBezigWebApp.Controllers
             ViewData["searchName"] = searchName;
             ViewData["searchLocation"] = searchLocation;
             
-            ViewBag.User = user;
             if (groupId.IsNullOrEmpty() && !isExternalWithLabel && !isExternalWithoutLabel)
             {
                 //Load only gb-orgs

@@ -1,14 +1,17 @@
+@using Castle.Core.Internal
+@using GoedBezigWebApp.Models.UserViewModels
 @model IEnumerable<GoedBezigWebApp.Models.Organization>
 
 @{
     Layout = "~/Views/Shared/_pannel.cshtml";
+    UserViewModel user = (UserViewModel)ViewData["User"];
 }
 
 <h2>@ViewData["title"]</h2>
 <hr />
-@if (ViewBag.User.Organization != null)
+@if (!user.Organization.IsNullOrEmpty())
 {
-    <p class="importantMsg">You are currently part of the Organization "@ViewBag.User.Organization.Name"!</p>
+    <p class="importantMsg">You are currently part of the Organization "@user.Organization"!</p>
 }
 <style>
 
@@ -78,7 +81,7 @@
                 @Html.DisplayFor(modelItem => item.Address.AddressCountry)
             </td>
             <td>
-                @if (ViewBag.User.Organization == null && ViewBag.Group == null && ViewBag.isExternalWithLabel != true && ViewBag.isExternalWithoutLabel != true )
+                @if (user.Organization.IsNullOrEmpty() && ViewBag.Group == null && ViewBag.isExternalWithLabel != true && ViewBag.isExternalWithoutLabel != true )
                 {
                     @Html.ActionLink("Register", "Register", new { id = item.OrgId })
                 }

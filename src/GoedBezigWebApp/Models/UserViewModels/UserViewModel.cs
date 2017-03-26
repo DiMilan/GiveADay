@@ -24,7 +24,7 @@ namespace GoedBezigWebApp.Models.UserViewModels
             NrOfInvitations = user.Invitations.Count;
             Organization = user.Organization!=null ? user.Organization.Name : "";
             Group = user.Group != null ? user.Group.GroupName : "";
-            HasPassword = user.PasswordHash.IsNullOrEmpty() ? false : true;
+            HasPassword = !user.PasswordHash.IsNullOrEmpty();
 
         }
 
