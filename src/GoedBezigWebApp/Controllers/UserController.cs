@@ -19,14 +19,11 @@ namespace GoedBezigWebApp.Controllers
         private readonly IStringLocalizer<HomeController> _localizer;
         private readonly IUserRepository _userRepository;
         private readonly IGroupRepository _groupRepository;
-        private readonly UserManager<User> _userManager;
-
-        public UserController(IUserRepository userRepository, UserManager<User> userManager, IGroupRepository groupRepository, IStringLocalizer<HomeController> localizer)
+        public UserController(IUserRepository userRepository, IGroupRepository groupRepository, IStringLocalizer<HomeController> localizer)
         {
             _userRepository = userRepository;
             _groupRepository = groupRepository;
             _localizer = localizer;
-            _userManager = userManager;
         }
 
         [ServiceFilter(typeof(UserFilter))]
@@ -39,19 +36,19 @@ namespace GoedBezigWebApp.Controllers
             }
             if (user.Group != null) { ViewBag.Group = user.Group.GroupName; }
             return View(_userRepository.GetAll().OrderBy(u => u.FamilyName).ThenBy(u2 => u2.FirstName));
-
-
         }
+
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult InviteUser(String name, User user)
         {
             ViewData["User"] = new UserViewModel(user);
-            _userRepository.LoadInvitations(user);
-            if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName)
-            {
+            // check geeft NullReferenceException op if(_userRepository.GetBy(name).Group == null)
+            // nog uit te zoeken
 
-                try
-                {
+            //if (_userRepository.GetBy(name).Group.Equals(null))
+            //{
+            try
+            {
                     _groupRepository.GetBy(user.Group.GroupName).InviteUser(_userRepository.GetBy(name));
                     //_groupRepository.SaveChanges();
                     TempData["message"] = $"User successfully invited in group!";
@@ -64,15 +61,17 @@ namespace GoedBezigWebApp.Controllers
                     return RedirectToAction("Index");
                 }
 
-            }
-            else {
-                TempData["message"] = $"User already invited in this group!";
-                return RedirectToAction("Index");
-            }
-
-
+            //}
+            //else if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName)
+            //    {
+            //    TempData["message"] = $"User already invited in this group!";
+            //    return RedirectToAction("Index");
+            //}
+            //else
+            //{
+            //    TempData["message"] = $"User already invited in another group!";
+            //    return RedirectToAction("Index");
+            //}
         }
     }
-
-
 }
