@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 85px;
     padding-bottom: 20px;
 }
 
@@ -10,6 +10,32 @@
     padding-right: 15px;
 }
 
+/*navigation*/
+.navbar {
+    z-index: 820;
+}
+.navbar-collapse.collapse.in {
+    z-index: 820;
+}
+
+.sidebar-toggle {
+    padding: .425rem;
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 35px;
+    position: absolute;
+    right: 25px;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+    .main-sidebar {
+        padding-top: 0;
+    }
+}
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
@@ -17,11 +43,11 @@ textarea {
     max-width: 280px;
 }
 
-input.fullWidth,
-select.fullWidth,
-textarea.fullWidth {
-    max-width: 2800px;
-}
+    input.fullWidth,
+    select.fullWidth,
+    textarea.fullWidth {
+        max-width: 2800px;
+    }
 
 /* Carousel */
 .carousel-caption p {
@@ -31,56 +57,59 @@ textarea.fullWidth {
 
 /* buttons and links extension to use brackets: [ click me ] */
 .btn-bracketed::before {
-    display:inline-block;
+    display: inline-block;
     content: "[";
     padding-right: 0.5em;
 }
+
 .btn-bracketed::after {
-    display:inline-block;
+    display: inline-block;
     content: "]";
     padding-left: 0.5em;
 }
 
 /* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"]
-{
+.carousel-inner .item img[src$=".svg"] {
     width: 100%;
 }
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
-  /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
 }
 
 /*well*/
 .well {
-  min-height: 20px;
-  padding: 19px;
-  margin-bottom: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
 }
-.well blockquote {
-  border-color: #ddd;
-  border-color: rgba(0, 0, 0, .15);
-}
+
+    .well blockquote {
+        border-color: #ddd;
+        border-color: rgba(0, 0, 0, .15);
+    }
+
 .well-lg {
-  padding: 24px;
-  border-radius: 6px;
+    padding: 24px;
+    border-radius: 6px;
 }
+
 .well-sm {
-  padding: 9px;
-  border-radius: 3px;
+    padding: 9px;
+    border-radius: 3px;
 }
 
 /* table column fit */
-.table td.fit, 
+.table td.fit,
 .table th.fit {
     white-space: nowrap;
     width: 1%;
@@ -92,4 +121,10 @@ textarea.fullWidth {
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.sidebar-menu {
+    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
 }
