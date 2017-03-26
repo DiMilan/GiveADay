@@ -64,6 +64,7 @@ namespace GoedBezigWebApp
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
 
             //Filters
             services.AddScoped<UserFilter>();
