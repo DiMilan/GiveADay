@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GoedBezigWebApp.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(UserFilter))]
     public class ActivityEventController : Controller
     {
         private readonly IGroupRepository _groupRepository;
@@ -26,17 +27,8 @@ namespace GoedBezigWebApp.Controllers
             _userRepository = userRepository;
             _userManager = userManager;
         }
-        [ServiceFilter(typeof(UserFilter))]
         public IActionResult Index(User user)
         {
-            ViewData["User"] = new UserViewModel(user);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            _userRepository.LoadInvitations(user);
-
             if (user.Group == null)
             {
                 TempData["Error"] = "You are not part of a group yet";
@@ -49,6 +41,11 @@ namespace GoedBezigWebApp.Controllers
             var events = user.Group.GetEvents();
 
             return View(new ActivityEventViewModel(activities, events));
+        }
+
+        public IActionResult Edit(User user, int id)
+        {
+            return View(new EditActivityEventViewModel());
         }
     }
 }

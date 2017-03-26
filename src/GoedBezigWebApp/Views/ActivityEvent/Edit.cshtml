@@ -1,0 +1,30 @@
+@model GoedBezigWebApp.Models.ActivityEventViewModels.EditActivityEventViewModel
+
+@{
+    ViewData["Title"] = Model.Id == null ? "Create Group" : "Edit Group";
+    Layout = "_pannel";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<form>
+    <div class="form-group">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" name="activityType" value="activity" autocomplete="off" checked> Activity
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="activityType" value="event" autocomplete="off"> Event
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" placeholder="Title"/>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" rows="3" placeholder="Description"></textarea>
+    </div>
+</form>
