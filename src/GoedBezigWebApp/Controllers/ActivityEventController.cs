@@ -18,14 +18,12 @@ namespace GoedBezigWebApp.Controllers
     public class ActivityEventController : Controller
     {
         private readonly IGroupRepository _groupRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly UserManager<User> _userManager;
+        private readonly IActivityRepository _activityRepository;
 
-        public ActivityEventController(IGroupRepository groupRepository, IUserRepository userRepository, UserManager<User> userManager)
+        public ActivityEventController(IGroupRepository groupRepository, IActivityRepository activityRepository)
         {
             _groupRepository = groupRepository;
-            _userRepository = userRepository;
-            _userManager = userManager;
+            _activityRepository = activityRepository;
         }
         public IActionResult Index(User user)
         {
@@ -43,9 +41,21 @@ namespace GoedBezigWebApp.Controllers
             return View(new ActivityEventViewModel(activities, events));
         }
 
-        public IActionResult Edit(User user, int id)
+        public IActionResult CreateActivity()
         {
-            return View(new EditActivityEventViewModel());
+            return View("Edit", new EditActivityEventViewModel(EditActivityEventViewModel.ActivityType.Activity));
+        }
+
+        public IActionResult CreateEvent()
+        {
+            return View("Edit", new EditActivityEventViewModel(EditActivityEventViewModel.ActivityType.Event));
+        }
+
+        public IActionResult Edit(int id)
+        {
+                var activity = _activityRepository.GetById(id);
+                return View(new EditActivityEventViewModel(activity));
+
         }
     }
 }
