@@ -46,14 +46,17 @@
                         <i class="fa fa-building"></i> <span>Organisaties</span>
                     </a>
                 </li>
-                <li>
-                    <a asp-area="" asp-controller="Invitation" asp-action="Index">
-                        <i class="fa fa-exchange"></i> <span>Uitnodigingen</span>
-                        <span class="pull-right-container">
+                @if (user.Group.IsNullOrEmpty())
+                {
+                    <li>
+                        <a asp-area="" asp-controller="Invitation" asp-action="Index">
+                            <i class="fa fa-exchange"></i> <span>Uitnodigingen</span>
+                            <span class="pull-right-container">
                         <small class="label pull-right bg-green">@user.NrOfInvitations</small>
                     </span>
-                    </a>
-                </li>
+                        </a>
+                    </li>
+                }
                 <li class="active treeview">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Groepen</span>

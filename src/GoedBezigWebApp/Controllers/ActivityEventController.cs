@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.ActivityEventViewModels;
 using GoedBezigWebApp.Models.Repositories;
+using GoedBezigWebApp.Models.UserViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +26,10 @@ namespace GoedBezigWebApp.Controllers
             _userRepository = userRepository;
             _userManager = userManager;
         }
-
-        public async Task<IActionResult> Index()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Index(User user)
         {
-            var user = await GetCurrentUserAsync();
-
+            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -48,10 +49,6 @@ namespace GoedBezigWebApp.Controllers
             var events = user.Group.GetEvents();
 
             return View(new ActivityEventViewModel(activities, events));
-        }
-        private async Task<User> GetCurrentUserAsync()
-        {
-            return await _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

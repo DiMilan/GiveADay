@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 85px;
+    padding-top: 75px;
     padding-bottom: 20px;
 }
 
@@ -8,6 +8,10 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.content-wrapper, .right-side {
+    background-color: white;
 }
 
 /*navigation*/
@@ -30,6 +34,10 @@
     z-index: 1;
     border-radius: 5px;
 }
+
+.main-sidebar {
+        padding-top: 15px;
+    }
 
 @media (max-width: 767px) {
     .main-sidebar {

@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
+using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
+using GoedBezigWebApp.Models.UserViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +22,10 @@ namespace GoedBezigWebApp.Controllers
             _userManager = userManager;
             _userRepository = userRepository;
         }
-
-        public async Task<IActionResult> Index()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Index(User user)
         {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
 
             if (user == null)
             {
@@ -35,11 +37,10 @@ namespace GoedBezigWebApp.Controllers
                 return View(user.GetPendingInvitations());
             }
         }
-
-        public async Task<IActionResult> Accept(string id)
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Accept(string id, User user)
         {
-            var user = await GetCurrentUserAsync();
-
+            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 TempData["error"] = "User not logged in";
@@ -62,11 +63,10 @@ namespace GoedBezigWebApp.Controllers
             return RedirectToAction("Index");
         }
 
-        
-        public async Task<IActionResult> Decline(string id)
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Decline(string id, User user)
         {
-            var user = await GetCurrentUserAsync();
-
+            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 TempData["error"] = "User not logged in";
@@ -89,11 +89,5 @@ namespace GoedBezigWebApp.Controllers
             return RedirectToAction("Index");
         }
 
-        private async Task<User> GetCurrentUserAsync()
-        {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            _userRepository.LoadInvitations(user);
-            return user;
-        }
     }
 }

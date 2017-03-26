@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using GoedBezigWebApp.Models;
 using System.Threading.Tasks;
 using System;
+using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models.Exceptions;
+using GoedBezigWebApp.Models.UserViewModels;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -27,10 +29,10 @@ namespace GoedBezigWebApp.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult Index(User user)
         {
-            var user = await GetCurrentUserAsync();
-
+            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 return View("Error");
@@ -41,16 +43,10 @@ namespace GoedBezigWebApp.Controllers
 
 
         }
-
-        private async Task<User> GetCurrentUserAsync()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult InviteUser(String name, User user)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            _userRepository.LoadInvitations(user);
-            return user;
-        }
-        public async Task<IActionResult> InviteUser(String name)
-        {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
             _userRepository.LoadInvitations(user);
             if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName)
             {

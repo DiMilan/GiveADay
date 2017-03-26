@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
+using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.Repositories;
+using GoedBezigWebApp.Models.UserViewModels;
 using GoedBezigWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -29,9 +31,10 @@ namespace GoedBezigWebApp.Controllers
             _groupRepository = groupRepository;
         }
 
-        public async Task<IActionResult> Index(String searchName, String searchLocation, bool isExternalWithLabel, bool isExternalWithoutLabel, string groupId)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> Index(String searchName, String searchLocation, bool isExternalWithLabel, bool isExternalWithoutLabel, string groupId, User user)
         {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
 
             if (user == null)
             {
@@ -85,9 +88,10 @@ namespace GoedBezigWebApp.Controllers
 
         }
 
-        public async Task<IActionResult> Register(int id = 0)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> Register(int id = 0, User user)
         {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
 
             if (user == null || id == 0)
             {
@@ -108,16 +112,10 @@ namespace GoedBezigWebApp.Controllers
             }
         }
 
-        private async Task<User> GetCurrentUserAsync()
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> AssignGBLabel(int id, string groupId, User user)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            _userRepository.LoadGbOrganization(user);
-            return user;
-        }
-
-        public async Task<IActionResult> AssignGBLabel(int id, string groupId)
-        {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
 
             if (user == null || id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
             {
@@ -131,10 +129,11 @@ namespace GoedBezigWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignGBLabel(int id, string groupId, List<ContactRecord> notifyContacts)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> AssignGBLabel(int id, string groupId, List<ContactRecord> notifyContacts, User user)
         {
-            var user = await GetCurrentUserAsync();
-            
+            ViewData["User"] = new UserViewModel(user);
+
 
             if (user == null || id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
             {
