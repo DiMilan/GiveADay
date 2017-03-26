@@ -1,11 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using GoedBezigWebApp.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.ManageViewModels;
+using GoedBezigWebApp.Models.Repositories;
+using GoedBezigWebApp.Models.UserViewModels;
 using GoedBezigWebApp.Services;
 
 namespace GoedBezigWebApp.Controllers
@@ -18,59 +21,71 @@ namespace GoedBezigWebApp.Controllers
         public IEmailSender EmailSender { get; }
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IUserRepository _userRepository;
 
         public ManageController(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        IUserRepository userRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             EmailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _userRepository = userRepository;
         }
 
         //
         // GET: /Manage/Index
         [HttpGet]
-        public async Task<IActionResult> Index(ManageMessageId? message = null)
+        [ServiceFilter(typeof(UserFilter))]
+        public ViewResult Index(User user, ManageMessageId? message = null)
         {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
-
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 return View("Error");
             }
-            var model = new IndexViewModel
+            UserViewModel userViewModel = new UserViewModel(user);
+            return View("Index", userViewModel);
+        }
+
+        //
+        //POST: /Manage/Index
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult UpdateProfile(UserViewModel userViewModel, User user)
+        {
+            if (!ModelState.IsValid)
             {
-                HasPassword = await _userManager.HasPasswordAsync(user),
-                PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
-                TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
-                Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
-            };
-            return View(model);
+                return View(userViewModel);
+            }
+            if (user == null)
+            {
+                return View("Error");
+            }
+            ViewData["User"] = new UserViewModel(user);
+            user.FirstName = userViewModel.FirstName;
+            user.FamilyName = userViewModel.FamilyName;
+            user.UserName = userViewModel.Username;
+            _userRepository.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel account)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel account, User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             ManageMessageId? message = ManageMessageId.Error;
-            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
@@ -85,8 +100,10 @@ namespace GoedBezigWebApp.Controllers
 
         //
         // GET: /Manage/AddPhoneNumber
-        public IActionResult AddPhoneNumber()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult AddPhoneNumber(User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             return View();
         }
 
@@ -94,14 +111,15 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/AddPhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model, User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
             // Generate the token and send it
-            var user = await GetCurrentUserAsync();
             if (user == null)
             {
                 return View("Error");
@@ -115,9 +133,10 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/EnableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EnableTwoFactorAuthentication()
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> EnableTwoFactorAuthentication(User user)
         {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
             if (user != null)
             {
                 await _userManager.SetTwoFactorEnabledAsync(user, true);
@@ -131,9 +150,10 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/DisableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DisableTwoFactorAuthentication()
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> DisableTwoFactorAuthentication(User user)
         {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
             if (user != null)
             {
                 await _userManager.SetTwoFactorEnabledAsync(user, false);
@@ -146,9 +166,10 @@ namespace GoedBezigWebApp.Controllers
         //
         // GET: /Manage/VerifyPhoneNumber
         [HttpGet]
-        public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber, User user)
         {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 return View("Error");
@@ -162,13 +183,14 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/VerifyPhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model, User user)
         {
+           ViewData["User"] = new UserViewModel(user);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.ChangePhoneNumberAsync(user, model.PhoneNumber, model.Code);
@@ -187,9 +209,10 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/RemovePhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemovePhoneNumber()
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> RemovePhoneNumber(User user)
         {
-            var user = await GetCurrentUserAsync();
+            ViewData["User"] = new UserViewModel(user);
             if (user != null)
             {
                 var result = await _userManager.SetPhoneNumberAsync(user, null);
@@ -205,8 +228,10 @@ namespace GoedBezigWebApp.Controllers
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
-        public IActionResult ChangePassword()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult ChangePassword(User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             return View();
         }
 
@@ -214,13 +239,14 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
@@ -239,8 +265,10 @@ namespace GoedBezigWebApp.Controllers
         //
         // GET: /Manage/SetPassword
         [HttpGet]
-        public IActionResult SetPassword()
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult SetPassword(User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             return View();
         }
 
@@ -248,14 +276,14 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/SetPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> SetPassword(SetPasswordViewModel model, User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 var result = await _userManager.AddPasswordAsync(user, model.NewPassword);
@@ -272,14 +300,15 @@ namespace GoedBezigWebApp.Controllers
 
         //GET: /Manage/ManageLogins
         [HttpGet]
-        public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<IActionResult> ManageLogins(User user, ManageMessageId? message = null)
         {
+            ViewData["User"] = new UserViewModel(user);
             ViewData["StatusMessage"] =
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
-            var user = await GetCurrentUserAsync();
             if (user == null)
             {
                 return View("Error");
@@ -298,8 +327,10 @@ namespace GoedBezigWebApp.Controllers
         // POST: /Manage/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult LinkLogin(string provider)
+        [ServiceFilter(typeof(UserFilter))]
+        public IActionResult LinkLogin(string provider, User user)
         {
+            ViewData["User"] = new UserViewModel(user);
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Action("LinkLoginCallback", "Manage");
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
@@ -309,13 +340,15 @@ namespace GoedBezigWebApp.Controllers
         //
         // GET: /Manage/LinkLoginCallback
         [HttpGet]
-        public async Task<ActionResult> LinkLoginCallback()
+        [ServiceFilter(typeof(UserFilter))]
+        public async Task<ActionResult> LinkLoginCallback(User user)
         {
-            var user = await GetCurrentUserAsync();
+            
             if (user == null)
             {
                 return View("Error");
             }
+            ViewData["User"] = new UserViewModel(user);
             var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
             if (info == null)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 
 namespace GoedBezigWebApp.Models.UserViewModels
 {
@@ -13,6 +14,7 @@ namespace GoedBezigWebApp.Models.UserViewModels
         public string Organization { get; set; }
         public string Group { get; set; }
         public int NrOfInvitations{ get; set; }
+        public bool HasPassword { get; set; }
 
         public UserViewModel(User user)
         {
@@ -22,6 +24,7 @@ namespace GoedBezigWebApp.Models.UserViewModels
             NrOfInvitations = user.Invitations.Count;
             Organization = user.Organization!=null ? user.Organization.Name : "";
             Group = user.Group != null ? user.Group.GroupName : "";
+            HasPassword = user.PasswordHash.IsNullOrEmpty() ? false : true;
 
         }
 
