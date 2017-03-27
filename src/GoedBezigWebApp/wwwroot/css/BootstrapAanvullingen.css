@@ -1,4 +1,11 @@
-﻿.panel {
+﻿@font-face {
+  font-family: 'Glyphicons Halflings';
+
+  src: url('../lib/bootstrap/dist/fonts/glyphicons-halflings-regular.eot');
+  src: url('../lib/bootstrap/dist/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../lib/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../lib/bootstrap/dist/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.panel {
     margin-bottom: 20px;
     background-color: #fff;
     border: 1px solid transparent;

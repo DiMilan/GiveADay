@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GoedBezigWebApp.Models.Repositories
 {
-    interface IActivityTaskRepository
+    public interface IActivityTaskRepository
     {
         ActivityTask GetBy(int id);
         IEnumerable<ActivityTask> GetAll();
