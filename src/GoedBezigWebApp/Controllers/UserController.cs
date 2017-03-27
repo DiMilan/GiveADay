@@ -34,20 +34,26 @@ namespace GoedBezigWebApp.Controllers
             {
                 return View("Error");
             }
-            if (user.Group != null) { ViewBag.Group = user.Group.GroupName; }
-            return View(_userRepository.GetAll().OrderBy(u => u.FamilyName).ThenBy(u2 => u2.FirstName));
+            if (user.Group != null) {
+                ViewBag.Group = user.Group.GroupName;
+                ViewBag.Org = user.Organization.Name;
+            }
+            return View(_userRepository.GetAll()
+                
+                .Where(u => u.Organization != null)
+                .Where(u2 => u2.Organization.Name == user.Organization.Name)
+                .OrderBy(uf => uf.FamilyName)
+                .ThenBy(uv => uv.FirstName));
         }
 
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult InviteUser(String name, User user)
         {
             ViewData["User"] = new UserViewModel(user);
-            // check geeft NullReferenceException op if(_userRepository.GetBy(name).Group == null)
-            // nog uit te zoeken
-
-            //if (_userRepository.GetBy(name).Group.Equals(null))
-            //{
-            try
+            // check om te zien of de user nog niet in een groep is ingeschreven
+            if (_userRepository.GetBy(name)!=null && _userRepository.GetBy(name).Group==null)
+            {
+                try
             {
                     _groupRepository.GetBy(user.Group.GroupName).InviteUser(_userRepository.GetBy(name));
                     //_groupRepository.SaveChanges();
@@ -61,17 +67,17 @@ namespace GoedBezigWebApp.Controllers
                     return RedirectToAction("Index");
                 }
 
-            //}
-            //else if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName)
-            //    {
-            //    TempData["message"] = $"User already invited in this group!";
-            //    return RedirectToAction("Index");
-            //}
-            //else
-            //{
-            //    TempData["message"] = $"User already invited in another group!";
-            //    return RedirectToAction("Index");
-            //}
+            }
+            else if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName)
+            {
+                TempData["error"] = $"User already invited in this group!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["error"] = $"User already invited in another group!";
+                return RedirectToAction("Index");
+            }
         }
     }
 }

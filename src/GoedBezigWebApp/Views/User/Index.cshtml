@@ -12,7 +12,7 @@
 
 @if (ViewBag.Group != null)
 {
-<p>@Localizer["Member of group:"] @ViewBag.Group</p>
+<p>@Localizer["Member of group:"] <b>@ViewBag.Group</b> @Localizer["Organization"] <b>@ViewBag.Org</b></p>
 <p>@Localizer["click to invite"]</p>
 }
 <p>

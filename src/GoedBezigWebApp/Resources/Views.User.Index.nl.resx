@@ -141,4 +141,7 @@
   <data name="Username" xml:space="preserve">
     <value>Naam Gebruiker</value>
   </data>
+  <data name="Organization" xml:space="preserve">
+    <value>die behoort tot de organisatie: </value>
+  </data>
 </root>
