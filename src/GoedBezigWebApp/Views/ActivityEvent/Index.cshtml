@@ -5,89 +5,105 @@
 @model GoedBezigWebApp.Models.ActivityEventViewModels.ActivityEventViewModel
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_pannel.cshtml";
+    ViewData["Title"] = "Activities & Events";
+    Layout = "_pannel";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <div>
-                <h4>Activities</h4>
+            <div class="container-fluid">
+                <div class="row">
+                    <h4>Activities <a asp-action="Create" asp-route-id="Activity" class="btn btn-default pull-right"><span class="fa fa-plus"></span> New</a></h4>
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="panel-group" id="activityAccordion" role="tablist" aria-multiselectable="true">
+                        @foreach (var item in Model.Activities)
+                        {
+                            var headingId = "headingActivity" + item.Id;
+                            var collapseId = "collapseActivity" + item.Id;
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="@headingId">
+                                    <a role="button" class="no-hover accordion-header" data-toggle="collapse" data-parent="#activityAccordion" href="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                        <h4 class="panel-title">
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                            <span class="pull-right cursor-pointer">
+                                                @if (item.Accepted)
+                                                {
+                                                    <span class="text-success fa fa-check" data-toggle="tooltip" title="Accepted"></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-info fa fa-clock-o" data-toggle="tooltip" title="Pending"></span>
+                                                }
+                                            </span>
+                                        </h4>
+                                    </a>
+                                </div>
+                                <div id="@collapseId" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@headingId">
+                                    <div class="panel-body">
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="fa fa-pencil btn-link-clean pull-right"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
-            <a asp-action="CreateActivity" class="btn btn-default"><span class="fa fa-plus"></span> New</a>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th class="fit" />
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Activities)
-                    {
-                        <tr class="cursor-pointer" onclick="location.href = '@(Url.Action("Edit", new { id = item.Id }))'">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Title)
-                            </td>
-                            <td>
-                                @if (item.Accepted)
-                                {
-                                    <span class="text-success fa fa-check cursor-default" data-toggle="tooltip" title="Accepted"></span>
-                                }
-                                else
-                                {
-                                    <span class="text-info fa fa-clock-o cursor-default" data-toggle="tooltip" title="Pending"></span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
         </div>
         <div class="col-md-6">
-            <div>
-                <h4>Events</h4>
+            <div class="container-fluid">
+                <div class="row">
+                    <h4>Events <a asp-action="Create" asp-route-id="Event" class="btn btn-default pull-right"><span class="fa fa-plus"></span> New</a></h4>
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="panel-group" id="eventAccordion" role="tablist" aria-multiselectable="true">
+                        @foreach (var item in Model.Events)
+                        {
+                            var headingId = "headingEvent" + item.Id;
+                            var collapseId = "collapseEvent" + item.Id;
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="@headingId">
+                                    <a role="button" class="no-hover accordion-header" data-toggle="collapse" data-parent="#eventAccordion" href="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                        <h4 class="panel-title">
+                                            <span class="label label-info">@Html.DisplayFor(modelItem => item.Date)</span>
+                                            <span> @Html.DisplayFor(modelItem => item.Title)</span>
+                                            <span class="pull-right cursor-pointer">
+                                                @if (item.Accepted)
+                                                {
+                                                    <span class="text-success fa fa-check" data-toggle="tooltip" title="Accepted"></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-info fa fa-clock-o" data-toggle="tooltip" title="Pending"></span>
+                                                }
+                                            </span>
+                                        </h4>
+                                    </a>
+                                </div>
+                                <div id="@collapseId" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@headingId">
+                                    <div class="panel-body">
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="fa fa-pencil btn-link-clean pull-right"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
-            <a asp-action="CreateEvent" class="btn btn-default"><span class="fa fa-plus"></span> New</a>
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Date
-                        </th>
-                        <th class="fit" />
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Events)
-                    {
-                        <tr class="cursor-pointer" onclick="location.href = '@(Url.Action("Edit", new { id = item.Id }))'">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Title)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Date)
-                            </td>
-                            <td>
-                                @if (item.Accepted)
-                                {
-                                    <span class="text-success fa fa-check" data-toggle="tooltip" title="Accepted"></span>
-                                }
-                                else
-                                {
-                                    <span class="text-info fa fa-clock-o" data-toggle="tooltip" title="Pending"></span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
+
+@section scripts
+{
+    <script>
+
+    </script>
+}

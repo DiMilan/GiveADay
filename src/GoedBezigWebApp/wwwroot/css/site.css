@@ -137,3 +137,31 @@ textarea {
     font-weight: 400;
     font-size: 1rem;
 }
+
+a.no-hover:hover,
+a.no-hover:focus {
+    text-decoration: none;
+}
+
+a.accordion-header,
+a.accordion-header:hover,
+a.accordion-header:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+a.btn-link-clean,
+a.btn-link-clean:hover,
+a.btn-link-clean:visited {
+    color: #333;
+    text-decoration: none;
+}
+
+a.btn-link-clean,
+a.btn-link-clean:visited {
+    opacity: 0.6;
+}
+
+a.btn-link-clean:hover {
+    opacity: 1;
+}
