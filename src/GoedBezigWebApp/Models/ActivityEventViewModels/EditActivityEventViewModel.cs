@@ -14,7 +14,13 @@ namespace GoedBezigWebApp.Models.ActivityEventViewModels
         public string Title { get; set; }
         [Required(ErrorMessage = "You need to supply a description")]
         public string Description { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? Date { get; set; }
+
+        public EditActivityEventViewModel()
+        {
+        }
 
         public EditActivityEventViewModel(ActivityType type)
         {

@@ -47,14 +47,14 @@ namespace GoedBezigWebApp.Controllers
         }
 
         [ServiceFilter(typeof(UserFilter))]
-        public IActionResult InviteUser(String name, User user)
+        public IActionResult InviteUser(User user, String name="")
         {
             ViewData["User"] = new UserViewModel(user);
             // check om te zien of de user nog niet in een groep is ingeschreven
-            if (_userRepository.GetBy(name)!=null && _userRepository.GetBy(name).Group==null)
+            if (_userRepository.GetBy(name) != null && _userRepository.GetBy(name).Group == null)
             {
                 try
-            {
+                {
                     _groupRepository.GetBy(user.Group.GroupName).InviteUser(_userRepository.GetBy(name));
                     //_groupRepository.SaveChanges();
                     TempData["message"] = $"User successfully invited in group!";
@@ -68,14 +68,16 @@ namespace GoedBezigWebApp.Controllers
                 }
 
             }
-            else if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName)
+            else if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName 
+               // ||_userRepository.GetBy(name).Invitations.Contains(_groupRepository.GetBy(_userRepository.GetBy(name).Group.GroupName)
+                )
             {
-                TempData["error"] = $"User already invited in this group!";
+                TempData["error"] = $"User already member of this group!";
                 return RedirectToAction("Index");
             }
             else
             {
-                TempData["error"] = $"User already invited in another group!";
+                TempData["error"] = $"User already member of another group!";
                 return RedirectToAction("Index");
             }
         }
