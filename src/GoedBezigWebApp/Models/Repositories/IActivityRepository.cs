@@ -8,5 +8,6 @@ namespace GoedBezigWebApp.Models.Repositories
     public interface IActivityRepository
     {
         Activity GetById(int id);
+        void SaveChanges();
     }
 }

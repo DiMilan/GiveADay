@@ -20,5 +20,10 @@ namespace GoedBezigWebApp.Data.Repositories
         {
             return _context.Activities.FirstOrDefault(a => a.Id == id);
         }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
     }
 }
