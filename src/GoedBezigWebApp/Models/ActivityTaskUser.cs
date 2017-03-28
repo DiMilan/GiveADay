@@ -12,6 +12,10 @@ namespace GoedBezigWebApp.Models
         public int ActivityTaskId { get; set; }
         public ActivityTask ActivityTask { get; set; }
 
+        public ActivityTaskUser()
+        {
+        }
+
         public ActivityTaskUser(User user, ActivityTask activityTask)
         {
             

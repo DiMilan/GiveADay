@@ -25,7 +25,10 @@ namespace GoedBezigWebApp.Data
             EnsureSeedGroups();
             EnsureSeedInvitations();
             EnsureSeedActivities();
+            EnsureSeedActivityTasks();
         }
+
+       
 
         private void EnsureSeedOrganizations()
         {
@@ -247,6 +250,15 @@ namespace GoedBezigWebApp.Data
             GroupHoGent1.AddActivity(event1);
             GroupHoGent1.AddActivity(event2);
             GroupHoGent1.AddActivity(event3);
+            List<ActivityTaskUser> atu = new List<ActivityTaskUser>();
+
+            List<User> users = new List<User>();
+            users.Add(UserTest);
+            users.Add(UserBart);
+            users.Add(UserCursist);
+            ActivityTask task2 = new ActivityTask("test123", users, DateTime.Now, DateTime.MaxValue, activity1, TaskState.InProgress);
+            GroupHoGent1.InitiateTaskList();
+            GroupHoGent1.TaskList.Add(task2);
 
             _context.SaveChanges();
         }
@@ -297,6 +309,11 @@ namespace GoedBezigWebApp.Data
             UserTom.Organization = HoGent;
 
             await _context.SaveChangesAsync();
+        }
+
+         private void EnsureSeedActivityTasks()
+        {
+            
         }
 
         #region UserData

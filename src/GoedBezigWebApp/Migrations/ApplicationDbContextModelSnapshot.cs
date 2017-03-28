@@ -109,8 +109,6 @@ namespace GoedBezigWebApp.Migrations
 
                     b.Property<string>("CompanyWebsite");
 
-                    b.Property<int?>("ExternalOrganizationOrgId");
-
                     b.Property<int?>("GBOrganizationOrgId");
 
                     b.Property<string>("Motivation")
@@ -124,8 +122,6 @@ namespace GoedBezigWebApp.Migrations
                         .HasColumnName("CreationTime");
 
                     b.HasKey("GroupName");
-
-                    b.HasIndex("ExternalOrganizationOrgId");
 
                     b.HasIndex("GBOrganizationOrgId");
 
@@ -541,10 +537,6 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.ExternalOrganization", "ExternalOrganization")
-                        .WithMany()
-                        .HasForeignKey("ExternalOrganizationOrgId");
-
                     b.HasOne("GoedBezigWebApp.Models.GBOrganization", "GbOrganization")
                         .WithMany("Groups")
                         .HasForeignKey("GBOrganizationOrgId");

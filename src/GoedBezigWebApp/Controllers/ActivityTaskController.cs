@@ -28,8 +28,10 @@ namespace GoedBezigWebApp.Controllers
             {
                 return View("Error");
             }
+            IEnumerable<ActivityTask> tasks = _activityTaskRepository.GetAll().OrderBy(d => d.FromDateTime);
+                //.Where(a => user.Group.Activities.Contains(a.Activity));
 
-            return View();
+            return View(tasks);
         }
     }
 }
