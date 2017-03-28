@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using GoedBezigWebApp.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Org.BouncyCastle.Crypto.Tls;
 
 namespace GoedBezigWebApp.Data
 {
@@ -230,7 +231,7 @@ namespace GoedBezigWebApp.Data
         private void MapActivityTasks(EntityTypeBuilder<ActivityTask> at)
         {
             at.HasKey(k => k.Id);
-            at.Property(p => p.Id).ValueGeneratedOnAdd();
+            //at.Property(p => p.Id).ValueGeneratedOnAdd();
 
             at.Property(p => p.Description)
                 .IsRequired()
@@ -248,6 +249,10 @@ namespace GoedBezigWebApp.Data
                 .WithMany()
                 .HasForeignKey(e => e.Id)
                 .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            at.HasMany(a => a.ActivityTaskUsers)
+                .WithOne(a => a.ActivityTask)
                 .IsRequired();
 
         }

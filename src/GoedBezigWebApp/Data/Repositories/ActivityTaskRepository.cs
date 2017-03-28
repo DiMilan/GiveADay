@@ -26,7 +26,7 @@ namespace GoedBezigWebApp.Data.Repositories
 
         public IEnumerable<ActivityTask> GetAll()
         {
-            return _activityTasks.ToList();
+            return _activityTasks.Include(a => a.ActivityTaskUsers).ThenInclude(u => u.User).ToList();
         }
 
         public void Add(ActivityTask activityTask)

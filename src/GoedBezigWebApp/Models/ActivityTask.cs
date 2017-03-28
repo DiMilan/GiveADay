@@ -14,7 +14,15 @@ namespace GoedBezigWebApp.Models
         public ICollection<ActivityTaskUser> ActivityTaskUsers { get; set; }
         public ICollection<User> Users
         {
-            get { return ActivityTaskUsers.Select(i => i.User).ToList(); }
+            get
+            {
+                ICollection<User> users = new List<User>();
+                foreach (ActivityTaskUser atu in ActivityTaskUsers)
+                {
+                    users.Add(atu.User);
+                }
+                return users;
+            }
         }
         public DateTime FromDateTime { get; set; }
         public DateTime ToDateTime { get; set; }
@@ -22,15 +30,20 @@ namespace GoedBezigWebApp.Models
         public TaskState CurrentState { get; set; }
         public  string Remarks { get; set; }
 
-
-        public ActivityTask(string description, ICollection<User> users, Event activityEvent, TaskState currentState) :
-            this(description, users, DateTime.MaxValue, DateTime.MaxValue, activityEvent, currentState)
+        public ActivityTask()
         {
         }
 
-        public ActivityTask(string description, ICollection<User> users, DateTime fromDateTime, DateTime toDateTime, Event activityEvent, TaskState currentState)
+        public ActivityTask(string description, ICollection<User> users, Activity activityEvent, TaskState currentState) :
+            this(description, users, DateTime.MaxValue, DateTime.MaxValue, activityEvent, currentState)
+        {
+            
+        }
+
+        public ActivityTask(string description, ICollection<User> users, DateTime fromDateTime, DateTime toDateTime, Activity activityEvent, TaskState currentState)
         {
             Description = description;
+            ActivityTaskUsers = new List<ActivityTaskUser>();
             foreach (User user in users)
             {
                 ActivityTaskUsers.Add(new ActivityTaskUser(user, this));
