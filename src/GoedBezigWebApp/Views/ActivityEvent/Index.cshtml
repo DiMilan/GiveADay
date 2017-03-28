@@ -45,7 +45,7 @@
                                 <div id="@collapseId" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@headingId">
                                     <div class="panel-body">
                                         @Html.DisplayFor(modelItem => item.Description)
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="fa fa-pencil btn-link-clean pull-right"></a>
+                                        <a asp-action="EditActivity" asp-route-id="@item.Id" class="fa fa-pencil btn-link-clean pull-right"></a>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                                 <div id="@collapseId" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@headingId">
                                     <div class="panel-body">
                                         @Html.DisplayFor(modelItem => item.Description)
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="fa fa-pencil btn-link-clean pull-right"></a>
+                                        <a asp-action="EditEvent" asp-route-id="@item.Id" class="fa fa-pencil btn-link-clean pull-right"></a>
                                     </div>
                                 </div>
                             </div>

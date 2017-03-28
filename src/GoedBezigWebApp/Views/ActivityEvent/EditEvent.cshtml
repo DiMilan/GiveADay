@@ -1,10 +1,11 @@
 @using GoedBezigWebApp.Models.ActivityEventViewModels
-@model GoedBezigWebApp.Models.ActivityEventViewModels.EditActivityEventViewModel
+@model GoedBezigWebApp.Models.ActivityEventViewModels.EditEventViewModel
 
 @{
     var action = Model.IsNew() ? "Create" : "Edit";
-    ViewData["Title"] = action + " " + Model.GetTypeName();
+    ViewData["Title"] = action + " Event";
     Layout = "_pannel";
+    action += "Event";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -21,19 +22,16 @@
         <textarea class="form-control" id="Description" asp-for="Description" rows="3" required></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-    @if (Model.Type == EditActivityEventViewModel.ActivityType.Event)
-    {
-        <div class="form-group">
-            <label for="Date">Date</label>
-            <div class="input-group date">
-                <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                </div>
-                <input type="date" class="form-control pull-right" id="Date" asp-for="Date" placeholder="Date" required />
-                <span asp-validation-for="Date" class="text-danger"></span>
+    <div class="form-group">
+        <label for="Date">Date</label>
+        <div class="input-group date">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
             </div>
+            <input type="text" class="form-control pull-right" id="Date" asp-for="Date" required pattern="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d" />
+            <span asp-validation-for="Date" class="text-danger"></span>
         </div>
-    }
+    </div>
     <div class="row">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Save" class="btn btn-default" />
@@ -45,7 +43,7 @@
 {
     <script>
         $(document).ready(function () {
-            $("#Date").datepicker({ format: 'dd/MM/yyyy', autoclose: true, todayBtn: 'linked' });
+            $("#Date").datepicker({ format: 'dd/mm/yyyy', autoclose: true, todayBtn: 'linked' });
         });
     </script>
 }

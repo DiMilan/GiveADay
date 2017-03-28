@@ -1,0 +1,30 @@
+@using GoedBezigWebApp.Models.ActivityEventViewModels
+@model GoedBezigWebApp.Models.ActivityEventViewModels.EditActivityViewModel
+
+@{
+    var action = Model.IsNew() ? "Create" : "Edit";
+    ViewData["Title"] = action + " Activity";
+    Layout = "_pannel";
+    action += "Activity";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<form asp-action="@action">
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" class="form-control" id="Title" asp-for="Title" required />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea class="form-control" id="Description" asp-for="Description" rows="3" required></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</form>

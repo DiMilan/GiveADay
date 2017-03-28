@@ -43,72 +43,81 @@ namespace GoedBezigWebApp.Controllers
 
         public IActionResult CreateActivity()
         {
-            return RedirectToAction("Create", EditActivityEventViewModel.ActivityType.Activity);
+            return View("EditActivity", new EditActivityViewModel());
         }
 
         public IActionResult CreateEvent()
         {
-            return RedirectToAction("Create", EditActivityEventViewModel.ActivityType.Event);
-        }
-
-        public IActionResult Create(EditActivityEventViewModel.ActivityType type)
-        {
-            return View("Edit", new EditActivityEventViewModel(type));
-        }
-
-        public IActionResult Edit(int id)
-        {
-            var activity = _activityRepository.GetById(id);
-            return View(new EditActivityEventViewModel(activity));
+            return View("EditEvent", new EditEventViewModel());
         }
 
         [HttpPost]
-        public IActionResult Create(EditActivityEventViewModel model, User user)
+        public IActionResult CreateActivity(EditActivityViewModel model, User user)
         {
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "The form contains some errors";
-                return View("Edit", model);
+                return View("EditActivity", model);
             }
 
+            var activity = new Activity
+            {
+                Title = model.Title,
+                Description = model.Description
+            };
+
+            return Create(activity, user);
+        }
+
+        [HttpPost]
+        public IActionResult CreateEvent(EditEventViewModel model, User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "The form contains some errors";
+                return View("EditEvent", model);
+            }
+
+            var @event = new Event
+            {
+                Title = model.Title,
+                Description = model.Description,
+                Date = model.Date ?? DateTime.Today
+            };
+
+            return Create(@event, user);
+        }
+
+        private IActionResult Create(Activity activity, User user)
+        {
             var group = GetGroup(user);
 
-            if (model.Type == EditActivityEventViewModel.ActivityType.Activity)
-            {
-
-                var activity = new Activity
-                {
-                    Title = model.Title,
-                    Description = model.Description
-                };
-
-
-                group.AddActivity(activity);
-            }
-            else
-            {
-                var @event = new Event
-                {
-                    Title = model.Title,
-                    Description = model.Description,
-                    Date = model.Date as DateTime? ?? DateTime.Today // Not really that pretty
-                };
-
-                group.AddActivity(@event);
-            }
+            group.AddActivity(activity);
 
             _groupRepository.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
+        public IActionResult EditActivity(int id)
+        {
+            var activity = GetActivity(id);
+            return View(new EditActivityViewModel(activity));
+        }
+
+        public IActionResult EditEvent(int id)
+        {
+            var @event = GetEvent(id);
+            return View(new EditEventViewModel(@event));
+        }
+
         [HttpPost]
-        public IActionResult Edit(EditActivityEventViewModel model, User user)
+        public IActionResult EditActivity(EditActivityViewModel model, User user)
         {
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "The form contains some errors";
-                return View("Edit", model);
+                return View("EditActivity", model);
             }
 
             if (model.Id == null)
@@ -117,22 +126,37 @@ namespace GoedBezigWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (model.Type == EditActivityEventViewModel.ActivityType.Activity)
+            var activity = GetActivity(model.Id.Value);
+
+            activity.Title = model.Title;
+            activity.Description = model.Description;
+
+            _activityRepository.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult EditEvent(EditEventViewModel model, User user)
+        {
+
+            if (!ModelState.IsValid)
             {
-                var activity = GetActivity(model.Id.Value);
-
-                activity.Title = model.Title;
-                activity.Description = model.Description;
-
+                TempData["Error"] = "The form contains some errors";
+                return View("EditActivity", model);
             }
-            else
+
+            if (model.Id == null)
             {
-                var @event = GetEvent(model.Id.Value);
-
-                @event.Title = model.Title;
-                @event.Description = model.Description;
-                @event.Date = model.Date as DateTime? ?? DateTime.Today; // Not really that pretty
+                TempData["Error"] = "Trying to edit activity / event that does not exist";
+                return RedirectToAction("Index");
             }
+
+            var @event = GetEvent(model.Id.Value);
+
+            @event.Title = model.Title;
+            @event.Description = model.Description;
+            @event.Date = model.Date ?? DateTime.Today;
 
             _activityRepository.SaveChanges();
 
