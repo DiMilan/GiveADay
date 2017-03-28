@@ -10,7 +10,6 @@ namespace GoedBezigWebApp.Models.ActivityEventViewModels
     {
         [Required(ErrorMessage = "You need to supply a date for this event")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        [DataType(DataType.Date)]
         public DateTime? Date { get; set; }
 
         public EditEventViewModel() : base()
