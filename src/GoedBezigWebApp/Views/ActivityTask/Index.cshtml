@@ -1,11 +1,11 @@
-﻿@model IEnumerable<ActivityTask>
+﻿@model IEnumerable<GoedBezigWebApp.Models.ActivityTaskViewModels.ActivityTaskEditViewModel>
 @{
 
     Layout = "_pannel";
 }
 
 @section Styles{
-        <!--DataTables-->
+    <!--DataTables-->
     <link href="~/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" />
 
 }
@@ -13,6 +13,7 @@
 <div class="box">
     <div class="box-header">
         <h3 class="box-title">Draaiboek Overzicht</h3>
+        <a asp-action="Create" class="btn btn-default pull-right"><span class="fa fa-plus"></span> New</a>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -24,48 +25,55 @@
                     <th>From</th>
                     <th>Till</th>
                     <th>State</th>
+                    <th></th>
                 </tr>
             </thead>
-        <tbody>
-        @foreach (ActivityTask at in Model)
-        {
-            string ToDate = !at.ToDateTime.Equals(DateTime.MaxValue) ? at.ToDateTime.ToString("d") : "not specified";
-        <tr>
-                <td>@at.Description</td>
-                <td>@at.ActivityTaskUsers.ToString();
-            </td>
+            <tbody>
+                @foreach (var at in Model)
+                {
+                    <tr>
+                        <td>@at.Description</td>
+                        <td>@at.Users</td>
 
-            <td>@at.FromDateTime.ToString("d")</td>
+                        <td>@at.FromDate.ToString("d")</td>
 
-            <td>@ToDate</td>
+                        <td>@at.ToDate.ToString("d")</td>
+                        <td>
+                            @switch (at.CurrentState)
+                            {
+                                case "Done":<small class="label pull-right bg-green">Done</small>
+                                    break;
+                                case "InProgress":<small class="label pull-right bg-yellow">In Progress</small>
+                                    break;
+                                case "ToDo":<small class="label pull-right bg-blue">To Do</small>
+                                    break;
+                            }
 
-            <td>@at.CurrentState.ToString()</td>
 
-        </tr>
-        }
-        
-        </tbody>
-            <tfoot>
-                <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                </tr>
-            </tfoot>
+
+                        </td>
+                        <td><a asp-action="Edit" asp-route-id=@at.Id><i class="fa fa-pencil"></i></a></td>
+
+
+                    </tr>
+                }
+
+            </tbody>
+
         </table>
     </div>
     <!-- /.box-body -->
 </div>
 <!-- /.box -->
 @section Scripts {
-<script src="~/plugins/datatables/dataTables.bootstrap.js"></script>
-<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="~/plugins/datatables/jquery.dataTables.js"></script>
     <script>
         $(document)
             .ready(function () {
-                $('#example1').DataTable();
+                $('#example1').DataTable({
+                    "order": [[2, 'asc']]
+                });
             });
     </script>
 }

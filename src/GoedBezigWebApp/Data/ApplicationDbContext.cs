@@ -22,6 +22,10 @@ namespace GoedBezigWebApp.Data
         {
         }
 
+        public ApplicationDbContext() : base()
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -231,8 +235,6 @@ namespace GoedBezigWebApp.Data
         private void MapActivityTasks(EntityTypeBuilder<ActivityTask> at)
         {
             at.HasKey(k => k.Id);
-            //at.Property(p => p.Id).ValueGeneratedOnAdd();
-
             at.Property(p => p.Description)
                 .IsRequired()
                 .HasColumnName("description")

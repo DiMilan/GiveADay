@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models.GroupState;
-using GoedBezigWebApp.Models.UserViewModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -32,7 +30,6 @@ namespace GoedBezigWebApp.Controllers
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult Index(User user)
         {
-            ViewData["User"] = new UserViewModel(user);
             if (user == null)
             {
                 TempData["error"] = "User not logged in";
@@ -55,8 +52,6 @@ namespace GoedBezigWebApp.Controllers
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult Edit(string id, User user)
         {
-            _userRepository.LoadInvitations(user);
-            ViewData["User"] = new UserViewModel(user);
             Group group = _groupRepository.GetBy(id);
             _groupRepository.LoadOrganizations(group);
             ViewBag.ExternalOrganization = group.ExternalOrganization;
@@ -69,12 +64,10 @@ namespace GoedBezigWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                ViewData["User"] = new UserViewModel(user);
-                Group group = null;
                 try
                 {
 
-                    group = _groupRepository.GetBy(groupEditViewModel.Name);
+                    var group = _groupRepository.GetBy(groupEditViewModel.Name);
                     group.SaveMotivation(groupEditViewModel.Motivation);
                     group.GroupState.AddCompanyDetails(groupEditViewModel.CompanyName, groupEditViewModel.CompanyAddress, groupEditViewModel.CompanyEmail, groupEditViewModel.CompanyWebsite);
                     group.GroupState.AddCompanyContact(groupEditViewModel.CompanyContactName, groupEditViewModel.CompanyContactSurname, groupEditViewModel.CompanyContactEmail, groupEditViewModel.CompanyContactTitle);
@@ -91,7 +84,7 @@ namespace GoedBezigWebApp.Controllers
                 catch (MotivationException e)
                 {
 
-                    TempData["error"] = e.Message.ToString();
+                    TempData["error"] = e.Message;
                 }
                 //catch (Exception)
                 //{
@@ -106,16 +99,14 @@ namespace GoedBezigWebApp.Controllers
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult Create(User user)
         {
-            ViewData["User"] = new UserViewModel(user);
             return View(nameof(Edit), new GroupEditViewModel(new Group()));
         }
 
         [HttpPost]
         [ServiceFilter(typeof(UserFilter))]
 
-        public IActionResult Create(GroupEditViewModel groupEditViewModel, User user)
+        public async Task<IActionResult> Create(GroupEditViewModel groupEditViewModel, User user)
         {
-            ViewData["User"] = new UserViewModel(user);
             if (ModelState.IsValid)
             {
                 try
@@ -133,7 +124,7 @@ namespace GoedBezigWebApp.Controllers
                     //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
 
                     var mailer = new AuthMessageSender();
-                    var sendMail = mailer.SendEmailAsync("bartjevm@gmail.com",
+                    await mailer.SendEmailAsync("bartjevm@gmail.com",
                         "Group has been added",
                         String.Format("Hi Lector,\n\na group has been added to the GiveADay Platform called {0} has been created.\n\nKind regards,\nGiveADay Bot", group.GroupName),
                         String.Format("<p>Hi Lector,<p><p>a group has been added to the GiveADay Platform called {0} has been created.</p><p>Kind regards<br>GiveADay Bot</p>", group.GroupName));
@@ -148,7 +139,7 @@ namespace GoedBezigWebApp.Controllers
                 catch (MotivationException e)
                 {
 
-                    TempData["error"] = e.Message.ToString();
+                    TempData["error"] = e.Message;
                 }
                 //catch (Exception)
                 //{
@@ -162,16 +153,14 @@ namespace GoedBezigWebApp.Controllers
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult SubmitMotivation(string id, User user)
         {
-            ViewData["User"] = new UserViewModel(user);
             ViewData[nameof(Group.GroupName)] = _groupRepository.GetBy(id).GroupName;
             return View();
         }
 
         [HttpPost, ActionName("SubmitMotivation")]
         [ServiceFilter(typeof(UserFilter))]
-        public IActionResult SubmitConfirmed(string id, User user)
+        public async Task<IActionResult> SubmitConfirmed(string id, User user)
         {
-            ViewData["User"] = new UserViewModel(user);
             GroupEditViewModel groupEditViewModel = null;
             Group group = null;
 
@@ -191,7 +180,7 @@ namespace GoedBezigWebApp.Controllers
                     //@Bart: waar vind ik de lector die bij het aanmaken van een groep onderstaande mail moet krijgen?
 
                     var mailer = new AuthMessageSender();
-                    var sendMail = mailer.SendEmailAsync("bartjevm@gmail.com",
+                    await mailer.SendEmailAsync("bartjevm@gmail.com",
                         "Motivation has been submitted",
                         String.Format(
                             "Hi Lector,\n\na motivation has been added to group {0} of the GiveADay Platform.\n\nKind regards,\nGiveADay Bot",
@@ -205,7 +194,7 @@ namespace GoedBezigWebApp.Controllers
                 catch (MotivationException e)
                 {
 
-                    TempData["error"] = $"De motivatie werd niet ingediend. {e.Message.ToString()}";
+                    TempData["error"] = $"De motivatie werd niet ingediend. {e.Message}";
                     groupEditViewModel = new GroupEditViewModel(group);
                 }
                 //catch (Exception)

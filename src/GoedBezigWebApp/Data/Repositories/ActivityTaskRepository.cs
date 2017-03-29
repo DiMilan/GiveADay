@@ -21,7 +21,7 @@ namespace GoedBezigWebApp.Data.Repositories
         }
         public ActivityTask GetBy(int id)
         {
-            return _activityTasks.Find(id);
+            return _activityTasks.Include(a => a.ActivityTaskUsers).ThenInclude(u => u.User).SingleOrDefault(i => i.Id == id);
         }
 
         public IEnumerable<ActivityTask> GetAll()

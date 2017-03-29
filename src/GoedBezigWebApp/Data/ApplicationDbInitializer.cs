@@ -174,6 +174,9 @@ namespace GoedBezigWebApp.Data
             // --> SEED Groups
             if (_context.Groups.Any()) return;
             GroupHoGent1.ClosedGroup = false;
+            GroupHoGent1.AddUser(UserTest);
+            GroupHoGent1.AddUser(UserCursist);
+            GroupHoGent1.AddUser(UserHogent);
             GroupUGent.Motivation = "TestMotivation";
             GroupUGent.GroupState = new MotivationApprovedState(GroupUGent);
 
@@ -251,15 +254,15 @@ namespace GoedBezigWebApp.Data
             GroupHoGent1.AddActivity(event2);
             GroupHoGent1.AddActivity(event3);
             List<ActivityTaskUser> atu = new List<ActivityTaskUser>();
-
-            List<User> users = new List<User>();
-            users.Add(UserTest);
-            users.Add(UserBart);
-            users.Add(UserCursist);
-            ActivityTask task2 = new ActivityTask("test123", users, DateTime.Now, DateTime.MaxValue, activity1, TaskState.InProgress);
+            List<User> users1 = new List<User>() {UserCursist};
+            ActivityTask task1 = new ActivityTask("Taak 1", users1, DateTime.Now, DateTime.MaxValue, activity1, TaskState.ToDo);
             GroupHoGent1.InitiateTaskList();
+            GroupHoGent1.TaskList.Add(task1);
+            _context.SaveChanges();
+            List<User> users2 = new List<User> {UserTest, UserBart};
+            ActivityTask task2 = new ActivityTask("Taak 2", users2, DateTime.Now, DateTime.MaxValue, activity2, TaskState.InProgress) {Id = 2};
             GroupHoGent1.TaskList.Add(task2);
-
+            _context.ActivityTasks.Add(task2);
             _context.SaveChanges();
         }
 

@@ -8,7 +8,6 @@ namespace GoedBezigWebApp.Models
 {
     public class ActivityTask
     {
-        [Key]
         public int Id { get; set; }
         public string Description { get; set; }
         public ICollection<ActivityTaskUser> ActivityTaskUsers { get; set; }
@@ -16,12 +15,7 @@ namespace GoedBezigWebApp.Models
         {
             get
             {
-                ICollection<User> users = new List<User>();
-                foreach (ActivityTaskUser atu in ActivityTaskUsers)
-                {
-                    users.Add(atu.User);
-                }
-                return users;
+                return ActivityTaskUsers.Select(i => i.User).ToList(); ;
             }
         }
         public DateTime FromDateTime { get; set; }
