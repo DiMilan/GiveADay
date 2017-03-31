@@ -61,7 +61,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         #endregion
         #region -- Create POST --
         [Fact]
-        public void CreateRedirectsToActionIndexWhenSuccessfull()
+        public async void CreateRedirectsToActionIndexWhenSuccessfull()
         {
             testUser.Organization = new GbOrganization();
             _userRepository.Setup(p => p.GetBy("testUser")).Returns(testUser);
@@ -72,7 +72,7 @@ namespace GoedBezigWebApp.Tests.Controllers
                 Timestamp = new DateTime(2017,02,15,18,52,45)
                         
             });
-            RedirectToActionResult action = _controller.Create(groupEditViewModel, testUser) as RedirectToActionResult;
+            RedirectToActionResult action = await _controller.Create(groupEditViewModel, testUser) as RedirectToActionResult;
             Assert.Equal("Index", action?.ActionName);
         }
 
