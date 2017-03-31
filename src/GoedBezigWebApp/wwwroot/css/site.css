@@ -133,8 +133,9 @@ textarea {
     cursor: default;
 }
 
-.cursor-pointer {
-    cursor: pointer;
+.cursor-pointer,
+.clickable-cell {
+    cursor: pointer !important;
 }
 
 .sidebar-menu {
