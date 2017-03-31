@@ -49,42 +49,48 @@ namespace GoedBezigWebApp.Controllers
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult InviteUser(User user, String name)
         {
-            ViewData["User"] = new UserViewModel(user);
+            var newUser = _userRepository.GetBy(name);
+
+            if (newUser == null)
+            {
+                TempData["message"] = $"Trying to add user that does not exist!";
+                return RedirectToAction("Index");
+            }
+
             _groupRepository.LoadUsers(user.Group);
-            // check om te zien of de user nog niet in een groep is ingeschreven
-            if (_userRepository.GetBy(name) != null 
-                && _userRepository.GetBy(name).Group == null
-                //deze check lijkt niet te werken
-                && !user.Group.Invitations.Select(i => i.User).ToList().Contains(_userRepository.GetBy(name))
-                )
+
+            if (newUser.Group != null)
             {
-                try
+                if (user.Group.Equals(newUser.Group))
                 {
-                    _groupRepository.GetBy(user.Group.GroupName).InviteUser(_userRepository.GetBy(name));
-                    //_groupRepository.SaveChanges();
-                    TempData["message"] = $"User successfully invited in group!";
-                    return RedirectToAction("Index");
+                    TempData["error"] = $"User already member of this group!";
+                }
+                else
+                {
+                    TempData["error"] = $"User already member of another group!";
 
                 }
-                catch (OrganizationException error)
-                {
-                    TempData["error"] = error.Message;
-                    return RedirectToAction("Index");
-                }
+                return RedirectToAction("Index");
+            }
 
-            }
-            else if (_userRepository.GetBy(name).Group.GroupName == user.Group.GroupName 
-                ||_groupRepository.GetBy(user.Group.GroupName).Users.Contains(_userRepository.GetBy(name))
-                )
+            if (user.Group.Invitations.Select(i => i.User).ToList().Contains(newUser))
             {
-                TempData["error"] = $"User already member or invited in this group!";
+                TempData["error"] = $"User already invited to this group!";
                 return RedirectToAction("Index");
             }
-            else
+
+            try
             {
-                TempData["error"] = $"User already member of another group!";
-                return RedirectToAction("Index");
+                user.Group.InviteUser(newUser);
+                _groupRepository.SaveChanges();
+                TempData["message"] = $"User successfully invited in group!";
             }
+            catch (OrganizationException error)
+            {
+                TempData["error"] = error.Message;
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
