@@ -23,6 +23,11 @@ namespace GoedBezigWebApp.Data.Repositories
             return _groups.Find(groupName);
         }
 
+        public Group GetBy(ExternalOrganization organization)
+        {
+            return _groups.FirstOrDefault(g => g.ExternalOrganization == organization);
+        }
+
         public IEnumerable<Group> GetAll()
         {
             return _groups.ToList();

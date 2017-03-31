@@ -23,9 +23,23 @@
         </div>
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-file-text-o"></i>
+                </div>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ActivityId" class="col-md-2 control-label">Activity</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar-check-o"></i>
+                </div>
+                <select asp-for="ActivityId" asp-items="@(ViewData["Activities"] as SelectList)" class="form-control">
+                    <option value="">-- select activity/event --</option>
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -50,24 +64,28 @@
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="CurrentState" class="col-md-2 control-label"></label>
+        <label asp-for="CurrentState" class="col-md-2 control-label">Activity</label>
         <div class="input-group">
             <div class="input-group-addon">
-                <i class="fa fa-check"></i>
+                <i class="fa fa-calendar-check-o"></i>
             </div>
-            <input asp-for="CurrentState" class="form-control" />
-            <span asp-validation-for="CurrentState" class="text-danger" />
+            <select asp-for="CurrentState" asp-items="@(ViewData["States"] as SelectList)" class="form-control">
+                <option value="">-- select state --</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">Users</label>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar-check-o"></i>
+            </div>
+            <select asp-for="Users" asp-items="@(ViewData["Users"] as MultiSelectList)" id="example-getting-started" multiple="multiple"></select>
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="@action" class="btn btn-default" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-3 control-label">Browser</label>
-        <div class="col-xs-5">
-            <select asp-for="Users" asp-items="@(ViewData["Users"] as MultiSelectList)" id="example-getting-started" multiple="multiple"></select>
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
     </div>
 </form>

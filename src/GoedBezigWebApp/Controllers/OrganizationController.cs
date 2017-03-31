@@ -5,6 +5,7 @@ using Castle.Core.Internal;
 using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Exceptions;
+using GoedBezigWebApp.Models.OrganizationViewModels;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Models.UserViewModels;
 using GoedBezigWebApp.Services;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 namespace GoedBezigWebApp.Controllers
 {
     [Authorize]
+    [ServiceFilter(typeof(UserFilter))]
     public class OrganizationController : Controller
     {
         private readonly IOrganizationRepository _organizationRepository;
@@ -31,19 +33,11 @@ namespace GoedBezigWebApp.Controllers
             _groupRepository = groupRepository;
         }
 
-        [ServiceFilter(typeof(UserFilter))]
-        public async Task<IActionResult> Index(String searchName, String searchLocation, bool isExternalWithLabel, bool isExternalWithoutLabel, string groupId, User user)
+        public IActionResult Index(String searchName, String searchLocation, bool isExternalWithLabel, bool isExternalWithoutLabel, string groupId, User user)
         {
-            ViewData["User"] = new UserViewModel(user);
-
-            if (user == null)
-            {
-                return View("Error");
-            }
-
             ViewData["searchName"] = searchName;
             ViewData["searchLocation"] = searchLocation;
-            
+
             if (groupId.IsNullOrEmpty() && !isExternalWithLabel && !isExternalWithoutLabel)
             {
                 //Load only gb-orgs
@@ -86,13 +80,10 @@ namespace GoedBezigWebApp.Controllers
             }
 
         }
-
-        [ServiceFilter(typeof(UserFilter))]
+        
         public IActionResult Register(User user, int id = 0)
         {
-            ViewData["User"] = new UserViewModel(user);
-
-            if (user == null || id == 0)
+            if (id == 0)
             {
                 return View("Error");
             }
@@ -102,7 +93,7 @@ namespace GoedBezigWebApp.Controllers
                 _userRepository.GetBy(user.UserName).RegisterInOrganization(_organizationRepository.GetGbOrganizationBy(id));
                 _userRepository.SaveChanges();
                 TempData["message"] = $"You have been added to the organization succesfully!";
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             catch (OrganizationException error)
             {
@@ -110,31 +101,22 @@ namespace GoedBezigWebApp.Controllers
                 return RedirectToAction("Index");
             }
         }
-
-        [ServiceFilter(typeof(UserFilter))]
-        public async Task<IActionResult> AssignGBLabel(int id, string groupId, User user)
+        
+        public IActionResult AssignGBLabel(int id, string groupId, User user)
         {
-            ViewData["User"] = new UserViewModel(user);
-
-            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
+            if (id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
             {
                 return View("Error");
             }
-
-
 
             ViewBag.Group = _groupRepository.GetBy(groupId);
             return View(_organizationRepository.GetExternalOrganizationBy(id));
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(UserFilter))]
-        public async Task<IActionResult> AssignGBLabel(int id, string groupId, List<ContactRecord> notifyContacts, User user)
+        public IActionResult AssignGBLabel(int id, string groupId, List<ContactRecord> notifyContacts, User user)
         {
-            ViewData["User"] = new UserViewModel(user);
-
-
-            if (user == null || id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
+            if (id == 0 || groupId.IsNullOrEmpty() || !checkEntitledToGiveGBLabel(groupId))
             {
                 TempData["error"] =
                     "The request is not valid or the GroupId is either not valid or the group is not entitled to give a GBLabel to an organization.";
@@ -143,7 +125,7 @@ namespace GoedBezigWebApp.Controllers
 
             try
             {
-                _organizationRepository.GetExternalOrganizationBy(id).AssignGbLabel(_groupRepository.GetBy(groupId),notifyContacts);
+                _organizationRepository.GetExternalOrganizationBy(id).AssignGbLabel(_groupRepository.GetBy(groupId), notifyContacts);
                 _organizationRepository.SaveChanges();
                 TempData["message"] = "The organization has succesfully been given a GB label, the selected stakeholders have been contacted.";
             }
@@ -154,7 +136,7 @@ namespace GoedBezigWebApp.Controllers
                 return RedirectToAction("AssignGBLabel", new { id = id, groupId = groupId });
             }
 
-            return RedirectToAction("Edit","Group", new { id = groupId });
+            return RedirectToAction("Edit", "Group", new { id = groupId });
         }
 
         private bool checkEntitledToGiveGBLabel(string groupId)
@@ -163,6 +145,29 @@ namespace GoedBezigWebApp.Controllers
             _groupRepository.LoadOrganizations(group);
             _groupRepository.LoadUsers(group);
             return group.EntitledToGiveGbLabel();
+        }
+
+        public IActionResult View(int id)
+        {
+            var organization = _organizationRepository.GetById(id);
+
+            if (organization == null)
+            {
+                TempData["error"] = "Organization does not exist";
+            }
+
+            var externalOrganization = organization as ExternalOrganization;
+
+            // Check if organization is external and is assigned a GB label
+            if (externalOrganization == null || !externalOrganization.HasGbLabel)
+                return View(new OrganizationViewModel(organization));
+
+            // Get motivation from group that invited this organization
+            var group = _groupRepository.GetBy(externalOrganization);
+
+            // TODO check motivation state == published
+
+            return View(new OrganizationViewModel(externalOrganization, @group?.Motivation));
         }
     }
 }

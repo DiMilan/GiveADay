@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GoedBezigWebApp.Models.ActivityTaskViewModels.ActivityTaskEditViewModel>
+﻿@using Castle.Core.Internal
+@model IEnumerable<GoedBezigWebApp.Models.ActivityTaskViewModels.ActivityTaskEditViewModel>
 @{
 
     Layout = "_pannel";
@@ -21,6 +22,7 @@
             <thead>
                 <tr>
                     <th>Description</th>
+                    <th>Event</th>
                     <th>Users</th>
                     <th>From</th>
                     <th>Till</th>
@@ -31,15 +33,17 @@
             <tbody>
                 @foreach (var at in Model)
                 {
+                    var Users = String.Join(",", at.Users);
                     <tr>
                         <td>@at.Description</td>
-                        <td>@at.Users</td>
-
+                        <td>@at.Activity</td>
+                        <td>@Users</td>
+                        
                         <td>@at.FromDate.ToString("d")</td>
 
                         <td>@at.ToDate.ToString("d")</td>
                         <td>
-                            @switch (at.CurrentState)
+                            @switch (at.CurrentState.ToString())
                             {
                                 case "Done":<small class="label pull-right bg-green">Done</small>
                                     break;

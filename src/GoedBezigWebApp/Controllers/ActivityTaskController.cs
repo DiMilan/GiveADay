@@ -44,13 +44,35 @@ namespace GoedBezigWebApp.Controllers
         public IActionResult Edit(int id, User user)
         {
             ActivityTask activityTask = _activityTaskRepository.GetBy(id);
-            ViewData["Users"] = new MultiSelectList(user.Group.Users, nameof(Models.User.UserName), nameof(Models.User.UserName));
+            ViewData["Users"] = GetUsersSelectList(user, activityTask);
+            ViewData["Activities"] = GetActivitiesSelectList(user, activityTask);
+            ViewData["States"] = GetCurrentStateSelectList(user, activityTask);
             return View(new ActivityTaskEditViewModel(activityTask));
         }
 
+       
+
         public IActionResult Create(User user)
         {
+            ViewData["Users"] = GetUsersSelectList(user, null);
+            ViewData["Activities"] = GetActivitiesSelectList(user, null);
+            ViewData["States"] = GetCurrentStateSelectList(user, null);
             return View(nameof(Edit), new ActivityTaskEditViewModel());
+        }
+
+        private SelectList GetActivitiesSelectList(User user, ActivityTask activityTask)
+        {
+            return new SelectList(user.Group.Activities.OrderBy(b => b.Title), nameof(Models.Activity.Id), nameof(Models.Activity.Title), activityTask?.Activity?.Id);
+        }
+
+        private SelectList GetCurrentStateSelectList(User user, ActivityTask activityTask)
+        {
+            return new SelectList(Enum.GetValues(typeof(TaskState)).Cast<TaskState>().ToList(),activityTask?.CurrentState);
+        }
+
+        private MultiSelectList GetUsersSelectList(User user, ActivityTask activityTask)
+        {
+            return new MultiSelectList(user.Group.Users.OrderBy(b => b.UserName), nameof(Models.User.UserName), nameof(Models.User.UserName), activityTask?.Users?.Select(u => u.UserName));
         }
     }
 }

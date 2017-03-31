@@ -6,6 +6,7 @@ namespace GoedBezigWebApp.Models.Repositories
 {
     public interface IOrganizationRepository
     {
+        Organization GetById(int id);
         GbOrganization GetGbOrganizationBy(int organizationId);
         ExternalOrganization GetExternalOrganizationBy(int organizationId);
         IEnumerable<Organization> GetAllGbOrganizations();
