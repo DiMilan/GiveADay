@@ -42,7 +42,7 @@ namespace GoedBezigWebApp.Tests.Model
         }
         #endregion
 
-        #region Moivation
+        #region Motivation
         [Fact]
         private void SavingMotivationInOpenGroup()
         {
@@ -261,6 +261,64 @@ namespace GoedBezigWebApp.Tests.Model
             _testGroup.InitiateTaskList();
             ActivityTask task = new ActivityTask("description", null, DateTime.MaxValue, DateTime.MaxValue, null, TaskState.Done);
             Assert.Throws<TaskListException>(() => _testGroup.AddTask(task));
+        }
+
+        #endregion
+
+
+        #region Invites
+
+        [Fact]
+        private void AddUserSuceeds()
+        {
+            //new open group
+            Group group = new Group("testGroup", false);
+            //new user
+            User user = new User();
+            group.AddUser(user);
+            Assert.Equal(group.Invitations.Last().User, user);
+        }
+        [Fact]
+        private void AddUserWithNoUser()
+        {
+            //new open group
+            Group group = new Group("testGroup", false);
+            User user = null;
+            Assert.Throws<Exception>(() => group.AddUser(user));
+        }
+        [Fact]
+        private void AddUserWithGroupNull()
+        {
+            //new open group
+            Group group = null;
+            //new user
+            User user = new User();
+            Assert.Throws<NullReferenceException>(() => group.AddUser(user));
+
+        }
+        [Fact]
+        private void AddUserFromOtherOrganisation()
+        {
+            //new open group
+            Group group = new Group("testGroup", false);
+           
+            //new user
+            User user = new User();
+            user.Id = "testuser@OtherOrganisation.com";
+            user.Organization.Domain = "OtherOrganisation.com";
+            Assert.Throws<AddUserException>(() => group.AddUser(user));
+        }
+        [Fact]
+        private void AddUserFromNoOrganisation()
+        {
+            //new open group
+            Group group = new Group("testGroup", false);
+
+            //new user
+            User user = new User();
+            user.Id = "testuser@nonExistingOrganisation.com";
+            user.Organization.Domain = "nonExistingOrganisation.com";
+            Assert.Throws<Exception>(() => group.AddUser(user));
         }
 
         #endregion

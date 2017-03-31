@@ -53,7 +53,7 @@ namespace GoedBezigWebApp.Controllers
                         ViewData["GroupSubmitted"] = true;
                         ViewData["GroupApproved"] = true;
                     }
-                    _groupRepository.LoadOrganizations(user.Group);
+                    //_groupRepository.LoadOrganizations(user.Group);
                     if (user.Group.ExternalOrganization != null)
                     {
                         ViewData["GBOrgAssigned"] = true;

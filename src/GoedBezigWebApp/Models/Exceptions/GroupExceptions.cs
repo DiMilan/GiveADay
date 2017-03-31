@@ -39,6 +39,18 @@ namespace GoedBezigWebApp.Models.Exceptions
 
         }
     }
+    public class AddUserException : ArgumentException
+    {
+
+        public AddUserException()
+        {
+
+        }
+        public AddUserException(string message) : base(message)
+        {
+
+        }
+    }
     public class NoStateException : ArgumentException
     {
 

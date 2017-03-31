@@ -6,6 +6,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.GroupState;
+using Xunit.Sdk;
 
 namespace GoedBezigWebApp.Models
 {
@@ -108,9 +109,15 @@ namespace GoedBezigWebApp.Models
 
         public void AddUser(User user)
         {
+            if(user != null )
+            {
+             Invitations.Add(new Invitation(user, this, InvitationStatus.Accepted));   
+            }
+            else
+             throw new AddUserException("User behoort niet tot de organisatie");
 
-            Invitations.Add(new Invitation(user, this, InvitationStatus.Accepted));
         }
+        
 
         private int GetNrOfWords(string s)
         {
@@ -179,20 +186,7 @@ namespace GoedBezigWebApp.Models
 
         public void AddTask(ActivityTask task)
         {
-            if (TaskList == null)
-            {
-                throw new TaskListException("Nog geen draaiboek geïnitialiseerd");
-            }
-            if (task.Description.IsNullOrEmpty()) throw new TaskListException("de omschrijving van een taak is verplicht");
-            if (task.FromDateTime != DateTime.MinValue & task.ToDateTime != DateTime.MinValue)
-            {
-                if (task.FromDateTime < DateTime.Now) throw new TaskListException("de begintijd moet in de toekomst liggen");
-                if (task.ToDateTime < DateTime.Now) throw new TaskListException("de eindtijd moet in de toekomst liggen");
-            }
-
-            if (task.Activity == null) throw new TaskListException("geen event opgegeven");
-            if (task.Activity.Accepted == false) throw new TaskListException("Enkel goedgekeurde evenementen komen in aanmerking");
-            TaskList.Add(task);
+            GroupState.AddTask(task);
         }
 
         public void AddCompanyContact(string companyContactName, string companyContactSurname, string companyContactEmail, string companyContactTitle)

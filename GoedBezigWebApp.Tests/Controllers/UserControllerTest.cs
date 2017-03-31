@@ -4,7 +4,6 @@ using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Tests.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.Localization;
 using Moq;
 
 namespace GoedBezigWebApp.Tests.Controllers
