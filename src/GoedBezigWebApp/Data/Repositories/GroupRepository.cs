@@ -74,7 +74,9 @@ namespace GoedBezigWebApp.Data.Repositories
         public void LoadUsers(Group group)
         {
             _dbContext.Entry(group)
-                .Collection(g => g.Users)
+                .Collection(g => g.Invitations)
+                .Query()
+                .Include(i => i.User)
                 .Load();
         }
     }
