@@ -167,7 +167,7 @@ namespace GoedBezigWebApp.Controllers
 
             // TODO check motivation state == published
 
-            return View(new OrganizationViewModel(externalOrganization, @group.Motivation));
+            return View(new OrganizationViewModel(externalOrganization, @group?.Motivation));
         }
     }
 }

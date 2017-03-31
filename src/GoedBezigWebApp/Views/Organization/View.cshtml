@@ -4,21 +4,36 @@
 @{
     Layout = "_pannel";
 }
-
-<h2>
-    <span style="width: 64px; height: 64px; margin-right: 16px;">
-        <img class="img-responsive center-block" src="@Model.Logo" alt="@Model.Name" />
-    </span>
-    @Model.Name
-    @if (!Model.IsExternal || Model.HasLabel)
-    {
-        <span class="text-success fa fa-check"></span>
-    }
-</h2>
+<!-- Header -->
+<div class="media">
+    <div class="media-left media-middle">
+        <img class="media-object" style="width: 64px; height: 64px; object-fit: scale-down;" src="@Model.Logo" alt="@Model.Name" />
+    </div>
+    <div class="media-body" style="vertical-align: bottom;">
+        <h2 style="margin-bottom: 0;">
+            @Model.Name
+            @if (!Model.IsExternal || Model.HasLabel)
+            {
+                <span class="text-success fa fa-check" data-toggle="tooltip" data-placement="right" title="Goed bezig!"></span>
+            }
+        </h2>
+    </div>
+</div>
 <hr />
+
+<!-- Details -->
 <div class="row">
     <div class="col-md-8">
+        <h4>About</h4>
         <p>@Model.Description</p>
+        @* Show motivation if existing *@
+        @if (Model.Motivation != null)
+        {
+            <!-- Motivation -->
+            <h4>Motivation</h4>
+            <p>@Model.Motivation</p>
+        }
+
     </div>
     <div class="col-md-4">
         <h4>Address</h4>
