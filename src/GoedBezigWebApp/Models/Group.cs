@@ -101,7 +101,9 @@ namespace GoedBezigWebApp.Models
         public void InviteUser(User user)
         {
             //ToDo add validations (eg if user is not yet present)
+            //Validation added in UserController
             Invitations.Add(new Invitation(user, this));
+            
         }
 
         public void AddUser(User user)
