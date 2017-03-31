@@ -32,5 +32,10 @@ namespace GoedBezigWebApp.Models.GroupState
             if (motivationState == null) throw new ArgumentNullException(nameof(motivationState));
             Group.GroupState = motivationState;
         }
+
+        public virtual void AddTask(ActivityTask task)
+        {
+            throw new MotivationException("Enkel a goedkeuring van de evenementen kunnen taken worden ingediend");
+        }
     }
 }
