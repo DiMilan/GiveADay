@@ -102,17 +102,17 @@ namespace GoedBezigWebApp
                     opts.SupportedUICultures = supportedCultures;
                 });
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.SecurityStampValidationInterval = TimeSpan.Zero;
-            });
+//            services.Configure<IdentityOptions>(options =>
+//            {
+//                options.SecurityStampValidationInterval = TimeSpan.Zero;
+//            });
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -124,7 +124,6 @@ namespace GoedBezigWebApp
                     // Deletes the existing database (toggle comment to speed up startup)
                     serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
                 }
-
             }
             else
             {
@@ -150,20 +149,13 @@ namespace GoedBezigWebApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //// Azure only (to delete existing DB when published)
-
-            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //{
-            //    // Deletes the existing database (toggle comment to speed up startup)
-            //    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
-            //}
-
             // Update database & seed data
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-                
+
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
                 //context.Database.Migrate(); // Create new database and apply latest migrations
                 new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)

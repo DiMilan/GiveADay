@@ -337,7 +337,7 @@ namespace GoedBezigWebApp.Data
         private static readonly User UserVrijwilliger = GenerateTestUser("vrijwilliger", "test.be");
         private static readonly User UserCursist = GenerateTestUser("cursist", "test.be");
         private static readonly User UserMilan = GenerateTestUser("milandimax", "gmail.com", "Milan", "Dima");
-        private static readonly User UserTom = GenerateTestUser("tom", "vdbussche.net", "Tom", "Vandenbussche");
+        private static readonly User UserTom = GenerateTestUser("tim", "vdbussche.net", "Tom", "Vandenbussche");
         private static readonly User UserMax = GenerateTestUser("max.devloo", "lightspeedhq.com", "Maximiliaan", "Devloo");
         private static readonly User UserBart = GenerateTestUser("bartjevm", "gmail.com", "Bart", "Vanmarcke");
 
