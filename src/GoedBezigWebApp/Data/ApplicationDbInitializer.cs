@@ -259,7 +259,7 @@ namespace GoedBezigWebApp.Data
             GroupHoGent1.InitiateTaskList();
             GroupHoGent1.TaskList.Add(task1);
             _context.SaveChanges();
-            List<User> users2 = new List<User> {UserTest, UserBart};
+            List<User> users2 = new List<User> {UserTest, UserHogent};
             ActivityTask task2 = new ActivityTask("Taak 2", users2, DateTime.Now, DateTime.MaxValue, activity2, TaskState.InProgress) {Id = 2};
             GroupHoGent1.TaskList.Add(task2);
             _context.ActivityTasks.Add(task2);
