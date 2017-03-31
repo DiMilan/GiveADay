@@ -150,6 +150,14 @@ namespace GoedBezigWebApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            //// Azure only (to delete existing DB when published)
+
+            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    // Deletes the existing database (toggle comment to speed up startup)
+            //    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
+            //}
+
             // Update database & seed data
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
