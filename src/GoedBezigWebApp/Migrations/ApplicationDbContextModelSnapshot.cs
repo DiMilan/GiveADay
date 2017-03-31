@@ -17,6 +17,74 @@ namespace GoedBezigWebApp.Migrations
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.Activity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Accepted");
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<string>("GroupName");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<string>("Type")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupName");
+
+                    b.ToTable("events");
+
+                    b.HasDiscriminator<string>("Type").HasValue("Activity");
+                });
+
+            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTask", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<int>("CurrentState");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnName("description")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("FromDateTime")
+                        .HasColumnName("fromDateTime");
+
+                    b.Property<string>("GroupName");
+
+                    b.Property<string>("Remarks");
+
+                    b.Property<DateTime>("ToDateTime")
+                        .HasColumnName("toDateTime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupName");
+
+                    b.ToTable("ActivityTasks");
+                });
+
+            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTaskUser", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("ActivityTaskId");
+
+                    b.HasKey("UserId", "ActivityTaskId");
+
+                    b.HasIndex("ActivityTaskId");
+
+                    b.ToTable("ActivityTaskUser");
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
                     b.Property<string>("GroupName")
@@ -26,22 +94,41 @@ namespace GoedBezigWebApp.Migrations
 
                     b.Property<bool>("ClosedGroup");
 
+                    b.Property<string>("CompanyAddress");
+
+                    b.Property<string>("CompanyContactEmail");
+
+                    b.Property<string>("CompanyContactName");
+
+                    b.Property<string>("CompanyContactSurname");
+
+                    b.Property<string>("CompanyContactTitle");
+
+                    b.Property<string>("CompanyEmail");
+
+                    b.Property<string>("CompanyName");
+
+                    b.Property<string>("CompanyWebsite");
+
+                    b.Property<int?>("ExternalOrganizationOrgId");
+
+                    b.Property<int?>("GbOrganizationOrgId");
+
                     b.Property<string>("Motivation")
                         .HasColumnName("Motivatie")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(10000);
 
-                    b.Property<int?>("MotivationStatusId");
-
-                    b.Property<int?>("OrganizationOrgId");
+                    b.Property<int>("StateType")
+                        .HasColumnName("GroupState");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnName("CreationTime");
 
                     b.HasKey("GroupName");
 
-                    b.HasIndex("MotivationStatusId");
+                    b.HasIndex("ExternalOrganizationOrgId");
 
-                    b.HasIndex("OrganizationOrgId");
+                    b.HasIndex("GbOrganizationOrgId");
 
                     b.ToTable("groups");
                 });
@@ -61,28 +148,24 @@ namespace GoedBezigWebApp.Migrations
                     b.ToTable("user_groups");
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.MotivationStatus.MotivationState", b =>
+            modelBuilder.Entity("GoedBezigWebApp.Models.Message", b =>
                 {
-                    b.Property<int>("MotivationStatusId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Discriminator")
+                    b.Property<int?>("ActivityId")
                         .IsRequired();
 
-                    b.Property<bool>("MotivationEditable");
+                    b.Property<string>("Content")
+                        .IsRequired();
 
-                    b.Property<bool>("MotivationSubmittable");
+                    b.Property<DateTime>("Time");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("MotivationName")
-                        .HasMaxLength(100);
+                    b.HasKey("Id");
 
-                    b.HasKey("MotivationStatusId");
+                    b.HasIndex("ActivityId");
 
-                    b.ToTable("MotivationState");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("MotivationState");
+                    b.ToTable("messages");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Organization", b =>
@@ -98,13 +181,12 @@ namespace GoedBezigWebApp.Migrations
                         .HasColumnName("btw")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("ClosedGroups");
-
                     b.Property<string>("Description")
                         .HasColumnName("description")
                         .HasMaxLength(800);
 
-                    b.Property<string>("Domain");
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<string>("Logo")
                         .HasColumnName("logo")
@@ -122,6 +204,8 @@ namespace GoedBezigWebApp.Migrations
                         .HasName("FK_org_address_id_ref");
 
                     b.ToTable("organization");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Organization");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.OrganizationalAddress", b =>
@@ -161,6 +245,31 @@ namespace GoedBezigWebApp.Migrations
                     b.ToTable("organizational_addresses");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.OrganizationContact", b =>
+                {
+                    b.Property<int>("ContactId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("contact_id");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Functie");
+
+                    b.Property<string>("Naam");
+
+                    b.Property<int?>("OrganizationOrgId")
+                        .IsRequired();
+
+                    b.Property<string>("Voornaam");
+
+                    b.HasKey("ContactId")
+                        .HasName("PK_organization_contacts_contact_id");
+
+                    b.HasIndex("OrganizationOrgId");
+
+                    b.ToTable("organization_contacts");
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -198,6 +307,8 @@ namespace GoedBezigWebApp.Migrations
                         .HasColumnName("user_id");
 
                     b.Property<int>("AccessFailedCount");
+
+                    b.Property<int?>("ActivityTaskId");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -246,6 +357,8 @@ namespace GoedBezigWebApp.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActivityTaskId");
 
                     b.HasIndex("GroupName");
 
@@ -359,55 +472,82 @@ namespace GoedBezigWebApp.Migrations
                     b.HasAnnotation("SqlServer:TableName", "user_tokens");
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.MotivationStatus.ApprovedState", b =>
+            modelBuilder.Entity("GoedBezigWebApp.Models.Event", b =>
                 {
-                    b.HasBaseType("GoedBezigWebApp.Models.MotivationStatus.MotivationState");
+                    b.HasBaseType("GoedBezigWebApp.Models.Activity");
 
+                    b.Property<DateTime>("Date")
+                        .HasAnnotation("BackingField", "Date");
 
-                    b.ToTable("ApprovedState");
+                    b.ToTable("Event");
 
-                    b.HasDiscriminator().HasValue("ApprovedState");
+                    b.HasDiscriminator().HasValue("Event");
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.MotivationStatus.DeclinedState", b =>
+            modelBuilder.Entity("GoedBezigWebApp.Models.ExternalOrganization", b =>
                 {
-                    b.HasBaseType("GoedBezigWebApp.Models.MotivationStatus.MotivationState");
+                    b.HasBaseType("GoedBezigWebApp.Models.Organization");
 
+                    b.Property<bool>("HasGbLabel");
 
-                    b.ToTable("DeclinedState");
+                    b.ToTable("ExternalOrganization");
 
-                    b.HasDiscriminator().HasValue("DeclinedState");
+                    b.HasDiscriminator().HasValue("ExternalOrganization");
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.MotivationStatus.OpenState", b =>
+            modelBuilder.Entity("GoedBezigWebApp.Models.GbOrganization", b =>
                 {
-                    b.HasBaseType("GoedBezigWebApp.Models.MotivationStatus.MotivationState");
+                    b.HasBaseType("GoedBezigWebApp.Models.Organization");
 
+                    b.Property<bool>("ClosedGroups");
 
-                    b.ToTable("OpenState");
+                    b.Property<string>("Domain");
 
-                    b.HasDiscriminator().HasValue("OpenState");
+                    b.ToTable("GbOrganization");
+
+                    b.HasDiscriminator().HasValue("GbOrganization");
                 });
 
-            modelBuilder.Entity("GoedBezigWebApp.Models.MotivationStatus.SubmittedState", b =>
+            modelBuilder.Entity("GoedBezigWebApp.Models.Activity", b =>
                 {
-                    b.HasBaseType("GoedBezigWebApp.Models.MotivationStatus.MotivationState");
+                    b.HasOne("GoedBezigWebApp.Models.Group")
+                        .WithMany("Activities")
+                        .HasForeignKey("GroupName");
+                });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTask", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.Group")
+                        .WithMany("TaskList")
+                        .HasForeignKey("GroupName");
 
-                    b.ToTable("SubmittedState");
+                    b.HasOne("GoedBezigWebApp.Models.Activity", "Activity")
+                        .WithMany()
+                        .HasForeignKey("Id");
+                });
 
-                    b.HasDiscriminator().HasValue("SubmittedState");
+            modelBuilder.Entity("GoedBezigWebApp.Models.ActivityTaskUser", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.ActivityTask", "ActivityTask")
+                        .WithMany("ActivityTaskUsers")
+                        .HasForeignKey("ActivityTaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GoedBezigWebApp.Models.User", "User")
+                        .WithMany("ActivityTaskUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.MotivationStatus.MotivationState", "MotivationStatus")
+                    b.HasOne("GoedBezigWebApp.Models.ExternalOrganization", "ExternalOrganization")
                         .WithMany()
-                        .HasForeignKey("MotivationStatusId");
+                        .HasForeignKey("ExternalOrganizationOrgId");
 
-                    b.HasOne("GoedBezigWebApp.Models.Organization")
+                    b.HasOne("GoedBezigWebApp.Models.GbOrganization", "GbOrganization")
                         .WithMany("Groups")
-                        .HasForeignKey("OrganizationOrgId");
+                        .HasForeignKey("GbOrganizationOrgId");
                 });
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Invitation", b =>
@@ -421,6 +561,14 @@ namespace GoedBezigWebApp.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.Message", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.Activity", "Activity")
+                        .WithMany("Messages")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.Organization", b =>
                 {
                     b.HasOne("GoedBezigWebApp.Models.OrganizationalAddress", "Address")
@@ -428,8 +576,20 @@ namespace GoedBezigWebApp.Migrations
                         .HasForeignKey("AddressId");
                 });
 
+            modelBuilder.Entity("GoedBezigWebApp.Models.OrganizationContact", b =>
+                {
+                    b.HasOne("GoedBezigWebApp.Models.ExternalOrganization", "Organization")
+                        .WithMany("Contacts")
+                        .HasForeignKey("OrganizationOrgId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("GoedBezigWebApp.Models.User", b =>
                 {
+                    b.HasOne("GoedBezigWebApp.Models.ActivityTask")
+                        .WithMany("Users")
+                        .HasForeignKey("ActivityTaskId");
+
                     b.HasOne("GoedBezigWebApp.Models.Group")
                         .WithMany("Users")
                         .HasForeignKey("GroupName");
@@ -438,8 +598,8 @@ namespace GoedBezigWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("LectorUserId");
 
-                    b.HasOne("GoedBezigWebApp.Models.Organization", "Organization")
-                        .WithMany()
+                    b.HasOne("GoedBezigWebApp.Models.GbOrganization", "Organization")
+                        .WithMany("Users")
                         .HasForeignKey("OrganizationOrgId");
                 });
 

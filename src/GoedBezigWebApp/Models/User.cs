@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using GoedBezigWebApp.Migrations;
 using GoedBezigWebApp.Models.Exceptions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -19,14 +15,15 @@ namespace GoedBezigWebApp.Models
         {
             get
             {
-                var accepted = Invitations.FirstOrDefault(i => i.Status == InvitationStatus.Accepted);
-                var group = accepted?.Group;
+                Group group = null;
+                Invitation accepted = Invitations.FirstOrDefault(i => i.Status == InvitationStatus.Accepted);
+                if (accepted != null) group = accepted.Group;
 
-                return @group;
+                return group;
             }
         }
 
-        public Organization Organization { get; set; }
+        public GbOrganization Organization { get; set; }
 
         public User LectorUser { get; set; }
 
@@ -50,11 +47,13 @@ namespace GoedBezigWebApp.Models
             invitation.Decline();
         }
 
-        public void RegisterInOrganization(Organization organization)
+        public void RegisterInOrganization(GbOrganization gbOrganization)
         {
-            if (!this.Email.Split('@')[1].Contains(organization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
-            if (this.Organization != null) throw new OrganizationException($"You are already registered in organization {this.Organization.Name}.");
-            this.Organization = organization;
+            if (!Email.Split('@')[1].Contains(gbOrganization.Domain)) throw new OrganizationException("Your email address has to have the extension of the organization you want to be in.");
+            if (Organization != null) throw new OrganizationException($"You are already registered in organization {Organization.Name}.");
+            Organization = gbOrganization;
+            gbOrganization.Users.Add(this);
         }
+        public ICollection<ActivityTaskUser> ActivityTaskUsers { get; set; }
     }
 }

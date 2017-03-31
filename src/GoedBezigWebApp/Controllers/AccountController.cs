@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.AccountViewModels;
 using GoedBezigWebApp.Services;
-using Microsoft.AspNetCore.Http.Authentication;
 
 namespace GoedBezigWebApp.Controllers
 {
@@ -101,7 +98,7 @@ namespace GoedBezigWebApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = "/Organization")
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -118,6 +115,7 @@ namespace GoedBezigWebApp.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
+                    TempData["message"] = $"u bent succesvol geregistreed als {user.UserName}. Registreer bij een organisatie om verder te gaan.";
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GoedBezigWebApp.Models;
-using GoedBezigWebApp.Models.MotivationState;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Org.BouncyCastle.Crypto.Tls;
 
 namespace GoedBezigWebApp.Data
 {
@@ -11,11 +11,18 @@ namespace GoedBezigWebApp.Data
     {
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
+        public virtual DbSet<GbOrganization> GbOrganizations { get; set; }
+        public virtual DbSet<ExternalOrganization> ExternalOrganizations { get; set; }
+        public virtual DbSet<OrganizationContact> OrganizationContacts { get; set; }
         public virtual DbSet<OrganizationalAddress> OrganizationalAddresses { get; set; }
         public virtual DbSet<Invitation> Invitations { get; set; }
-        public virtual DbSet<Invitation> MotivationState { get; set; }
-
+        public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<ActivityTask> ActivityTasks { get; set; }
         public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public ApplicationDbContext() : base()
         {
         }
 
@@ -28,15 +35,18 @@ namespace GoedBezigWebApp.Data
             MapRole(modelBuilder.Entity<Role>().ForSqlServerToTable("roles"));
             MapGroup(modelBuilder.Entity<Group>());
             MapOrganization(modelBuilder.Entity<Organization>());
+            MapGBOrganization(modelBuilder.Entity<GbOrganization>());
+            MapExternalOrganization(modelBuilder.Entity<ExternalOrganization>());
+            MapOrganizationContact(modelBuilder.Entity<OrganizationContact>());
             MapOrganizationalAddress(modelBuilder.Entity<OrganizationalAddress>());
             MapUserGroup(modelBuilder.Entity<Invitation>());
-
-            modelBuilder.Entity<MotivationState>().HasKey(k => k.MotivationStatusId);
-            modelBuilder.Entity<OpenState>();
-            modelBuilder.Entity<SubmittedState>();
-            modelBuilder.Entity<ApprovedState>();
-            modelBuilder.Entity<DeclinedState>();
+            MapActivity(modelBuilder.Entity<Activity>());
+            MapActivityTasks(modelBuilder.Entity<ActivityTask>());
+            MapActivityTasksUser(modelBuilder.Entity<ActivityTaskUser>());
+            MapEvent(modelBuilder.Entity<Event>());
+            MapMessage(modelBuilder.Entity<Message>());
         }
+
 
         private static void MapIdentity(ModelBuilder modelBuilder)
         {
@@ -61,8 +71,9 @@ namespace GoedBezigWebApp.Data
             entity.Property(e => e.FamilyName).HasColumnName("family_name");
 
             entity.HasMany(u => u.Invitations).WithOne(i => i.User);
-
+            entity.HasOne(u => u.Organization).WithMany(o => o.Users);
             entity.HasOne(o => o.LectorUser).WithMany();
+            entity.HasMany(o => o.ActivityTaskUsers).WithOne(o => o.User);
         }
 
         private static void MapRole(EntityTypeBuilder<Role> entity)
@@ -89,11 +100,14 @@ namespace GoedBezigWebApp.Data
 
             g.Property(t => t.Motivation)
                 .HasColumnName("Motivatie")
-                .HasMaxLength(1000);
+                .HasMaxLength(10000);
 
             g.Property(p => p.StateType)
-                .HasColumnName("MotivationStatus");
+                .HasColumnName("GroupState");
 
+            g.HasOne(p => p.GbOrganization)
+                .WithMany(a => a.Groups)
+                .IsRequired(false);
 
 
         }
@@ -135,6 +149,16 @@ namespace GoedBezigWebApp.Data
                 .HasConstraintName("organization$FK_org_address_id_ref");
         }
 
+        private static void MapGBOrganization(EntityTypeBuilder<GbOrganization> entity)
+        {
+            entity.HasMany(e => e.Users).WithOne(u => u.Organization);
+        }
+
+        private static void MapExternalOrganization(EntityTypeBuilder<ExternalOrganization> entity)
+        {
+           entity.HasMany(o => o.Contacts).WithOne(e => e.Organization).OnDelete(DeleteBehavior.Cascade);
+        }
+
         private static void MapOrganizationalAddress(EntityTypeBuilder<OrganizationalAddress> entity)
         {
             entity.HasKey(e => e.AddressId)
@@ -170,6 +194,17 @@ namespace GoedBezigWebApp.Data
                 .HasMaxLength(255);
         }
 
+        private static void MapOrganizationContact(EntityTypeBuilder<OrganizationContact> entity)
+        {
+            entity.HasKey(e => e.ContactId)
+                .HasName("PK_organization_contacts_contact_id");
+
+            entity.ToTable("organization_contacts");
+
+            entity.Property(e => e.ContactId).HasColumnName("contact_id");
+            entity.HasOne(e => e.Organization).WithMany(o => o.Contacts).IsRequired();
+        }
+
         private static void MapUserGroup(EntityTypeBuilder<Invitation> ug)
         {
             ug.ToTable("user_groups");
@@ -183,6 +218,75 @@ namespace GoedBezigWebApp.Data
                 .WithMany(g => g.Invitations)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private static void MapActivity(EntityTypeBuilder<Activity> type)
+        {
+            type.ToTable("events");
+            type.HasKey(e => e.Id);
+            type.Property(e => e.Title).IsRequired();
+            type.Property(e => e.Description).IsRequired();
+            type.HasDiscriminator<string>("Type")
+                .HasValue<Event>("Event")
+                .HasValue<Activity>("Activity");
+            type.HasMany(t => t.Messages).WithOne(t => t.Activity);
+        }
+
+        private void MapActivityTasks(EntityTypeBuilder<ActivityTask> at)
+        {
+            at.HasKey(k => k.Id);
+            at.Property(p => p.Description)
+                .IsRequired()
+                .HasColumnName("description")
+                .HasMaxLength(255);
+
+            at.Property(p => p.FromDateTime)
+                .IsRequired()
+                .HasColumnName("fromDateTime");
+
+            at.Property(p => p.ToDateTime)
+                .IsRequired()
+                .HasColumnName("toDateTime");
+            at.HasOne(o => o.Activity)
+                .WithMany()
+                .HasForeignKey(e => e.Id)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            at.HasMany(a => a.ActivityTaskUsers)
+                .WithOne(a => a.ActivityTask)
+                .IsRequired();
+
+        }
+
+        private void MapActivityTasksUser(EntityTypeBuilder<ActivityTaskUser> atu)
+        {
+            atu.HasKey(x => new {x.UserId, x.ActivityTaskId});
+
+            atu.HasOne(o => o.User)
+                .WithMany(m => m.ActivityTaskUsers)
+                .HasForeignKey(fk => fk.UserId);
+
+            atu.HasOne(o => o.ActivityTask)
+                .WithMany(m => m.ActivityTaskUsers)
+                .HasForeignKey(fk => fk.ActivityTaskId);
+        }
+
+        private static void MapEvent(EntityTypeBuilder<Event> type)
+        {
+            type.Property(t => t.Date).HasAnnotation("BackingField", "Date");
+        }
+
+        private static void MapMessage(EntityTypeBuilder<Message> type)
+        {
+            type.ToTable("messages");
+            type.HasKey(m => m.Id);
+            type.Property(m => m.Content).IsRequired();
+            type.Property(m => m.Time).IsRequired();
+            type.HasOne(m => m.Activity)
+                .WithMany(e => e.Messages)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -1,0 +1,113 @@
+@model GoedBezigWebApp.Models.ActivityTaskViewModels.ActivityTaskEditViewModel
+
+@{
+    ViewData["Title"] = "Taak";
+    Layout = "~/Views/Shared/_pannel.cshtml";
+    var action = Model.Id == 0 ? "Create" : "Edit";
+}
+
+@section Styles {
+    <link href="~/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <link href="~/plugins/multiselect/css/bootstrap-multiselect.css" rel="stylesheet" />
+}
+
+<h2>View</h2>
+
+<form asp-action=@action>
+    <div class="form-horizontal">
+        <h4>ActivityTask</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            @Html.HiddenFor(a => a.Id)
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-file-text-o"></i>
+                </div>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ActivityId" class="col-md-2 control-label">Activity</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar-check-o"></i>
+                </div>
+                <select asp-for="ActivityId" asp-items="@(ViewData["Activities"] as SelectList)" class="form-control">
+                    <option value="">-- select activity/event --</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">From Date</label>
+            <div class="input-group date">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input data-provide="datepicker" class="form-control pull-right datepicker1" asp-for="FromDate" asp-format="{0:dd/MM/yyyy}" />
+                <span asp-validation-for="FromDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">To Date</label>
+            <div class="input-group date">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input data-provide="datepicker" class="form-control pull-right datepicker1" asp-for="ToDate" asp-format="{0:dd/MM/yyyy}" />
+                <span asp-validation-for="ToDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="CurrentState" class="col-md-2 control-label">Activity</label>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar-check-o"></i>
+            </div>
+            <select asp-for="CurrentState" asp-items="@(ViewData["States"] as SelectList)" class="form-control">
+                <option value="">-- select state --</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-3 control-label">Users</label>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar-check-o"></i>
+            </div>
+            <select asp-for="Users" asp-items="@(ViewData["Users"] as MultiSelectList)" id="example-getting-started" multiple="multiple"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="~/plugins/datepicker/locales/bootstrap-datepicker.nl-BE.js"></script>
+        <script src="~/plugins/multiselect/js/bootstrap-multiselect.js"></script>
+        @*<script src="~/plugins/datepicker/bootstrap-datepicker.js"></script>*@
+
+        <script type="text/javascript">
+            $('.datepicker1').datepicker({ format: 'dd-mm-yyyy' });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#example-getting-started').multiselect();
+            });
+        </script>
+
+    }
+}

@@ -6,7 +6,7 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_pannel.cshtml";
 }
 
 <h2>@Localizer["Group Index"]</h2>
@@ -38,7 +38,7 @@
          {
              <tr>
                  <td>
-                     <a href=""> @Html.DisplayFor(modelItem => item.GroupName) </a>
+                     @Html.DisplayFor(modelItem => item.GroupName)
                  </td>
                  <td>
                      @Html.DisplayFor(modelItem => item.Timestamp)
@@ -50,10 +50,9 @@
 
 
                  <td>
-                     <a asp-action="Subscribe" asp-route-id="@item.GroupName">@Localizer["Subscribe"]</a> |
-                     <a asp-action="Edit" asp-route-id="@item.GroupName">@Localizer["Edit"]</a> |
-                     <a asp-action="Details" asp-route-id="@item.GroupName">@Localizer["Details"]</a> |
-                     <a asp-action="Delete" asp-route-id="@item.GroupName">@Localizer["Delete"]</a>
+                     @* 2 verschillende links voor addUser omdat er geen enkele werkt ¯\_(?)_/¯ *@
+                     @*@Html.ActionLink("AddUser", "AddUser", new { id = item.GroupName })  |*@
+                     <a asp-action="AddUser" asp-route-id="@item.GroupName">@Localizer["Subscribe"]</a>
                  </td>
              </tr>
          }

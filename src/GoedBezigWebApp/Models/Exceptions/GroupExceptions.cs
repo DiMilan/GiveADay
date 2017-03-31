@@ -39,6 +39,18 @@ namespace GoedBezigWebApp.Models.Exceptions
 
         }
     }
+    public class AddUserException : ArgumentException
+    {
+
+        public AddUserException()
+        {
+
+        }
+        public AddUserException(string message) : base(message)
+        {
+
+        }
+    }
     public class NoStateException : ArgumentException
     {
 
@@ -47,6 +59,18 @@ namespace GoedBezigWebApp.Models.Exceptions
 
         }
         public NoStateException(string message) : base(message)
+        {
+
+        }
+    }
+    public class TaskListException : ArgumentException
+    {
+
+        public TaskListException()
+        {
+
+        }
+        public TaskListException(string message) : base(message)
         {
 
         }

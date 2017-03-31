@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using GoedBezigWebApp.Models.GroupState;
 
 namespace GoedBezigWebApp.Models.GroupViewModels
 {
@@ -15,16 +16,27 @@ namespace GoedBezigWebApp.Models.GroupViewModels
         public bool ClosedGroup { get; set; }
         [Display(Name = "Motivatie")]
         public string Motivation { get; set; }
-
         public bool MotivationEditable { get; set; }
         public bool MotivationSubmittable { get; set; }
+        public bool EntitledToGiveGBLabel { get; set; }
+        [Display(Name = "Bedrijfsnaam")]
         public string CompanyName { get; set; }
+        [Display(Name = "Adres")]
         public string CompanyAddress { get; set; }
+        [Display(Name = "Website")]
+        [Url]
         public string CompanyWebsite { get; set; }
+        [Display(Name = "E-mail")]
+        [EmailAddress]
         public string CompanyEmail { get; set; }
+        [Display(Name = "Voornaam")]
         public string CompanyContactName { get; set; }
+        [Display(Name = "Familienaam")]
         public string CompanyContactSurname { get; set; }
+        [Display(Name = "E-mail")]
+        [EmailAddress]
         public string CompanyContactEmail { get; set; }
+        [Display(Name = "Functie")]
         public string CompanyContactTitle { get; set; }
 
         public GroupEditViewModel()
@@ -39,8 +51,17 @@ namespace GoedBezigWebApp.Models.GroupViewModels
             Timestamp = group.Timestamp;
             ClosedGroup = group.ClosedGroup;
             Motivation = group.Motivation;
-            MotivationSubmittable = group.MotivationStatus.MotivationSubmittable();
-            MotivationEditable = group.MotivationStatus.MotivationEditable();
+            MotivationSubmittable = (group.GroupState is MotivationOpenState);
+            MotivationEditable = (group.GroupState is MotivationOpenState || group.GroupState is MotivationDeclinedState);
+            CompanyName = group.CompanyName;
+            CompanyAddress = group.CompanyAddress;
+            CompanyEmail = group.CompanyEmail;
+            CompanyWebsite = group.CompanyWebsite;
+            CompanyContactEmail = group.CompanyContactEmail;
+            CompanyContactName = group.CompanyContactName;
+            CompanyContactSurname = group.CompanyContactSurname;
+            CompanyContactTitle = group.CompanyContactTitle;
+            EntitledToGiveGBLabel = group.EntitledToGiveGbLabel();
         }
     }
 }

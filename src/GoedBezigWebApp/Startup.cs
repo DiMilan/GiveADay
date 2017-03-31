@@ -13,6 +13,7 @@ using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
+using GoedBezigWebApp.Filters;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 
@@ -63,6 +64,10 @@ namespace GoedBezigWebApp
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
+            services.AddScoped<IActivityTaskRepository, ActivityTaskRepository>();
+            //Filters
+            services.AddScoped<UserFilter>();
 
             services.AddSession();
             services.AddMvc();
@@ -97,17 +102,17 @@ namespace GoedBezigWebApp
                     opts.SupportedUICultures = supportedCultures;
                 });
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.SecurityStampValidationInterval = TimeSpan.Zero;
-            });
+//            services.Configure<IdentityOptions>(options =>
+//            {
+//                options.SecurityStampValidationInterval = TimeSpan.Zero;
+//            });
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -118,11 +123,30 @@ namespace GoedBezigWebApp
                 {
                     // Deletes the existing database (toggle comment to speed up startup)
                     serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.EnsureDeleted();
+                    var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                    
+                    context.Database.EnsureCreated();
+                    //context.Database.Migrate(); // Create new database and apply latest migrations
+                    new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)
                 }
-
             }
             else
             {
+
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                    // Deletes the existing database (toggle comment to speed up startup)
+                    Console.WriteLine("Deleting database");
+                    context.Database.EnsureDeleted();
+                    Console.WriteLine("Creating database");
+                    context.Database.EnsureCreated();
+                    Console.WriteLine("Seeding database");
+                    //context.Database.Migrate(); // Create new database and apply latest migrations
+                    new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)
+                }
+
                 app.UseExceptionHandler("/Home/Error");
             }
 
@@ -145,16 +169,17 @@ namespace GoedBezigWebApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            // Update database & seed data
-
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
-                context.Database.EnsureCreated();
-                //context.Database.Migrate(); // Create new database and apply latest migrations
-                new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)
-            }
+//            // Update database & seed data
+//
+//            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+//            {
+//                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+//
+//                context.Database.EnsureDeleted();
+//                context.Database.EnsureCreated();
+//                //context.Database.Migrate(); // Create new database and apply latest migrations
+//                new ApplicationDbInitializer(context).SeedData();// Seeds dummy data into database (if not data is present)
+//            }
         }
     }
 }

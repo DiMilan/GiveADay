@@ -1,71 +1,235 @@
+@using System.Threading.Tasks
+@using GoedBezigWebApp.Models.GroupViewModels
 @model GoedBezigWebApp.Models.GroupViewModels.GroupEditViewModel
 
 @{
     ViewData["Title"] = Model.Name == null ? "Create Group" : "Edit Group";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "_pannel";
+    GroupEditViewModel group = (GroupEditViewModel)ViewData["GroupViewEditModel"];
     var action = Model.Name == null ? "Create" : "Edit";
+
 }
 
 <h2>@ViewData["Title"]</h2>
 <hr />
 
 <form asp-action="@action">
-    <div class="form-horizontal">
-
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @if (Model.Name == null)
-        {
-            <div class="form-group">
-                <label asp-for="Name" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="Name" class="form-control"/>
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="form-group">
-                <label asp-for="Name" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    @Html.HiddenFor(a => a.Name)
-                    <input asp-for="Name" class="form-control" disabled/>
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-            </div>
-        }
-        <br/>
-        @if (Model.MotivationEditable)
-        {
-            <div class="form-group">
-                <label asp-for="Motivation" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <textarea asp-for="Motivation" class="form-control" rows="3" placeholder="Geef de motivatie voor het aanmaken van de groep"></textarea>
-                    <span asp-validation-for="Motivation" class="text-danger"></span>
-                </div>
-            </div>
-            <br/>
-        }
-        else
-        {
-            <div class="form-group">
-                <label asp-for="Motivation" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <textarea asp-for="Motivation" class="form-control" rows="3" disabeled></textarea>
-                    <span asp-validation-for="Motivation" class="text-danger"></span>
-                </div>
-            </div>
-            <br />
-        }
-    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <h5>Algemene Gegevens</h5>
     <div class="row">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-        </div>
-    </div></form>
-<p><a asp-controller="Group" asp-action="SubmitMotivation" asp-route-id="@Model.Name">Submit</a></p>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                @if (Model.Name == null)
+                {
 
-<p><a asp-action="Index">Back to List</a></p>
+                    <input asp-for="Name" class="form-control fullWidth" />
+                    <span asp-validation-for="Name" class="text-danger fullWidth"></span>
+
+                }
+                else
+                {
+
+                    @Html.HiddenFor(a => a.Name)
+                    <input asp-for="Name" class="form-control fullWidth" disabled />
+                    <span asp-validation-for="Name" class="text-danger fullWidth"></span>
+                }
+                @if (Model.EntitledToGiveGBLabel)
+                {
+                    <br /> @Html.ActionLink("Click here to assign a GB Label to an organization", "Index", "Organization", new { groupId = Model.Name })
+                }
+                else if (ViewBag.ExternalOrganization != null)
+                {
+                    <br /><span style="font-weight: bold;">This group has given a GB-Label to @ViewBag.ExternalOrganization.Name</span>
+                }
+            </div>
+        </div>
+    </div>
+    @if (Model.Name != null)
+    {
+
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="Motivation" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    @if (Model.MotivationEditable)
+                    {
+                        <textarea asp-for="Motivation" class="form-control fullWidth" rows="3" placeholder="Geef de motivatie voor het aanmaken van de groep"></textarea>
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(a => a.Motivation)
+                        <textarea asp-for="Motivation" class="form-control fullWidth" rows="3" readonly="readonly">@Model.Motivation</textarea>
+                    }
+                    <span asp-validation-for="Motivation" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="col col-md-6">
+            <h5>Bedrijfsgegevens</h5>
+            <br />
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyName" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+
+                            <input asp-for="CompanyName" class="form-control fullWidth" />
+
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyName)
+                            <input asp-for="CompanyName" class="form-control fullWidth" disabled />
+
+                        }
+                        <span asp-validation-for="CompanyName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyAddress" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+                            <input asp-for="CompanyAddress" class="form-control fullWidth" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyAddress)
+                            <input asp-for="CompanyAddress" class="form-control fullWidth" disabled />
+                        }
+                        <span asp-validation-for="CompanyAddress" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyEmail" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+                            <input asp-for="CompanyEmail" class="form-control fullWidth" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyEmail)
+                            <input asp-for="CompanyEmail" class="form-control fullWidth" disabled />
+                        }
+                        <span asp-validation-for="CompanyEmail" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyWebsite" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+                            <input asp-for="CompanyWebsite" class="form-control fullWidth" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyWebsite)
+                            <input asp-for="CompanyWebsite" class="form-control fullWidth" disabled />
+                        }
+                        <span asp-validation-for="CompanyWebsite" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <h5>Contactpersoon</h5>
+            <br />
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactName" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+                            <input asp-for="CompanyContactName" class="form-control fullWidth" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactName)
+                            <input asp-for="CompanyContactName" class="form-control fullWidth" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactSurname" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+                            <input asp-for="CompanyContactSurname" class="form-control fullWidth" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactSurname)
+                            <input asp-for="CompanyContactSurname" class="form-control fullWidth" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactSurname" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactTitle" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+                            <input asp-for="CompanyContactTitle" class="form-control fullWidth" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactTitle)
+                            <input asp-for="CompanyContactTitle" class="form-control fullWidth" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactTitle" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="CompanyContactEmail" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        @if (Model.MotivationEditable)
+                        {
+                            <input asp-for="CompanyContactEmail" class="form-control fullWidth" />
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(a => a.CompanyContactEmail)
+                            <input asp-for="CompanyContactEmail" class="form-control fullWidth" disabled />
+                        }
+                        <span asp-validation-for="CompanyContactEmail" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+    @if (Model.MotivationEditable)
+    {
+        <div class="row">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+</form>
+<br />
+<hr />
+
+<p><a asp-controller="Home" asp-action="Index">Terug naar Home</a></p>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

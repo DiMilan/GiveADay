@@ -402,7 +402,7 @@ namespace GoedBezigWebApp.Migrations
 
             modelBuilder.Entity("GoedBezigWebApp.Models.Group", b =>
                 {
-                    b.HasOne("GoedBezigWebApp.Models.MotivationStatus.MotivationState", "MotivationStatus")
+                    b.HasOne("GoedBezigWebApp.Models.MotivationStatus.MotivationState", "GroupState")
                         .WithMany()
                         .HasForeignKey("MotivationStatusId");
 

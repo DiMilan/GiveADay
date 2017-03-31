@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GoedBezigWebApp.Models;
+using GoedBezigWebApp.Models.GroupState;
 using Microsoft.AspNetCore.Identity;
 
 namespace GoedBezigWebApp.Data
@@ -22,24 +23,35 @@ namespace GoedBezigWebApp.Data
             //            EnsureSeedRoles(context).Wait();
             EnsureSeedUsers().Wait();
             EnsureSeedGroups();
+            EnsureSeedInvitations();
+            EnsureSeedActivities();
+            EnsureSeedActivityTasks();
         }
+
+       
 
         private void EnsureSeedOrganizations()
         {
             // --> SEED Organizations
             if (_context.Organizations.Any()) return;
-            
-                _context.Organizations.Add(HoGent);
-                _context.Organizations.Add(UGent);
-                _context.Organizations.Add(Solvay);
-                _context.Organizations.Add(TestOrg);
+
+            KebabHouse.Contacts.Add(new OrganizationContact("Jan", "Janssens", "CFO", "jan.janssens@mdware.org", KebabHouse));
+            KebabHouse.Contacts.Add(new OrganizationContact("Piet", "Pieters", "CEO", "piet.pieters@mdware.org", KebabHouse));
+
+            _context.GbOrganizations.Add(HoGent);
+            _context.GbOrganizations.Add(UGent);
+            _context.GbOrganizations.Add(Solvay);
+            _context.GbOrganizations.Add(TestOrg);
+            _context.ExternalOrganizations.Add(KebabHouse);
+            _context.ExternalOrganizations.Add(PitaHouse);
+            _context.ExternalOrganizations.Add(PizzaRoma);
 
             _context.SaveChanges();
         }
 
         #region Organization Data
 
-        private static readonly Organization HoGent = new Organization
+        private static readonly GbOrganization HoGent = new GbOrganization
         {
             Name = "HoGent",
             Logo = "https://upload.wikimedia.org/wikipedia/commons/1/10/HoGent_Logo.png",
@@ -56,7 +68,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly Organization UGent = new Organization
+        private static readonly GbOrganization UGent = new GbOrganization
         {
             Name = "UGent",
             Logo = "https://webster.ugent.be/alumnivacatures/invoeren/static/images/logo-ugent_org.svg",
@@ -72,7 +84,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly Organization Solvay = new Organization
+        private static readonly GbOrganization Solvay = new GbOrganization
         {
             Name = "Solvay Economics & Management",
             Logo =
@@ -89,7 +101,7 @@ namespace GoedBezigWebApp.Data
             }
         };
 
-        private static readonly Organization TestOrg = new Organization
+        private static readonly GbOrganization TestOrg = new GbOrganization
         {
             Name = "Test University",
             Logo = "http://users.hogent.be/~533031md/eportfolio/spost/images/cap.png",
@@ -105,32 +117,154 @@ namespace GoedBezigWebApp.Data
             }
         };
 
+        private ExternalOrganization KebabHouse = new ExternalOrganization
+        {
+            Name = "Kebab House",
+            Logo = "https://eggthedail.files.wordpress.com/2010/08/100_2041.jpg",
+            Btw = "BE045785456",
+            Description = "Kebab schnijden is onze specialiteit. Mohammed zegt dat ook altijd. Ma zegt hij, zoals ik kebab...",
+            HasGbLabel = false,
+            Address = new OrganizationalAddress()
+            {
+                AddressCity = "Wevelgem",
+                AddressCountry = "België",
+                AddressLine1 = "Kortrijksestraat 32",
+                AddressPostalCode = "8560"
+            },
+            Contacts = new List<OrganizationContact>()
+        };
+
+        private ExternalOrganization PitaHouse = new ExternalOrganization
+        {
+            Name = "Pita House",
+            Logo = "http://www.pitahouse.ca/wp-content/uploads/2016/05/cropped-thumbnail_PitaHouse_FINAL_LOGO2-1.jpg",
+            Btw = "BE045785456",
+            Description = "Pita vullen is onze specialiteit, njammie!",
+            HasGbLabel = false,
+            Address = new OrganizationalAddress()
+            {
+                AddressCity = "Antwerpen",
+                AddressCountry = "België",
+                AddressLine1 = "Steenstraat 102",
+                AddressPostalCode = "3000"
+            },
+            Contacts = new List<OrganizationContact>()
+        };
+
+        private static readonly ExternalOrganization PizzaRoma = new ExternalOrganization
+        {
+            Name = "Pizza Roma",
+            Logo = "http://www.pizzaroma.be/assets/images/pizza-roma-gent.png",
+            Btw = "BE066585456",
+            Description = "Pizza Roma, de nr. 1 pizzamaker uit Gent!",
+            HasGbLabel = true,
+            Address = new OrganizationalAddress()
+            {
+                AddressCity = "Gent",
+                AddressCountry = "België",
+                AddressLine1 = "Hoogstraat 12",
+                AddressPostalCode = "9000"
+            }
+        };
+
         #endregion
 
         private void EnsureSeedGroups()
         {
             // --> SEED Groups
             if (_context.Groups.Any()) return;
+            GroupHoGent1.ClosedGroup = false;
+            GroupHoGent1.AddUser(UserTest);
+            GroupHoGent1.AddUser(UserCursist);
+            GroupHoGent1.AddUser(UserHogent);
+            GroupUGent.Motivation = "TestMotivation";
+            GroupUGent.GroupState = new MotivationApprovedState(GroupUGent);
 
-            var groupHogent = HoGent.AddGroup("Test1");
-            var groupUGent = UGent.AddGroup("Test2");
-            var groupSolvay = Solvay.AddGroup("Test3");
+            _context.Groups.Add(GroupHoGent1);
+            _context.Groups.Add(GroupHoGent2);
+            _context.Groups.Add(GroupHoGent3);
+            _context.Groups.Add(GroupUGent);
+            _context.Groups.Add(GroupSolvay);
 
             _context.SaveChanges();
-
-            _context.Invitations.Add(new Invitation(UserTest, groupHogent));
-            //_context.Invitations.Add(new Invitation(UserTest, groupUGent));
-            //_context.Invitations.Add(new Invitation(UserCursist, groupSolvay));
-
-            _context.SaveChanges();
-
         }
 
         #region Group Data
 
+        private static readonly Group GroupHoGent1 = new Group("GroupHogent1", true)
+        {
+            GbOrganization = HoGent
+        };
 
+        private static readonly Group GroupHoGent2 = new Group("GroupHogent2", true)
+        {
+            GbOrganization = HoGent
+        };
+
+        private static readonly Group GroupHoGent3 = new Group("GroupHogent3", true)
+        {
+            GbOrganization = HoGent
+        };
+
+        private static readonly Group GroupUGent = new Group("GroupUgent", true)
+        {
+            GbOrganization = UGent
+        };
+
+        private static readonly Group GroupSolvay = new Group("GroupSolvay", false)
+        {
+            GbOrganization = Solvay
+        };
 
         #endregion
+
+
+        private void EnsureSeedInvitations()
+        {
+            if (_context.Invitations.Any()) return;
+
+            var invitation2 = new Invitation(UserTest, GroupHoGent2);
+            var invitation3 = new Invitation(UserTest, GroupHoGent3);
+
+            var acceptedInvitation = new Invitation(UserHogent, GroupHoGent1) { Status = InvitationStatus.Accepted };
+
+            _context.Add(invitation2);
+            _context.Add(invitation3);
+            _context.Add(acceptedInvitation);
+
+            _context.SaveChanges();
+        }
+
+        private void EnsureSeedActivities()
+        {
+            if (_context.Activities.Any()) return;
+
+            var activity1 = new Activity("Activity1", "Activity description");
+            var activity2 = new Activity("Activity2", "Activity description");
+            var activity3 = new Activity("Activity3", "Activity description");
+
+            var event1 = new Event("Event1", "Event description", DateTime.Today.AddDays(5));
+            var event2 = new Event("Event2", "Event description", DateTime.Today.AddDays(25));
+            var event3 = new Event("Event3", "Event description", DateTime.Today.AddDays(45));
+
+            GroupHoGent1.AddActivity(activity1);
+            GroupHoGent1.AddActivity(activity2);
+            GroupHoGent1.AddActivity(activity3);
+            GroupHoGent1.AddActivity(event1);
+            GroupHoGent1.AddActivity(event2);
+            GroupHoGent1.AddActivity(event3);
+            List<ActivityTaskUser> atu = new List<ActivityTaskUser>();
+            List<User> users1 = new List<User>() {UserCursist};
+            ActivityTask task1 = new ActivityTask("Taak 1", users1, DateTime.Now, DateTime.MaxValue, activity1, TaskState.ToDo);
+            GroupHoGent1.InitiateTaskList();
+            GroupHoGent1.TaskList.Add(task1);
+            _context.SaveChanges();
+            List<User> users2 = new List<User> {UserTest, UserHogent};
+            ActivityTask task2 = new ActivityTask("Taak 2", users2, DateTime.Now, DateTime.MaxValue, activity2, TaskState.InProgress) {Id = 2};
+            GroupHoGent1.TaskList.Add(task2);
+            _context.ActivityTasks.Add(task2);
+            _context.SaveChanges();
+        }
 
         private async Task EnsureSeedRoles()
         {
@@ -150,6 +284,7 @@ namespace GoedBezigWebApp.Data
         private async Task EnsureSeedUsers()
         {
             // --> SEED Users
+
             foreach (var user in Users)
             {
                 var passwordHasher = new PasswordHasher<User>();
@@ -168,8 +303,20 @@ namespace GoedBezigWebApp.Data
                 //await userStore.AddToRoleAsync(user, UserRoles[user]);
                 //await userManager.AddToRolesAsync(user, UserRoles[user]);
             }
+
             UserTest.Organization = HoGent;
+            UserHogent.Organization = HoGent;
+            UserBart.Organization = HoGent;
+            UserMax.Organization = HoGent;
+            UserMilan.Organization = HoGent;
+            UserTom.Organization = HoGent;
+
             await _context.SaveChangesAsync();
+        }
+
+         private void EnsureSeedActivityTasks()
+        {
+            
         }
 
         #region UserData
@@ -186,14 +333,15 @@ namespace GoedBezigWebApp.Data
 
         private static readonly User UserLector = GenerateTestUser("giveaday", "mdware.org");
         private static readonly User UserTest = GenerateTestUser("test", "test.be");
+        private static readonly User UserHogent = GenerateTestUser("test", "hogent.be");
         private static readonly User UserVrijwilliger = GenerateTestUser("vrijwilliger", "test.be");
         private static readonly User UserCursist = GenerateTestUser("cursist", "test.be");
         private static readonly User UserMilan = GenerateTestUser("milandimax", "gmail.com", "Milan", "Dima");
-        private static readonly User UserTom = GenerateTestUser("tom", "vdbussche.net", "Tom", "Vandenbussche");
+        private static readonly User UserTom = GenerateTestUser("tim", "vdbussche.net", "Tom", "Vandenbussche");
         private static readonly User UserMax = GenerateTestUser("max.devloo", "lightspeedhq.com", "Maximiliaan", "Devloo");
         private static readonly User UserBart = GenerateTestUser("bartjevm", "gmail.com", "Bart", "Vanmarcke");
 
-        private static readonly User[] Users = new User[] { UserTest, UserVrijwilliger, UserCursist, UserMilan, UserTom, UserMax, UserBart };
+        private static readonly User[] Users = new User[] { UserLector, UserTest, UserHogent, UserVrijwilliger, UserCursist, UserMilan, UserTom, UserMax, UserBart };
 
         private static readonly Dictionary<User, string[]> UserRoles = new Dictionary<User, string[]>()
         {
@@ -235,12 +383,6 @@ namespace GoedBezigWebApp.Data
         }
 
         #endregion
-
-        private void EnsureSeedInvitations()
-        {
-            
-        }
-
 
     }
 }

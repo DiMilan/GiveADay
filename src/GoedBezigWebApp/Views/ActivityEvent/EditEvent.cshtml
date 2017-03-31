@@ -1,0 +1,49 @@
+@using GoedBezigWebApp.Models.ActivityEventViewModels
+@model GoedBezigWebApp.Models.ActivityEventViewModels.EditEventViewModel
+
+@{
+    var action = Model.IsNew() ? "Create" : "Edit";
+    ViewData["Title"] = action + " Event";
+    Layout = "_pannel";
+    action += "Event";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<form asp-action="@action">
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" class="form-control" id="Title" asp-for="Title" required />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea class="form-control" id="Description" asp-for="Description" rows="3" required></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Date">Date</label>
+        <div class="input-group date">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <input class="form-control pull-right" data-date-format="dd/mm/yyyy" id="Date" asp-for="Date" asp-format="{0:dd/MM/yyyy}" required />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</form>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#Date").datepicker({ format: 'dd/mm/yyyy', autoclose: true, todayBtn: 'linked' });
+        });
+    </script>
+}

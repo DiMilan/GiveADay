@@ -23,6 +23,11 @@ namespace GoedBezigWebApp.Data.Repositories
             return _groups.Find(groupName);
         }
 
+        public Group GetBy(ExternalOrganization organization)
+        {
+            return _groups.FirstOrDefault(g => g.ExternalOrganization == organization);
+        }
+
         public IEnumerable<Group> GetAll()
         {
             return _groups.ToList();
@@ -52,6 +57,32 @@ namespace GoedBezigWebApp.Data.Repositories
                 return false;
             }
             return true;
+        }
+
+        public void LoadActivities(Group @group)
+        {
+            _dbContext.Entry(group)
+                .Collection(g => g.Activities)
+                .Load();
+        }
+
+        public void LoadOrganizations(Group group)
+        {
+            _dbContext.Entry(group)
+                .Reference (g => g.GbOrganization)
+                .Load();
+            _dbContext.Entry(group)
+                .Reference (g => g.ExternalOrganization)
+                .Load();
+        }
+
+        public void LoadUsers(Group group)
+        {
+            _dbContext.Entry(group)
+                .Collection(g => g.Invitations)
+                .Query()
+                .Include(i => i.User)
+                .Load();
         }
     }
 }

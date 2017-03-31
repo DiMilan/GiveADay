@@ -1,0 +1,214 @@
+﻿@using Castle.Core.Internal
+@using GoedBezigWebApp.Models.UserViewModels
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    UserViewModel user = (UserViewModel)ViewData["User"];
+}
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <div class="user-panel">
+                <p>Register or Log in</p>
+                <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-primary" role="button">
+                    Registreren
+                </a>
+                <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary" role="button">
+                    Inloggen
+                </a>
+            </div>
+        }
+
+        else
+        {
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="https://placehold.it/160x160" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>@user.FirstName @user.FamilyName</p>
+                    <a asp-area="" asp-controller="Manage"><i class="fa fa-pencil text-primary"></i>Edit</a>
+                </div>
+            </div>
+
+
+            <hr/>
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                <li>
+                    <a asp-area="" asp-controller="Organization" asp-action="Index">
+                        <i class="fa fa-building"></i> <span>Organisaties</span>
+                    </a>
+                </li>
+                @if (!user.Organization.IsNullOrEmpty())//Alles hieronder wordt pas getoond als de gebruiker is geregistreerd bij een Organisatie
+                {
+                @if (user.Group.IsNullOrEmpty())
+                {
+                    <li>
+                        <a asp-area="" asp-controller="Invitation" asp-action="Index">
+                            <i class="fa fa-exchange"></i> <span>Uitnodigingen</span>
+                            <span class="pull-right-container">
+                        <small class="label pull-right bg-green">@user.NrOfInvitations</small>
+                    </span>
+                        </a>
+                    </li>
+                }
+                    <li class="active treeview">
+                        <a href="#">
+                            <i class="fa fa-users"></i> <span>Groepen</span>
+                            <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            @if (user.Group.IsNullOrEmpty())
+                            {
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="Index"><i class="fa fa-circle-o"></i> Bekijk open groepen</a></li>
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="Create"><i class="fa fa-circle-o"></i> Maak een groep aan</a></li>
+                            }
+                            else
+                            {
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="Edit" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i> Bewerk groep</a></li>
+                                <li class="active"><a asp-area="" asp-controller="User" asp-action="Index" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i> Voeg Leden Toe</a></li>
+                                <li class="active"><a asp-area="" asp-controller="Group" asp-action="SubmitMotivation" asp-route-id="@user.Group"><i class="fa fa-circle-o"></i>Motivatie Indienen</a></li>
+                                <li class="active"><a asp-area="" asp-controller="ActivityEvent" asp-action="Index"><i class="fa fa-circle-o"></i>Evenementen</a></li>
+                                <li class="active"><a asp-area="" asp-controller="ActivityTask" asp-action="Index"><i class="fa fa-circle-o"></i>Draaiboek</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @*<li class="treeview">
+        <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>treeview</span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="#"><i class="fa fa-circle-o"></i> treeview1</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> treeview2</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> treeview3</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> treeview4</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>labels</span>
+        </a>
+        <ul class="treeview-menu">
+            <li>
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> label1
+                    <span class="pull-right-container">
+                    <span class="label label-primary pull-right">4</span>
+                </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> label2
+                    <span class="pull-right-container">
+                    <small class="label pull-right bg-green">new</small>
+                </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> label3
+                    <span class="pull-right-container">
+                    <small class="label pull-right bg-yellow">12</small>
+                </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> label4
+                    <span class="pull-right-container">
+                    <small class="label pull-right bg-red">5</small>
+
+                </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> multi label
+                    <span class="pull-right-container">
+                    <small class="label pull-right bg-yellow">12</small>
+                    <small class="label pull-right bg-green">16</small>
+                    <small class="label pull-right bg-red">5</small>
+
+                </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">
+            <i class="fa fa-calendar"></i> <span>Calendar</span>
+            <span class="pull-right-container">
+            <small class="label pull-right bg-red">3</small>
+            <small class="label pull-right bg-blue">17</small>
+        </span>
+        </a>
+    </li>
+    <li>
+        <a href="#">
+            <i class="fa fa-envelope"></i> <span>Mailbox</span>
+            <span class="pull-right-container">
+            <small class="label pull-right bg-yellow">12</small>
+            <small class="label pull-right bg-green">16</small>
+            <small class="label pull-right bg-red">5</small>
+        </span>
+        </a>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-share"></i> <span>Multilevel</span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> Level One
+                    <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-circle-o"></i> Level Two
+                            <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                            <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
+        </ul>
+    </li>
+    <li class="header">LABELS</li>
+    <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+    <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+    <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>*@
+            </ul>
+        }
+    </section>
+    <!-- /.sidebar -->
+</aside>

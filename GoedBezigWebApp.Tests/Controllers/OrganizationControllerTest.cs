@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GoedBezigWebApp.Controllers;
+﻿using GoedBezigWebApp.Controllers;
 using GoedBezigWebApp.Models;
 using GoedBezigWebApp.Models.Repositories;
 using GoedBezigWebApp.Tests.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Moq;
 
 namespace GoedBezigWebApp.Tests.Controllers
@@ -18,6 +13,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         private readonly OrganizationController _controller;
         private readonly Mock<IOrganizationRepository> _organizationRepository;
         private readonly Mock<IUserRepository> _userRepository;
+        private readonly Mock<IGroupRepository> _groupRepository;
         private readonly Mock<UserManager<User>> _userManager;
         private readonly DummyGoedBezigDbContext _dummyContext;
 
@@ -25,7 +21,7 @@ namespace GoedBezigWebApp.Tests.Controllers
         {
             _dummyContext = new DummyGoedBezigDbContext();
             _organizationRepository = new Mock<IOrganizationRepository>();
-            _controller = new OrganizationController(_userManager.Object,_organizationRepository.Object, _userRepository.Object)
+            _controller = new OrganizationController(_userManager.Object,_organizationRepository.Object, _userRepository.Object, _groupRepository.Object)
             {
                 TempData = new Mock<ITempDataDictionary>().Object
             };

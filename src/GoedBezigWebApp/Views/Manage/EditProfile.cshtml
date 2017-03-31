@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model GoedBezigWebApp.Models.UserViewModels.UserViewModel
+@{
+    
+}
+<h3>Personal info</h3>
+<form asp-action="UpdateProfile" class="form-horizontal" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label">First name:</label>
+        <div class="col-lg-8">
+            <input asp-for="FirstName" class="form-control fullWidth" />
+            <span asp-validation-for="FirstName" class="text-danger fullWidth"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Last name:</label>
+        <div class="col-lg-8">
+            <input asp-for="FamilyName" class="form-control fullWidth" />
+            <span asp-validation-for="FamilyName" class="text-danger fullWidth"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">Email/Username:</label>
+        <div class="col-md-8">
+            <input asp-for="Username" class="form-control fullWidth" />
+            <span asp-validation-for="Username" class="text-danger fullWidth"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-3 control-label">Password:</label>
+        <div class="col-md-8">
+            @if (Model.HasPassword)
+            {
+                <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Change</a>
+            }
+            else
+            {
+                <a asp-controller="Manage" asp-action="SetPassword" class="btn-bracketed">Create</a>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+
+
+</form>
+<div class="form-group">
+    <label class="col-md-3 control-label"></label>
+    <div class="col-md-8">
+        <input type="submit" class="btn btn-primary" value="Save Changes">
+        <span></span>
+        <input class="btn btn-default" value="Cancel" type="reset">
+    </div>
+</div>

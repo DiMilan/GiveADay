@@ -1,15 +1,17 @@
+@using Castle.Core.Internal
+@using GoedBezigWebApp.Models.UserViewModels
 @model IEnumerable<GoedBezigWebApp.Models.Organization>
 
 @{
-    ViewData["Title"] = "View";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_pannel.cshtml";
+    UserViewModel user = (UserViewModel)ViewData["User"];
 }
 
-<h2>GB Organizations</h2>
+<h2>@ViewData["title"]</h2>
 <hr />
-@if (ViewBag.User.Organization != null)
+@if (!user.Organization.IsNullOrEmpty())
 {
-    <p class="importantMsg">You are currently part of the Organization "@ViewBag.User.Organization.Name"!</p>
+    <p class="importantMsg">You are currently part of the Organization "@user.Organization"!</p>
 }
 <style>
 
@@ -26,59 +28,85 @@
             Search location: <select name="searchLocation" asp-for="@ViewData["searchLocation"]" asp-items="ViewBag.Cities">
                 <option value="">---Select a city---</option>
             </select>
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Reset</a>
+            @if (ViewBag.Group != null)
+            {
+                <input name="groupId" type="hidden" value="@ViewBag.Group.GroupName"/>
+            }
+            <input type="submit" value="Search" class="btn btn-default" />
+            @if (ViewBag.Group == null)
+            {
+                <br />
+                <a asp-action="Index">All GB Organizations</a><span> | </span>
+                @Html.ActionLink("Ext. With Label", "Index", "Organization", new { isExternalWithLabel = true }) <span> | </span>
+                @Html.ActionLink("Ext. Without Label", "Index", "Organization", new { isExternalWithoutLabel = true })
+
+            }
         </p>
     </div>
 </form>
 
-<table class="table organizationTable">
+<table class="table table-hover organizationTable">
     <thead>
-        <tr>
-            <th>
+    <tr>
+        <th>
                 
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                Address
-            </th>
-            <th></th>
-        </tr>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        @*            <th>*@
+        @*                @Html.DisplayNameFor(model => model.Description)*@
+        @*            </th>*@
+        <th>
+            Address
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
-            <td>
-                <img src="@Html.DisplayFor(modelItem => item.Logo)" />
+            @{
+                var viewLink = "Organization/View/" + item.OrgId;
+            }
+            <td class="clickable-cell" data-href="@viewLink">
+                <img src="@Html.DisplayFor(modelItem => item.Logo)" alt="@item.Name"/>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
+            <td class="clickable-cell" data-href="@viewLink">
+                @Html.DisplayFor(i => item.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address.AddressLine1)<br />
-                @Html.DisplayFor(modelItem => item.Address.AddressPostalCode) @Html.DisplayFor(modelItem => item.Address.AddressCountry)<br />
+            @*            <td>*@
+            @*                @Html.DisplayFor(modelItem => item.Description)*@
+            @*            </td>*@
+            <td class="clickable-cell" data-href="@viewLink">
+                @Html.DisplayFor(modelItem => item.Address.AddressLine1)<br/>
+                @Html.DisplayFor(modelItem => item.Address.AddressPostalCode) @Html.DisplayFor(modelItem => item.Address.AddressCountry)<br/>
                 @Html.DisplayFor(modelItem => item.Address.AddressCountry)
             </td>
             <td>
-                @if (ViewBag.User.Organization == null)
+                @if (user.Organization.IsNullOrEmpty() && ViewBag.Group == null && ViewBag.isExternalWithLabel != true && ViewBag.isExternalWithoutLabel != true)
                 {
-                    @Html.ActionLink("Register", "Register", new { id = item.OrgId })
+                    @Html.ActionLink("Register", "Register", new {id = item.OrgId})
                 }
+
                 @if (ViewBag.Group != null)
                 {
-                   @Html.ActionLink("Assign GB Label", "AssignLabel", new { id = item.OrgId })
+                    @Html.ActionLink("Assign GB Label", "AssignGBLabel", new {id = item.OrgId, groupId = ViewBag.Group.GroupName})
                 }
 
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
+    
+@section scripts
+{
+    <script>
+        jQuery(document).ready(function ($) {
+            $('.clickable-cell').click(function () {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+}
