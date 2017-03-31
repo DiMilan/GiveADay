@@ -65,7 +65,8 @@
       "imports": [
         "portable-net45+win8"
       ]
-    }
+    },
+    "BundlerMinifier.Core": "2.2.281"
   },
 
   "frameworks": {
