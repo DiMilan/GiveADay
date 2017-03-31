@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using GoedBezigWebApp.Models;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using GoedBezigWebApp.Filters;
 using GoedBezigWebApp.Models.Exceptions;
 using GoedBezigWebApp.Models.UserViewModels;
@@ -29,21 +30,21 @@ namespace GoedBezigWebApp.Controllers
         [ServiceFilter(typeof(UserFilter))]
         public IActionResult Index(User user)
         {
-            ViewData["User"] = new UserViewModel(user);
-            if (user == null)
-            {
-                return View("Error");
-            }
-            if (user.Group != null) {
-                ViewBag.Group = user.Group.GroupName;
-                ViewBag.Org = user.Organization.Name;
-            }
-            return View(_userRepository.GetAll()
-                
+
+            ViewBag.Group = user.Group.GroupName;
+            ViewBag.Org = user.Organization.Name;
+
+            var users = _userRepository.GetAll()
                 .Where(u => u.Organization != null)
                 .Where(u2 => u2.Organization.Name == user.Organization.Name)
                 .OrderBy(uf => uf.FamilyName)
-                .ThenBy(uv => uv.FirstName));
+                .ThenBy(uv => uv.FirstName);
+
+            _groupRepository.LoadUsers(user.Group);
+
+            var invitedUsers = user.Group.Invitations.Select(i => i.User);
+
+            return View(users.Except(invitedUsers));
         }
 
         [ServiceFilter(typeof(UserFilter))]
@@ -53,7 +54,7 @@ namespace GoedBezigWebApp.Controllers
 
             if (newUser == null)
             {
-                TempData["message"] = $"Trying to add user that does not exist!";
+                TempData["error"] = $"Trying to add user that does not exist!";
                 return RedirectToAction("Index");
             }
 
@@ -63,11 +64,11 @@ namespace GoedBezigWebApp.Controllers
             {
                 if (user.Group.Equals(newUser.Group))
                 {
-                    TempData["error"] = $"User already member of this group!";
+                    TempData["error"] = newUser.FirstName + $" already member of this group!";
                 }
                 else
                 {
-                    TempData["error"] = $"User already member of another group!";
+                    TempData["error"] = newUser.FirstName + $" already member of another group!";
 
                 }
                 return RedirectToAction("Index");
@@ -75,7 +76,7 @@ namespace GoedBezigWebApp.Controllers
 
             if (user.Group.Invitations.Select(i => i.User).ToList().Contains(newUser))
             {
-                TempData["error"] = $"User already invited to this group!";
+                TempData["error"] = newUser.FirstName + $" already invited to this group!";
                 return RedirectToAction("Index");
             }
 
@@ -83,7 +84,7 @@ namespace GoedBezigWebApp.Controllers
             {
                 user.Group.InviteUser(newUser);
                 _groupRepository.SaveChanges();
-                TempData["message"] = $"User successfully invited in group!";
+                TempData["message"] = newUser.FirstName + $" successfully invited in group!";
             }
             catch (OrganizationException error)
             {
