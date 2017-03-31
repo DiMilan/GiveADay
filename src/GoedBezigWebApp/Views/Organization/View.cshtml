@@ -1,0 +1,30 @@
+﻿@using GoedBezigWebApp.Models.OrganizationViewModels
+@model GoedBezigWebApp.Models.OrganizationViewModels.OrganizationViewModel
+
+@{
+    Layout = "_pannel";
+}
+
+<h2>
+    <span style="width: 64px; height: 64px; margin-right: 16px;">
+        <img class="img-responsive center-block" src="@Model.Logo" alt="@Model.Name" />
+    </span>
+    @Model.Name
+    @if (!Model.IsExternal || Model.HasLabel)
+    {
+        <span class="text-success fa fa-check"></span>
+    }
+</h2>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <p>@Model.Description</p>
+    </div>
+    <div class="col-md-4">
+        <h4>Address</h4>
+        <address>
+            @Model.AddressLine1 <br />
+            @Model.AddressLine2
+        </address>
+    </div>
+</div>

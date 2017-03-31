@@ -138,5 +138,12 @@ namespace GoedBezigWebApp.Data.Repositories
         {
             _dbContext.SaveChanges();
         }
+
+        public Organization GetById(int id)
+        {
+            return _dbContext.Organizations
+                .Include(o => o.Address)
+                .FirstOrDefault(o => o.OrgId == id);
+        }
     }
 }
