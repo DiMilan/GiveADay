@@ -25,13 +25,17 @@ namespace GoedBezigWebApp.Filters
                 ? _userRepository.GetBy(context.HttpContext.User.Identity.Name)
                 : null;
 
+            if (user != null)
+            {
+                context.ActionArguments["user"] = user;
+            }
+
             var controller = context.Controller as Controller;
 
             if (controller == null) return;
 
             if (user != null)
             {
-                context.ActionArguments["user"] = user;
                 controller.ViewData["User"] = new UserViewModel(user);
             }
             else
